@@ -53,6 +53,10 @@ quarkus:
     always-include: true
   opentelemetry:
     enabled: false
+
+#  quinoa:
+#    ui-dir: "webui"
+
 indy_security:
   enabled: True
 

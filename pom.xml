@@ -73,6 +73,7 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-undertow</artifactId>
     </dependency>
+    <!-- quarkus-security start -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-security</artifactId>
@@ -85,7 +86,13 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-oidc</artifactId>
     </dependency>
-    
+    <!-- quarkus-security end -->
+
+    <dependency>
+      <groupId>io.quarkiverse.quinoa</groupId>
+      <artifactId>quarkus-quinoa</artifactId>
+      <version>1.2.3</version>
+    </dependency>
 
     <dependency>
       <groupId>io.quarkus</groupId>

@@ -18,6 +18,20 @@ target
 # mac
 *.DS_Store
 
+# node & npm
+node_modules
+dist
+.tmp
+.sass-cache
+.build-tmp
+node
+rest-config.json
+proxy-profiles.json
+
+# vscode
+.vscode/
 
 *.dat
 log/*
+
+

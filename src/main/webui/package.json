@@ -1,0 +1,49 @@
+{
+  "name": "indy-ui",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Indy Repository Manager UI",
+  "repository": "https://github.com/Commonjava/indy",
+  "license": "ASLv2",
+  "dependencies": {
+    "angular": "2.5.6",
+    "angular-loader": "1.5.8",
+    "angular-resource": "1.5.8",
+    "angular-route": "1.5.8",
+    "angular-ui-bootstrap": "^2.5.6",
+    "bootstrap": "^3.4.1",
+    "components-font-awesome": "4.2.0",
+    "html5-boilerplate": "5.3.0",
+    "jquery": "^3.5.0",
+    "keycloak-js": "^1.9.8",
+    "ng-dialog": "~0.6.4",
+    "swagger-ui-dist": "4.1.x"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "http-server": "^14.1.1",
+    "lodash": ">=4.17.21",
+    "protractor": "~7.0.0",
+    "webpack": "^4.34.0",
+    "webpack-cli": "^3.3.4",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "webpack": "node node_modules/webpack/bin/webpack.js --openssl-legacy-provider",
+    "compile": "NODE_ENV=production webpack --config ./webpack.config.js --progress",
+    "clean": "rm -rf ./dist",
+    "build": "npm run-script clean && npm run-script compile && rm ./dist/indy.bundle.js",
+    "prestart": "npm install",
+    "start": "http-server -a localhost -p 8000",
+    "pretest": "npm install",
+    "test": "karma start test/karma.conf.js",
+    "test-single-run": "karma start test/karma.conf.js  --single-run",
+    "preupdate-webdriver": "npm install",
+    "update-webdriver": "webdriver-manager update",
+    "preprotractor": "npm run update-webdriver",
+    "protractor": "protractor test/protractor-conf.js"
+  }
+}
