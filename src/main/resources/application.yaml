@@ -1,0 +1,88 @@
+quarkus:
+  http:
+    port: 8080
+    read-timeout: 30m
+    limits:
+      max-body-size: 500M
+  package:
+    type: uber-jar
+  application:
+    name: "Indy UI"
+  resteasy:
+    gzip:
+      enabled: true
+      max-input: 64M
+  keycloak:
+    devservices:
+      enabled: false
+  oidc:
+    enabled: false
+  security:
+    auth:
+      enabled-in-dev-mode: false
+  log:
+    level: INFO
+    min-level: TRACE
+    category:
+      "org.jboss":
+        level: WARN
+      "org.apache.kafka":
+        level: WARN
+      "io.quarkus":
+        level: WARN
+      "io.smallrye":
+        level: WARN
+      "org.eclipse":
+        level: WARN
+      "io.netty":
+        level: WARN
+      "org.commonjava.indy.service":
+        level: TRACE
+    console:
+      enable: true
+      level: DEBUG
+    file:
+      level: DEBUG
+      enable: true
+      path: "log/Indy UI.log"
+      format: "%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n"
+      rotation:
+        max-backup-index: 5
+        max-file-size: 10M
+  swagger-ui:
+    always-include: true
+  opentelemetry:
+    enabled: false
+indy_security:
+  enabled: True
+
+
+"%dev":
+  quarkus:
+    log:
+      level: TRACE
+      min-level: TRACE
+      category:
+        "org.jboss":
+          level: INFO
+        "org.apache.kafka":
+          level: ERROR
+        "io.quarkus":
+          level: INFO
+        "io.smallrye":
+          level: INFO
+        "org.eclipse":
+          level: INFO
+        "io.netty":
+          level: INFO
+        "org.commonjava.indy.service":
+          level: TRACE
+      console:
+        enable: true
+      file:
+        enable: true
+        path: "/tmp/Indy UI.log"
+        format: "%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n"
+        rotation:
+          max-backup-index: 5
+          max-file-size: 10M
