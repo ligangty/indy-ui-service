@@ -44,7 +44,7 @@ quarkus:
     file:
       level: DEBUG
       enable: true
-      path: "log/Indy UI.log"
+      path: "log/indy-ui-service.log"
       format: "%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n"
       rotation:
         max-backup-index: 5
@@ -95,7 +95,7 @@ indy_security:
         enable: true
       file:
         enable: true
-        path: "/tmp/Indy UI.log"
+        path: "/tmp/indy-ui-service.log"
         format: "%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n"
         rotation:
           max-backup-index: 5
