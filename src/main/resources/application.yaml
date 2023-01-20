@@ -54,8 +54,18 @@ quarkus:
   opentelemetry:
     enabled: false
 
-#  quinoa:
-#    ui-dir: "webui"
+  quinoa:
+    # ui-dir: "webui"
+    build-dir: "dist"
+    package-manager-install:
+      ~: true
+      node-version: "8.12.0"
+      npm-version: "6.4.1"
+    package-manager-command:
+      install-env:
+        strict-ssl: false
+      install: "npm ci"
+
 
 indy_security:
   enabled: True
@@ -90,3 +100,6 @@ indy_security:
         rotation:
           max-backup-index: 5
           max-file-size: 10M
+    quinoa:
+      package-manager-command:
+        install: "npm ci"
