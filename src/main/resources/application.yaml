@@ -26,6 +26,8 @@ quarkus:
     category:
       "org.jboss":
         level: WARN
+      "org.apache.http":
+        level: ERROR
       "io.quarkus":
         level: WARN
       "io.smallrye":
@@ -33,6 +35,8 @@ quarkus:
       "org.eclipse":
         level: WARN
       "io.netty":
+        level: WARN
+      "io.grpc":
         level: WARN
       "org.commonjava.indy.service":
         level: TRACE
@@ -66,8 +70,11 @@ quarkus:
 
 
 indy_security:
-  enabled: True
+  enabled: False
 
+## [rest client]
+service-api/mp-rest/uri: http://localhost:8080/
+service-api/mp-rest/scope: javax.inject.Singleton
 
 "%dev":
   quarkus:
@@ -77,6 +84,8 @@ indy_security:
       category:
         "org.jboss":
           level: INFO
+        "org.apache.http":
+          level: ERROR
         "io.quarkus":
           level: INFO
         "io.smallrye":
@@ -84,6 +93,8 @@ indy_security:
         "org.eclipse":
           level: INFO
         "io.netty":
+          level: INFO
+        "io.grpc":
           level: INFO
         "org.commonjava.indy.service":
           level: TRACE
