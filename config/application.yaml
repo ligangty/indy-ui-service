@@ -21,7 +21,7 @@ quarkus:
     auth:
       enabled-in-dev-mode: false
   log:
-    level: INFO
+    level: DEBUG
     min-level: TRACE
     category:
       "org.jboss":
@@ -30,6 +30,8 @@ quarkus:
         level: WARN
       "io.quarkus":
         level: WARN
+      "io.quarkiverse":
+        level: DEBUG
       "io.smallrye":
         level: WARN
       "org.eclipse":
@@ -69,37 +71,3 @@ quarkus:
 
 indy_security:
   enabled: True
-
-
-"%dev":
-  quarkus:
-    log:
-      level: TRACE
-      min-level: TRACE
-      category:
-        "org.jboss":
-          level: INFO
-        "org.apache.kafka":
-          level: ERROR
-        "io.quarkus":
-          level: INFO
-        "io.smallrye":
-          level: INFO
-        "org.eclipse":
-          level: INFO
-        "io.netty":
-          level: INFO
-        "org.commonjava.indy.service":
-          level: TRACE
-      console:
-        enable: true
-      file:
-        enable: true
-        path: "/tmp/indy-ui-service.log"
-        format: "%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n"
-        rotation:
-          max-backup-index: 5
-          max-file-size: 10M
-    quinoa:
-      package-manager-command:
-        install: "npm ci"
