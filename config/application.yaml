@@ -26,8 +26,6 @@ quarkus:
     category:
       "org.jboss":
         level: WARN
-      "org.apache.kafka":
-        level: WARN
       "io.quarkus":
         level: WARN
       "io.quarkiverse":

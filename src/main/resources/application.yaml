@@ -26,8 +26,6 @@ quarkus:
     category:
       "org.jboss":
         level: WARN
-      "org.apache.kafka":
-        level: WARN
       "io.quarkus":
         level: WARN
       "io.smallrye":
@@ -79,8 +77,6 @@ indy_security:
       category:
         "org.jboss":
           level: INFO
-        "org.apache.kafka":
-          level: ERROR
         "io.quarkus":
           level: INFO
         "io.smallrye":
