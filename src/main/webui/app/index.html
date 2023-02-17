@@ -35,6 +35,7 @@
   <link rel="stylesheet" href="css/indy.css"/>
 
   <script src="node_modules/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+  <script src="api/security/keycloak.js"></script>
   <script src="node_modules/angular/angular.min.js"></script>
   <script src="node_modules/angular-route/angular-route.min.js"></script>
   <script src="node_modules/angular-resource/angular-resource.min.js"></script>
@@ -101,7 +102,7 @@
                   <li class="dropdown" ng-if="username">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{username}}<span class="caret"></span></a>
                       <ul class="dropdown-menu" role="menu">
-                          <li><a class="fa fa-btn btn-lg" href="#/logout">Log Out</a></li>
+                          <li><a class="fa fa-btn btn-lg" href="/logout">Log Out</a></li>
                       </ul>
                   </li>
               </ul>
@@ -136,5 +137,6 @@
   <script src="js/services.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/app.js"></script>
+  <script src="api/security/keycloak-init.js"></script>
 </body>
 </html>
