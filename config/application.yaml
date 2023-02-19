@@ -20,6 +20,11 @@ quarkus:
     read-timeout: 30m
     limits:
       max-body-size: 500M
+    auth:
+      permission:
+        authenticated:
+          paths: "/*"
+          policy: authenticated
   package:
     type: uber-jar
   application:
@@ -32,7 +37,12 @@ quarkus:
     devservices:
       enabled: false
   oidc:
-    enabled: false
+    enabled: true
+    auth-server-url: "http://localhost:8180/realms/indyuiservice"
+    "client-id": "indy"
+    credentials:
+      secret: "secret"
+    "application-type": "web-app"
   security:
     auth:
       enabled-in-dev-mode: false
@@ -82,6 +92,3 @@ quarkus:
         strict-ssl: false
       install: "npm ci"
 
-
-indy_security:
-  enabled: True

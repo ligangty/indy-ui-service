@@ -35,14 +35,14 @@ const JS = [
 const IMG=[  
   {"from":"app/img/", "to":"img/"}
 ];
-const SWAGGER=[
-  'node_modules/swagger-ui-dist/'
-];
+// const SWAGGER=[
+//   'node_modules/swagger-ui-dist/',
+//   {"from":"app/rest-api.html", "to":"rest-api.html"}
+// ];
 const OTHER=[
   {"from":"app/index.html", "to":"index.html"},
-  {"from":"app/rest-api.html", "to":"rest-api.html"},
   {"from":"app/partials/", "to":"partials/"},
   {"from":"app/keycloak.json", "to":"keycloak.json"}
 ]
 
-module.exports = [...JS, ...CSS, ...IMG, ...SWAGGER, ...OTHER];
+module.exports = [...JS, ...CSS, ...IMG, ...OTHER];

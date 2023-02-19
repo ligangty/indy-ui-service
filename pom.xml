@@ -50,11 +50,13 @@
   </properties>
 
   <dependencies>
+    <!-- 
     <dependency>
       <groupId>org.commonjava.indy.service</groupId>
       <artifactId>indy-security</artifactId>
       <version>${indysecurity.verison}</version>
-    </dependency>
+    </dependency> 
+    -->
     
     <!-- quarkus deps start -->
     <dependency>

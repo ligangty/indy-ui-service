@@ -16,7 +16,6 @@
     "components-font-awesome": "4.2.0",
     "bootstrap": "^3.4.1",
     "keycloak-js": "^1.9.8",
-    "swagger-ui-dist": "4.1.x",
     "jquery": "^3.5.0"
   },
   "devDependencies": {
@@ -37,7 +36,7 @@
     "clean": "rm -rf ./dist",
     "build": "npm run-script clean && npm run-script compile && rm ./dist/indy.bundle.js",
     "prestart": "npm install",
-    "start": "http-server -a localhost -p 8000",
+    "start": "http-server ./dist -a localhost -p 8000",
     "pretest": "npm install",
     "test": "karma start test/karma.conf.js",
     "test-single-run": "karma start test/karma.conf.js  --single-run",

@@ -32,11 +32,9 @@
   <link rel="stylesheet" href="node_modules/ng-dialog/css/ngDialog-theme-default.css"/>
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css"/>
-  <!-- link rel="stylesheet" href="node_modules/components-font-awesome/css/font-awesome.css"/ -->
   <link rel="stylesheet" href="css/indy.css"/>
 
   <script src="node_modules/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
-  <script src="api/security/keycloak.js"></script>
   <script src="node_modules/angular/angular.min.js"></script>
   <script src="node_modules/angular-route/angular-route.min.js"></script>
   <script src="node_modules/angular-resource/angular-resource.min.js"></script>
@@ -60,12 +58,6 @@
           </div>
           <div class="collapse navbar-collapse" id="navbar-collapse-1">
               <ul class="nav navbar-nav" ng-controller="NavCtl">
-
-<!--
-                  <li><a class="fa btn btn-lg" href="#/remote">Remote Repositories</a></li>
-                  <li><a class="fa btn btn-lg" href="#/hosted">Hosted Repositories</a></li>
-                  <li><a class="fa btn btn-lg" href="#/group">Groups</a></li>
--->
                   <li class="dropdown">
                       <a href="#" class="fa btn btn-lg dropdown-toggle" data-toggle="dropdown">Remote Repositories <span class="caret"></span></a>
                       <ul class="dropdown-menu" role="menu">
@@ -101,8 +93,9 @@
                           <li><a class="fa" href="#/nfc">Not-Found Cache</a></li>
                           <li><a class="fa" href="#/cache/delete">Delete Metadata</a></li>
                           <li class="divider"></li>
-                          <li ng-repeat="addon in addon_navs"><a class="fa" href="#{{addon.route}}">{{addon.name}}</a>
-                          </li>
+                          <!--
+                          <li ng-repeat="addon in addon_navs"><a class="fa" href="#{{addon.route}}">{{addon.name}}</a></li>
+                          -->
                       </ul>
                   </li>
                   <li class="dropdown" ng-if="username">
@@ -142,8 +135,7 @@
   <script src="js/filters.js"></script>
   <script src="js/services.js"></script>
   <script src="js/controllers.js"></script>
-  <script src="api/stats/addons/active.js"></script>
+<!--  <script src="api/stats/addons/active.js"></script>-->
   <script src="js/app.js"></script>
-  <script src="api/security/keycloak-init.js"></script>
 </body>
 </html>
