@@ -31,6 +31,9 @@ proxy-profiles.json
 # vscode
 .vscode/
 
+# quarkus & extension
+.quinoa/
+
 *.dat
 log/*
 
