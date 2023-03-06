@@ -62,7 +62,7 @@ quarkus:
     package-manager-command:
       install-env:
         strict-ssl: false
-      install: "npm ci"
+      install: "npm config set strict-ssl false && npm ci"
 
 
 indy_security:
@@ -98,4 +98,4 @@ indy_security:
           max-file-size: 10M
     quinoa:
       package-manager-command:
-        install: "npm ci"
+        install: "npm config set strict-ssl false && npm ci"

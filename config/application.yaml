@@ -90,5 +90,5 @@ quarkus:
     package-manager-command:
       install-env:
         strict-ssl: false
-      install: "npm ci"
+      install: "npm config set strict-ssl false && npm ci"
 
