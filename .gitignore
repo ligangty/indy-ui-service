@@ -33,8 +33,9 @@ proxy-profiles.json
 
 # quarkus & extension
 .quinoa/
+config/*
+log/*
 
 *.dat
-log/*
 
 
