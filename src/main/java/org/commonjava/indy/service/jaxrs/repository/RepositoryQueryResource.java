@@ -23,6 +23,7 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -38,6 +39,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PATH;
+import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.QUERY;
 
 @Tag( name = "Store Querying APIs", description = "Resource for querying artifact store definitions" )
 @Path( "/api/admin/stores/query" )
@@ -50,6 +53,13 @@ public class RepositoryQueryResource
     RepositoryQueryServiceClient client;
 
     @Operation( description = "Retrieve all repository definitions" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = QUERY, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "types", in = QUERY, description = "The types of the repository. Split by comma",
+                        example = "\"remote, hosted\"" ), @Parameter( name = "enabled", in = QUERY,
+                                                                      description = "If the repositories retrieved are enabled, default is true if not specified",
+                                                                      example = "true|false" ) } )
     @APIResponse( responseCode = "200",
                   content = @Content( schema = @Schema( implementation = StoreListingDTO.class ) ),
                   description = "The store definitions" )
@@ -65,6 +75,11 @@ public class RepositoryQueryResource
     }
 
     @Operation( description = "Retrieve all remote repository definitions by specified package type" )
+    @Parameters( value = { @Parameter( name = "packageType", in = QUERY,
+                                       description = "package type for the remotes, default is maven if not specified",
+                                       example = "maven, npm, generic-http" ), @Parameter( name = "enabled", in = QUERY,
+                                                                                           description = "If the repositories retrieved are enabled, default is true if not specified",
+                                                                                           example = "true|false" ) } )
     @APIResponse( responseCode = "200",
                   content = @Content( schema = @Schema( implementation = StoreListingDTO.class ) ),
                   description = "The store definitions" )
@@ -72,16 +87,18 @@ public class RepositoryQueryResource
     @GET
     @Path( "/remotes/all" )
     @Produces( APPLICATION_JSON )
-    public Response getAllRemoteRepositories(
-            @Parameter( description = "package type for the remotes, default is maven if not specified",
-                        example = "maven|npm" ) @QueryParam( "packageType" ) final String packageType,
-            @Parameter( description = "If the repositories retrieved are enabled, default is true if not specified",
-                        example = "true" ) @QueryParam( "enabled" ) final String enabled )
+    public Response getAllRemoteRepositories( @QueryParam( "packageType" ) final String packageType,
+                                              @QueryParam( "enabled" ) final String enabled )
     {
         return client.getAllRemoteRepositories( packageType, enabled );
     }
 
     @Operation( description = "Retrieve all hosted repository definitions by specified package type" )
+    @Parameters( value = { @Parameter( name = "packageType", in = QUERY,
+                                       description = "package type for the hosted repos, default is maven if not specified",
+                                       example = "maven, npm" ), @Parameter( name = "enabled", in = QUERY,
+                                                                             description = "If the repositories retrieved are enabled, default is true if not specified",
+                                                                             example = "true|false" ) } )
     @APIResponse( responseCode = "200",
                   content = @Content( schema = @Schema( implementation = StoreListingDTO.class ) ),
                   description = "The store definitions" )
@@ -89,16 +106,18 @@ public class RepositoryQueryResource
     @GET
     @Path( "/hosteds/all" )
     @Produces( APPLICATION_JSON )
-    public Response getAllHostedRepositories(
-            @Parameter( description = "package type for the hosted repos, default is maven if not specified",
-                        example = "maven|npm" ) @QueryParam( "packageType" ) final String packageType,
-            @Parameter( description = "If the repositories retrieved are enabled, default is true if not specified",
-                        example = "true" ) @QueryParam( "enabled" ) final String enabled )
+    public Response getAllHostedRepositories( @QueryParam( "packageType" ) final String packageType,
+                                              @QueryParam( "enabled" ) final String enabled )
     {
         return client.getAllHostedRepositories( packageType, enabled );
     }
 
     @Operation( description = "Retrieve all group definitions by specified package type" )
+    @Parameters( value = { @Parameter( name = "packageType", in = QUERY,
+                                       description = "package type for the groups, default is maven if not specified",
+                                       example = "maven, npm" ), @Parameter( name = "enabled", in = QUERY,
+                                                                             description = "If the repositories retrieved are enabled, default is true if not specified",
+                                                                             example = "true|false" ) } )
     @APIResponse( responseCode = "200",
                   content = @Content( schema = @Schema( implementation = StoreListingDTO.class ) ),
                   description = "The store definitions" )
@@ -106,11 +125,8 @@ public class RepositoryQueryResource
     @GET
     @Path( "/groups/all" )
     @Produces( APPLICATION_JSON )
-    public Response getAllGroups(
-            @Parameter( description = "package type for the groups,  default is maven if not specified",
-                        example = "maven|npm" ) @QueryParam( "packageType" ) final String packageType,
-            @Parameter( description = "If the repositories retrieved are enabled, default is true if not specified",
-                        example = "true" ) @QueryParam( "enabled" ) final String enabled )
+    public Response getAllGroups( @QueryParam( "packageType" ) final String packageType,
+                                  @QueryParam( "enabled" ) final String enabled )
     {
         return client.getAllGroups( packageType, enabled );
     }
@@ -136,7 +152,8 @@ public class RepositoryQueryResource
     @Path( "/byName/{name}" )
     @Produces( APPLICATION_JSON )
     public Response getByName(
-            @Parameter( description = "Name of the repository", required = true ) @PathParam( "name" ) String name )
+            @Parameter( description = "Name of the repository", in = PATH, required = true ) @PathParam( "name" )
+            String name )
     {
         return client.getByName( name );
     }
