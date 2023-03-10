@@ -54,7 +54,7 @@ public class GenericContentAccessResource
 
     @Inject
     @RestClient
-    private GenericContentAccessServiceClient client;
+    GenericContentAccessServiceClient client;
 
     @Operation( description = "Store content under the given artifact store (type/name) and path." )
     @Parameters( { @Parameter( name = "type", in = PATH, description = "The type of the repository.",
