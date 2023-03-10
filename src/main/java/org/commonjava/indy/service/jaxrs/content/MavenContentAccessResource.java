@@ -43,7 +43,7 @@ import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 
 import static javax.ws.rs.core.MediaType.WILDCARD;
-import static org.commonjava.indy.service.client.content.MavenContentAccessServiceClient.CHECK_CACHE_ONLY;
+import static org.commonjava.indy.service.client.Constants.CHECK_CACHE_ONLY;
 import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PATH;
 import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.QUERY;
 

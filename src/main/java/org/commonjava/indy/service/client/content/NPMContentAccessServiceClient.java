@@ -15,8 +15,6 @@
  */
 package org.commonjava.indy.service.client.content;
 
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -31,16 +29,22 @@ import javax.ws.rs.core.UriInfo;
 
 import static org.commonjava.indy.service.client.Constants.CHECK_CACHE_ONLY;
 
-@Path( "/api/content/maven/{type: (hosted|group|remote)}/{name}" )
-@RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider(CustomClientRequestFilter.class)
-public interface MavenContentAccessServiceClient
+@Path( "/api/content/npm/{type: (hosted|group|remote)}/{name}" )
+//@RegisterProvider( CustomClientRequestFilter.class)
+public interface NPMContentAccessServiceClient
 {
 
     @PUT
-    @Path( "/{path}" )
+    @Path( "/{packageName}" )
     Response doCreate( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
-                       final @PathParam( "path" ) String path, final @Context UriInfo uriInfo,
+                       final @PathParam( "packageName" ) String packageName, final @Context UriInfo uriInfo,
+                       final @Context HttpServletRequest request );
+
+    @PUT
+    @Path( "/{packageName}/{versionTarball}" )
+    Response doCreate( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
+                       final @PathParam( "packageName" ) String packageName,
+                       final @PathParam( "versionTarball" ) String versionTarball, final @Context UriInfo uriInfo,
                        final @Context HttpServletRequest request );
 
     @DELETE
@@ -50,15 +54,31 @@ public interface MavenContentAccessServiceClient
                        final @QueryParam( CHECK_CACHE_ONLY ) Boolean cacheOnly );
 
     @HEAD
-    @Path( "/{path}" )
+    @Path( "/{packageName}" )
     Response doHead( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
-                     final @PathParam( "path" ) String path, @QueryParam( CHECK_CACHE_ONLY ) final Boolean cacheOnly,
-                     @Context final UriInfo uriInfo, @Context final HttpServletRequest request );
+                     final @PathParam( "packageName" ) String packageName,
+                     @QueryParam( CHECK_CACHE_ONLY ) final Boolean cacheOnly, @Context final UriInfo uriInfo,
+                     @Context final HttpServletRequest request );
+
+    @HEAD
+    @Path( "/{packageName}/{versionTarball: (.*)}" )
+    Response doHead( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
+                     final @PathParam( "packageName" ) String packageName,
+                     final @PathParam( "versionTarball" ) String versionTarball,
+                     @QueryParam( CHECK_CACHE_ONLY ) final Boolean cacheOnly, @Context final UriInfo uriInfo,
+                     @Context final HttpServletRequest request );
 
     @GET
-    @Path( "/{path}" )
+    @Path( "/{packageName}" )
     Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
-                    final @PathParam( "path" ) String path, @Context final UriInfo uriInfo,
+                    final @PathParam( "packageName" ) String packageName, @Context final UriInfo uriInfo,
+                    @Context final HttpServletRequest request );
+
+    @GET
+    @Path( "/{packageName}/{versionTarball: (.*)}" )
+    Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
+                    final @PathParam( "packageName" ) String packageName,
+                    final @PathParam( "versionTarball" ) String versionTarball, @Context final UriInfo uriInfo,
                     @Context final HttpServletRequest request );
 
     @GET
