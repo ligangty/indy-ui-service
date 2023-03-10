@@ -15,6 +15,8 @@
  */
 package org.commonjava.indy.service.client.content;
 
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -30,6 +32,7 @@ import javax.ws.rs.core.UriInfo;
 import static org.commonjava.indy.service.client.Constants.CHECK_CACHE_ONLY;
 
 @Path( "/api/content/npm/{type: (hosted|group|remote)}/{name}" )
+@RegisterRestClient( configKey = "service-api" )
 //@RegisterProvider( CustomClientRequestFilter.class)
 public interface NPMContentAccessServiceClient
 {
