@@ -18,6 +18,7 @@ package org.commonjava.indy.service.client.koji;
 import org.commonjava.indy.service.models.koji.KojiMultiRepairResult;
 import org.commonjava.indy.service.models.koji.KojiRepairRequest;
 import org.commonjava.indy.service.models.koji.KojiRepairResult;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -33,6 +34,8 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path( "/api/repair/koji" )
 @Produces( APPLICATION_JSON )
+@RegisterRestClient( configKey = "service-api" )
+//@RegisterProvider( CustomClientRequestFilter.class)
 public interface KojiRepairServiceClient
 {
 
