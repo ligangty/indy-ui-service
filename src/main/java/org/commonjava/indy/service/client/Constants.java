@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.commonjava.indy.service.models.repository;
+package org.commonjava.indy.service.client;
 
-/**
- * Created by jdcasey on 6/2/16.
- */
-public enum PathStyle
+public interface Constants
 {
-    plain,
-    hashed;
+    String CHECK_CACHE_ONLY = "cache-only";
+
+    public static final String PKG_TYPE_MAVEN = "maven";
+
+    public static final String PKG_TYPE_NPM = "npm";
+
+    public static final String PKG_TYPE_GENERIC_HTTP = "generic-http";
+
 }

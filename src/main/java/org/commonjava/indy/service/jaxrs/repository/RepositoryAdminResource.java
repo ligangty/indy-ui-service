@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2023 Red Hat, Inc.
+ * Copyright (C) 2023 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,12 @@ import org.commonjava.indy.service.client.repository.RepositoryAdminServiceClien
 import org.commonjava.indy.service.models.repository.ArtifactStore;
 import org.commonjava.indy.service.models.repository.ArtifactStoreValidateData;
 import org.commonjava.indy.service.models.repository.StoreListingDTO;
+import org.commonjava.indy.service.models.repository.StoreType;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -46,7 +48,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import java.util.Map;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -58,8 +59,6 @@ import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PAT
 public class RepositoryAdminResource
 {
 
-    private final Logger logger = LoggerFactory.getLogger( getClass() );
-
     @Inject
     @RestClient
     RepositoryAdminServiceClient client;
@@ -67,6 +66,11 @@ public class RepositoryAdminResource
     @Operation( description = "Check if a given store exists" )
     @APIResponse( responseCode = "200", description = "The store exists" )
     @APIResponse( responseCode = "404", description = "The store doesn't exist" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = PATH, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "type", in = PATH, description = "The type of the repository.",
+                        content = @Content( schema = @Schema( implementation = StoreType.class ) ) ) } )
     @Path( "/{name}" )
     @HEAD
     public Response exists( final @PathParam( "packageType" ) String packageType,
@@ -79,6 +83,11 @@ public class RepositoryAdminResource
     @APIResponse( responseCode = "201", content = @Content( schema = @Schema( implementation = ArtifactStore.class ) ),
                   description = "The store was created" )
     @APIResponse( responseCode = "409", description = "A store with the specified type and name already exists" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = PATH, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "type", in = PATH, description = "The type of the repository.",
+                        content = @Content( schema = @Schema( implementation = StoreType.class ) ) ) } )
     @RequestBody( description = "The artifact store definition JSON", name = "body", required = true,
                   content = @Content( schema = @Schema( implementation = ArtifactStore.class ) ) )
     @POST
@@ -96,6 +105,11 @@ public class RepositoryAdminResource
                   description = "The store was updated" )
     @APIResponse( responseCode = "400",
                   description = "The store specified in the body JSON didn't match the URL parameters" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = PATH, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "type", in = PATH, description = "The type of the repository.",
+                        content = @Content( schema = @Schema( implementation = StoreType.class ) ) ) } )
     @RequestBody( description = "The artifact store definition JSON", name = "body", required = true,
                   content = @Content( schema = @Schema( implementation = ArtifactStore.class ) ) )
     @Path( "/{name}" )
@@ -108,6 +122,11 @@ public class RepositoryAdminResource
     }
 
     @Operation( description = "Retrieve the definitions of all artifact stores of a given type on the system" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = PATH, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "type", in = PATH, description = "The type of the repository.",
+                        content = @Content( schema = @Schema( implementation = StoreType.class ) ) ) } )
     @APIResponse( responseCode = "200",
                   content = @Content( schema = @Schema( implementation = StoreListingDTO.class ) ),
                   description = "The store definitions" )
@@ -120,6 +139,11 @@ public class RepositoryAdminResource
     }
 
     @Operation( description = "Retrieve the definition of a specific artifact store" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = PATH, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "type", in = PATH, description = "The type of the repository.",
+                        content = @Content( schema = @Schema( implementation = StoreType.class ) ) ) } )
     @APIResponse( responseCode = "200", content = @Content( schema = @Schema( implementation = ArtifactStore.class ) ),
                   description = "The store definition" )
     @APIResponse( responseCode = "404", description = "The store doesn't exist" )
@@ -133,6 +157,11 @@ public class RepositoryAdminResource
     }
 
     @Operation( description = "Delete an artifact store" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = PATH, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "type", in = PATH, description = "The type of the repository.",
+                        content = @Content( schema = @Schema( implementation = StoreType.class ) ) ) } )
     @APIResponse( responseCode = "204", content = @Content( schema = @Schema( implementation = ArtifactStore.class ) ),
                   description = "The store was deleted (or didn't exist in the first place)" )
     @Path( "/{name}" )
@@ -146,6 +175,11 @@ public class RepositoryAdminResource
     }
 
     @Operation( description = "Retrieve the definition of a remote by specific url" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = PATH, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "type", in = PATH, description = "The type of the repository.",
+                        content = @Content( schema = @Schema( implementation = StoreType.class ) ) ) } )
     @APIResponse( responseCode = "200",
                   content = @Content( schema = @Schema( implementation = StoreListingDTO.class ) ),
                   description = "The remote store definitions" )
@@ -160,6 +194,11 @@ public class RepositoryAdminResource
     }
 
     @Operation( description = "Revalidation of Artifacts Stored on demand" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = PATH, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "type", in = PATH, description = "The type of the repository.",
+                        content = @Content( schema = @Schema( implementation = StoreType.class ) ) ) } )
     @APIResponse( responseCode = "200", content = @Content( schema = @Schema( implementation = Map.class ) ),
                   description = "Revalidation for Remote Repositories was successfull" )
     @APIResponse( responseCode = "404", description = "Revalidation is not successfull" )
@@ -172,6 +211,11 @@ public class RepositoryAdminResource
     }
 
     @Operation( description = "Revalidation of Artifact Stored on demand based on package, type and name" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = PATH, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "type", in = PATH, description = "The type of the repository.",
+                        content = @Content( schema = @Schema( implementation = StoreType.class ) ) ) } )
     @APIResponse( responseCode = "200",
                   content = @Content( schema = @Schema( implementation = ArtifactStoreValidateData.class ) ),
                   description = "Revalidation for Remote Repository was successful" )
@@ -186,6 +230,11 @@ public class RepositoryAdminResource
     }
 
     @Operation( description = "Return All Invalidated Remote Repositories" )
+    @Parameters( value = {
+            @Parameter( name = "packageType", in = PATH, description = "The package type of the repository.",
+                        example = "maven, npm, generic-http" ),
+            @Parameter( name = "type", in = PATH, description = "The type of the repository.",
+                        content = @Content( schema = @Schema( implementation = StoreType.class ) ) ) } )
     @APIResponse( responseCode = "200", description = "Return All Invalidated Remote Repositories" )
     @Path( "/invalid/all" )
     @GET
