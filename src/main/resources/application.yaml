@@ -4,15 +4,15 @@ quarkus:
     read-timeout: 30m
     limits:
       max-body-size: 500M
-    auth:
-      permission:
-        authenticated:
-          paths: "/*"
-          policy: authenticated
+#    auth:
+#      permission:
+#        authenticated:
+#          paths: "/*"
+#          policy: authenticated
   package:
     type: uber-jar
   application:
-    name: "Indy UI"
+    name: "Indy"
   resteasy:
     gzip:
       enabled: true
@@ -20,16 +20,16 @@ quarkus:
   keycloak:
     devservices:
       enabled: false
-  oidc:
-    enabled: true
-    auth-server-url: "http://localhost:8180/realms/indyuiservice"
-    "client-id": "indy"
-    credentials:
-      secret: "secret"
-    "application-type": "web-app"
-    logout:
-      path: "/logout"
-      post-logout-path: "/"
+#  oidc:
+#    enabled: true
+#    auth-server-url: "http://localhost:8180/realms/indyuiservice"
+#    "client-id": "indy"
+#    credentials:
+#      secret: "secret"
+#    "application-type": "web-app"
+#    logout:
+#      path: "/logout"
+#      post-logout-path: "/"
   log:
     level: INFO
     min-level: TRACE
@@ -78,6 +78,16 @@ quarkus:
       install-env:
         strict-ssl: false
       install: "npm config set strict-ssl false && npm ci"
+
+mp:
+  openapi:
+    scan:
+      exclude:
+        packages:
+          - org.commonjava.indy.service.ui.jaxrs.stats
+          - org.commonjava.indy.service.ui.models.stats
+          - org.commonjava.indy.service.ui.keycloak
+
 
 
 indy_security:
