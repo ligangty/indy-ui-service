@@ -64,7 +64,7 @@ indy.config(['$routeProvider', '$controllerProvider', '$compileProvider', '$filt
 
   $routeProvider.when('/rest-api', {templateUrl: 'partials/rest-api.html'})
   
-  $routeProvider.when('/logout', {template: " ", controller: 'LogoutCtl'})
+  // $routeProvider.when('/logout', {template: " ", controller: 'LogoutCtl'})
 
   
   if ( typeof addons !== 'undefined' ){

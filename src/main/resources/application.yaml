@@ -4,6 +4,11 @@ quarkus:
     read-timeout: 30m
     limits:
       max-body-size: 500M
+    auth:
+      permission:
+        authenticated:
+          paths: "/*"
+          policy: authenticated
   package:
     type: uber-jar
   application:
@@ -16,10 +21,15 @@ quarkus:
     devservices:
       enabled: false
   oidc:
-    enabled: false
-  security:
-    auth:
-      enabled-in-dev-mode: false
+    enabled: true
+    auth-server-url: "http://localhost:8180/realms/indyuiservice"
+    "client-id": "indy"
+    credentials:
+      secret: "secret"
+    "application-type": "web-app"
+    logout:
+      path: "/logout"
+      post-logout-path: "/"
   log:
     level: INFO
     min-level: TRACE
@@ -71,6 +81,28 @@ quarkus:
 
 indy_security:
   enabled: False
+
+keycloak:
+  enabled: false
+#  url: http://localhost:8090/
+#  realm:
+#    name: indy
+#    key: "UNSPECIFIED"
+#    public:
+#      key: "UNSPECIFIED"
+#  keycloak:
+#    json: keycloak/keycloak.json
+#  keycloak-ui:
+#    json: keycloak/keycloak-ui.json
+#  security-bindings:
+#    json: keycloak/security-bindings.json
+#  server:
+#    credential:
+#      secret: "UNSPECIFIED"
+#    resource: indy
+#  ui:
+#    resource: indy-ui
+
 
 ## [rest client]
 service-api/mp-rest/uri: http://localhost:8080/
