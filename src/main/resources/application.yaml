@@ -63,6 +63,7 @@ quarkus:
         max-file-size: 10M
   swagger-ui:
     always-include: true
+    title: "Indy"
   opentelemetry:
     enabled: false
 
