@@ -84,6 +84,24 @@ indy_security:
 
 keycloak:
   enabled: false
+#  url: http://localhost:8090/
+#  realm:
+#    name: indy
+#    key: "UNSPECIFIED"
+#    public:
+#      key: "UNSPECIFIED"
+#  keycloak:
+#    json: keycloak/keycloak.json
+#  keycloak-ui:
+#    json: keycloak/keycloak-ui.json
+#  security-bindings:
+#    json: keycloak/security-bindings.json
+#  server:
+#    credential:
+#      secret: "UNSPECIFIED"
+#    resource: indy
+#  ui:
+#    resource: indy-ui
 
 
 ## [rest client]

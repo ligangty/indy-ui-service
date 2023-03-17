@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2023 Red Hat, Inc.
+ * Copyright (C) 2011-2022 Red Hat, Inc. (https://github.com/Commonjava/indy)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.commonjava.indy.service.exception;
+package org.commonjava.indy.service;
 
 import java.io.NotSerializableException;
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.Objects;
 
 public class IndyUIException
-        extends Exception
+    extends Exception
 {
     private Object[] params;
 
     private transient String formattedMessage;
-
-    private int status;
 
     public IndyUIException( final String message, final Object... params )
     {
@@ -39,20 +36,6 @@ public class IndyUIException
     {
         super( message, cause );
         this.params = params;
-    }
-
-    public IndyUIException( final int status, final String message, final Object... params )
-    {
-        super( message );
-        this.params = params;
-        this.status = status;
-    }
-
-    public IndyUIException( final int status, final String message, Throwable cause, final Object... params )
-    {
-        super( message, cause );
-        this.params = params;
-        this.status = status;
     }
 
     private static final long serialVersionUID = 1L;
@@ -69,7 +52,7 @@ public class IndyUIException
             }
             else
             {
-                for ( int i = 0; i < params.length; i++ )
+                for(int i=0; i<params.length; i++)
                 {
                     if ( params[i] == null )
                     {
@@ -80,42 +63,41 @@ public class IndyUIException
                 final String original = formattedMessage;
                 try
                 {
-                    formattedMessage = String.format( format.replaceAll( "\\{}", "%s" ), params );
+                    formattedMessage = String.format( format.replaceAll( "\\{\\}", "%s" ), params );
                 }
-                catch ( final Error | Exception ignored )
+                catch ( final Error e )
+                {
+                }
+                catch ( final RuntimeException e )
+                {
+                }
+                catch ( final Exception e )
                 {
                 }
 
-                if ( formattedMessage == null || Objects.equals( original, formattedMessage ) )
+                if ( formattedMessage == null || original == formattedMessage )
                 {
                     try
                     {
                         formattedMessage = MessageFormat.format( format, params );
                     }
-                    catch ( IllegalArgumentException e )
+                    catch ( final Error e )
                     {
                         formattedMessage = format;
                     }
-                    catch ( final Error | RuntimeException e )
+                    catch ( final RuntimeException e )
                     {
                         formattedMessage = format;
-                        //                        throw e;
                     }
                     catch ( final Exception e )
                     {
                         formattedMessage = format;
                     }
                 }
-
             }
         }
 
         return formattedMessage;
-    }
-
-    public int getStatus()
-    {
-        return status < 1 ? 500 : status;
     }
 
     /**
