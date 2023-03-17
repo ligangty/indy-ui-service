@@ -20,7 +20,7 @@ import org.apache.commons.io.IOUtils;
 import org.codehaus.plexus.interpolation.InterpolationException;
 import org.codehaus.plexus.interpolation.PropertiesBasedValueSource;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
-import org.commonjava.indy.service.IndyUIException;
+import org.commonjava.indy.service.exception.IndyUIException;
 import org.commonjava.indy.service.util.UrlUtils;
 
 import javax.enterprise.context.ApplicationScoped;

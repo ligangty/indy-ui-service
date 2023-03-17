@@ -15,7 +15,7 @@
  */
 package org.commonjava.indy.service.keycloak;
 
-import org.commonjava.indy.service.IndyUIException;
+import org.commonjava.indy.service.exception.IndyUIException;
 import org.commonjava.indy.service.jaxrs.ResponseHelper;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;

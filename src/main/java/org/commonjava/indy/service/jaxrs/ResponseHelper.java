@@ -17,7 +17,7 @@ package org.commonjava.indy.service.jaxrs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.commonjava.indy.service.IndyUIException;
+import org.commonjava.indy.service.exception.IndyUIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
