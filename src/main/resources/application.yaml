@@ -119,6 +119,9 @@ keycloak:
 ## [rest client]
 service-api/mp-rest/uri: http://localhost:8080/
 service-api/mp-rest/scope: javax.inject.Singleton
+#service-api/mp-rest/connectTimeout: 60000
+#service-api/mp-rest/readTimeout: 60000
+#service-api/mp-rest/providers: org.commonjava.indy.service.ui.client.CustomClientRequestFilter
 
 "%dev":
   quarkus:
