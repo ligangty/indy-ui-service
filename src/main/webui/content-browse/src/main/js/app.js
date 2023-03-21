@@ -15,7 +15,7 @@
  */
 'use strict'
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {render} from 'react-dom';
 import {styles} from './style.js';
 
@@ -28,7 +28,12 @@ const URLList  = (props)=> {
   if(props.urls){
     props.urls.forEach((urlResult, index)=>{
       let source = `sources:\n${urlResult.sources.join("\n")}`;
-      let url = urlResult.listingUrl.replace(/http(s{0,1}):\/\/.*\/api/, "");
+      let url = urlResult.listingUrl;
+      if (url.includes("api/browse")){
+        url = url.replace(/http(s{0,1}):\/\/.*\/api/, "");
+      } else {
+        url = url.replace(/http(s{0,1}):\/\/.*?\//, "/");
+      }
       let paths = urlResult.path.split('/');
       let path = urlResult.path.endsWith("/")? paths[paths.length-2] + "/" : paths[paths.length-1];
       elems.push(<li key={"urlList"+index}><a className="item-link" title={source} href={url} path={urlResult.path}>{path}</a></li>);
@@ -52,18 +57,8 @@ const Footer = (props) => {
     </footer>);
 }
 
-class URLPage extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      error: null,
-      isLoaded: false,
-      data: {}
-    };
-  }
-
-  getStoreKey(){
-    let storeElems = this.state.data.storeKey.split(":");
+function getStoreKey(storeKey){
+    let storeElems = storeKey.split(":");
     return {
       "packageType": storeElems[0],
       "type": storeElems[1],
@@ -71,7 +66,9 @@ class URLPage extends React.Component {
     }
   }
 
-  componentDidMount() {
+const initPage=()=> {
+  const [dataLoad, setDataLoad] = useState({error: null, isLoaded: false, data:{} });
+  useEffect(()=>{
     fetch("/api" + document.location.pathname, {
       method: "GET",
       credentials: 'same-origin',
@@ -81,38 +78,40 @@ class URLPage extends React.Component {
     }).then(response => {
       if(response.ok){
         response.json().then(data=>{          
-          this.setState({
+          setDataLoad({
             isLoaded: true,
-            data
+            data: data
           });
         });
       }else if(!response.ok){
         response.text().then(data=>{
-          this.setState({
+          setDataLoad({
             isLoaded: true,
             error: data
           });         
         });
       }
-    });    
-  }
-  
-  render() {
-    const { error, isLoaded, data } = this.state;
-    if (error) {
-      return <div>Error: {error}</div>;
-    } else if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-      document.title = `Directory listing for ${data.path} on ${this.getStoreKey().name}`;
-      return (
-        <div>
-          <h2 style={styles.Header} key="title">Directory listing for {data.path} on {this.getStoreKey().name}</h2>
-          <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
-          <Footer key="footer" sources={data.sources} />
-        </div>
-      );
-    }
+    }); 
+  },[dataLoad]);
+  return dataLoad;  
+}
+
+function URLPage() {
+  const { error, isLoaded, data } = initPage();
+  if (error) {
+    return <div>Error: {error}</div>;
+  } else if (!isLoaded) {
+    return <div>Loading...</div>;
+  } else {
+    const heading = `Directory listing for ${data.path} on ${getStoreKey(data.storeKey).name}`;
+    document.title = heading
+    return (
+      <div>
+        <h2 style={styles.Header} key="title">{heading}</h2>
+        <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
+        <Footer key="footer" sources={data.sources} />
+      </div>
+    );
   }
 }
 
