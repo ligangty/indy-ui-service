@@ -16,6 +16,7 @@
 package org.commonjava.indy.service.ui.jaxrs.content;
 
 import org.commonjava.indy.service.ui.client.content.ContentBrowseServiceClient;
+import org.commonjava.indy.service.ui.models.content.ContentBrowseResult;
 import org.commonjava.indy.service.ui.models.repository.StoreType;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -26,6 +27,8 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -44,6 +47,8 @@ import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PAT
 @Path( "/api/browse/{packageType}/{type: (hosted|group|remote)}/{name}" )
 public class ContentBrowseResource
 {
+    private final Logger logger = LoggerFactory.getLogger( this.getClass() );
+
     @Inject
     @RestClient
     ContentBrowseServiceClient client;
@@ -90,8 +95,12 @@ public class ContentBrowseResource
                                      final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                                      final @PathParam( "path" ) String path, @Context final UriInfo uriInfo )
     {
-
-        return client.browseDirectory( packageType, type, name, path, uriInfo );
+        try (Response r = client.browseDirectory( packageType, type, name, path, uriInfo ))
+        {
+            ContentBrowseResult result = r.readEntity( ContentBrowseResult.class );
+            logger.debug( "Returning: {}", result );
+            return Response.ok( result ).build();
+        }
 
     }
 
@@ -112,7 +121,12 @@ public class ContentBrowseResource
                                 final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                                 @Context final UriInfo uriInfo )
     {
-        return client.browseRoot( packageType, type, name, uriInfo );
+        try (Response r = client.browseRoot( packageType, type, name, uriInfo ))
+        {
+            ContentBrowseResult result = r.readEntity( ContentBrowseResult.class );
+            logger.debug( "{}", result );
+            return Response.ok( result ).build();
+        }
     }
 
 }

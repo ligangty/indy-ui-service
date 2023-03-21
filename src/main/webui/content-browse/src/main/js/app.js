@@ -28,7 +28,7 @@ const URLList  = (props)=> {
   if(props.urls){
     props.urls.forEach((urlResult, index)=>{
       let source = `sources:\n${urlResult.sources.join("\n")}`;
-      let url = urlResult.listingUrl.replace("/api/browse", "/browse");
+      let url = urlResult.listingUrl.replace(/http(s{0,1}):\/\/.*\/api/, "");
       let paths = urlResult.path.split('/');
       let path = urlResult.path.endsWith("/")? paths[paths.length-2] + "/" : paths[paths.length-1];
       elems.push(<li key={"urlList"+index}><a className="item-link" title={source} href={url} path={urlResult.path}>{path}</a></li>);
