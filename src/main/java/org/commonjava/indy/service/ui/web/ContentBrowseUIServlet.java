@@ -224,7 +224,7 @@ public class ContentBrowseUIServlet
 
     private URL resourceForProdMode( final String path )
     {
-        final String fPath = "META-INF/webui/content-browse/" + path;
+        final String fPath = config.resourceRoot() + path;
         logger.debug( "requesting {}", fPath );
         URL url = Thread.currentThread().getContextClassLoader().getResource( fPath );
         logger.debug( "The resource path: {}", url );

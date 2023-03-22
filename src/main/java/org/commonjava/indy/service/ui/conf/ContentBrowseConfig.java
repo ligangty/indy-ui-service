@@ -17,4 +17,8 @@ public interface ContentBrowseConfig
 
     @WithName( "service-url" )
     Optional<String> serviceUrl();
+
+    @WithName( "resource-root" )
+    @WithDefault( "META-INF/webui/content-browse/" )
+    String resourceRoot();
 }

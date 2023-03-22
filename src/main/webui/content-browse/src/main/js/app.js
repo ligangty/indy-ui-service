@@ -15,7 +15,7 @@
  */
 'use strict'
 
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {render} from 'react-dom';
 import {styles} from './style.js';
 
@@ -57,8 +57,18 @@ const Footer = (props) => {
     </footer>);
 }
 
-function getStoreKey(storeKey){
-    let storeElems = storeKey.split(":");
+class URLPage extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      error: null,
+      isLoaded: false,
+      data: {}
+    };
+  }
+
+  getStoreKey(){
+    let storeElems = this.state.data.storeKey.split(":");
     return {
       "packageType": storeElems[0],
       "type": storeElems[1],
@@ -66,9 +76,7 @@ function getStoreKey(storeKey){
     }
   }
 
-const initPage=()=> {
-  const [dataLoad, setDataLoad] = useState({error: null, isLoaded: false, data:{} });
-  useEffect(()=>{
+  componentDidMount() {
     fetch("/api" + document.location.pathname, {
       method: "GET",
       credentials: 'same-origin',
@@ -78,40 +86,38 @@ const initPage=()=> {
     }).then(response => {
       if(response.ok){
         response.json().then(data=>{          
-          setDataLoad({
+          this.setState({
             isLoaded: true,
-            data: data
+            data
           });
         });
       }else if(!response.ok){
         response.text().then(data=>{
-          setDataLoad({
+          this.setState({
             isLoaded: true,
             error: data
           });         
         });
       }
-    }); 
-  },[dataLoad]);
-  return dataLoad;  
+    });
 }
 
-function URLPage() {
-  const { error, isLoaded, data } = initPage();
-  if (error) {
-    return <div>Error: {error}</div>;
-  } else if (!isLoaded) {
-    return <div>Loading...</div>;
-  } else {
-    const heading = `Directory listing for ${data.path} on ${getStoreKey(data.storeKey).name}`;
-    document.title = heading
-    return (
-      <div>
-        <h2 style={styles.Header} key="title">{heading}</h2>
-        <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
-        <Footer key="footer" sources={data.sources} />
-      </div>
-    );
+  render() {
+    const { error, isLoaded, data } = this.state;
+    if (error) {
+      return <div>Error: {error}</div>;
+    } else if (!isLoaded) {
+      return <div>Loading...</div>;
+    } else {
+        document.title = `Directory listing for ${data.path} on ${this.getStoreKey().name}`;
+      return (
+        <div>
+            <h2 style={styles.Header} key="title">Directory listing for {data.path} on {this.getStoreKey().name}</h2>
+          <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
+          <Footer key="footer" sources={data.sources} />
+        </div>
+      );
+    }
   }
 }
 
