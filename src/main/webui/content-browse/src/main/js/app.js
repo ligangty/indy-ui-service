@@ -19,7 +19,23 @@ import React from 'react';
 import {render} from 'react-dom';
 import {styles} from './style.js';
 
-const URLList  = (props)=> {
+function replaceUrl(url){
+  if (url.includes("api/browse")){
+    return url.replace(/http(s{0,1}):\/\/.*\/api/, "");
+  } else {
+    return url.replace(/http(s{0,1}):\/\/.*?\//, "/");
+  }
+}
+
+function getFullHost(){
+  let fullHost = location.protocol + "//" + location.hostname
+  if (location.port){
+    fullHost = fullHost + ":" + location.port
+  }
+  return fullHost
+}
+
+const URLList = (props)=> {
   let elems = [];
   if(props.parentUrl){
     let parentUrl = props.parentUrl.replace("/api/browse", "/browse");
@@ -28,12 +44,7 @@ const URLList  = (props)=> {
   if(props.urls){
     props.urls.forEach((urlResult, index)=>{
       let source = `sources:\n${urlResult.sources.join("\n")}`;
-      let url = urlResult.listingUrl;
-      if (url.includes("api/browse")){
-        url = url.replace(/http(s{0,1}):\/\/.*\/api/, "");
-      } else {
-        url = url.replace(/http(s{0,1}):\/\/.*?\//, "/");
-      }
+      let url = replaceUrl(urlResult.listingUrl);
       let paths = urlResult.path.split('/');
       let path = urlResult.path.endsWith("/")? paths[paths.length-2] + "/" : paths[paths.length-1];
       elems.push(<li key={"urlList"+index}><a className="item-link" title={source} href={url} path={urlResult.path}>{path}</a></li>);
@@ -47,14 +58,20 @@ const URLList  = (props)=> {
 }
 
 const Footer = (props) => {
-  let elems = props.sources && props.sources.map((src, index)=>(<li key={"footer"+index}><a className="source-link" title={src} href={src}>{src}</a></li>));
+  let elems = props.sources && props.sources.map(
+    (src, index)=>{
+      let url = src.replace(/http(s{0,1}):\/\/.*?\//, getFullHost()+"/");
+      return (<li key={"footer"+index}><a className="source-link" title={url} href={url}>{url}</a></li>)
+    }
+  );
   return(
     <footer style={styles.Footer}>
       <p>Sources for this page:</p>
       <ul>
         {elems}
       </ul>
-    </footer>);
+    </footer>
+  );
 }
 
 class URLPage extends React.Component {
@@ -112,7 +129,7 @@ class URLPage extends React.Component {
         document.title = `Directory listing for ${data.path} on ${this.getStoreKey().name}`;
       return (
         <div>
-            <h2 style={styles.Header} key="title">Directory listing for {data.path} on {this.getStoreKey().name}</h2>
+          <h2 style={styles.Header} key="title">Directory listing for {data.path} on {this.getStoreKey().name}</h2>
           <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
           <Footer key="footer" sources={data.sources} />
         </div>
