@@ -53,7 +53,6 @@ public interface RepositoryAdminServiceClient
                        @PathParam( "name" ) String name );
 
     @POST
-    @Path( "/{packageType}/{type: (hosted|group|remote)}" )
     Response createStore( @PathParam( "packageType" ) String packageType, @PathParam( "type" ) String type,
                           @Context HttpRequest request );
 
@@ -70,21 +69,20 @@ public interface RepositoryAdminServiceClient
 
     @Path( "/{name}" )
     @DELETE
-    public Response deleteStore( final @PathParam( "packageType" ) String packageType,
-                            final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
-                            final @QueryParam( "deleteContent" ) boolean deleteContent,
-                            @Context final HttpRequest request );
+    Response deleteStore( final @PathParam( "packageType" ) String packageType, final @PathParam( "type" ) String type,
+                          final @PathParam( "name" ) String name,
+                          final @QueryParam( "deleteContent" ) boolean deleteContent,
+                          @Context final HttpRequest request );
 
     @Path( "/query/byUrl" )
     @GET
     Response getRemoteByUrl( final @PathParam( "packageType" ) String packageType,
-                                    final @PathParam( "type" ) String type, final @QueryParam( "url" ) String url,
-                                    @Context final HttpRequest request );
+                             final @PathParam( "type" ) String type, final @QueryParam( "url" ) String url,
+                             @Context final HttpRequest request );
 
     @Path( "/revalidate/all/" )
     @POST
-    public Response revalidateStores( @PathParam( "packageType" ) String packageType,
-                                              @PathParam( "type" ) String type );
+    Response revalidateStores( @PathParam( "packageType" ) String packageType, @PathParam( "type" ) String type );
 
     @Path( "/{name}/revalidate" )
     @POST
