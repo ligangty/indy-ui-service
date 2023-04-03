@@ -30,7 +30,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path( "/api/admin/stores/maint" )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider(CustomClientRequestFilter.class)
 public interface RepositoryMaintServiceClient
 {
     String MEDIATYPE_APPLICATION_ZIP = "application/zip";

@@ -34,7 +34,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path( "/api/admin/schedule" )
 @Produces( APPLICATION_JSON )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider( CustomClientRequestFilter.class)
 public interface SchedulerServiceClient
 {
     @Path( "store/{type}/{name}/disable-timeout" )

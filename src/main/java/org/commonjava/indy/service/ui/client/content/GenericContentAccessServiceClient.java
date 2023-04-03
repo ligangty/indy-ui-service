@@ -33,7 +33,6 @@ import static org.commonjava.indy.service.ui.client.Constants.CHECK_CACHE_ONLY;
 
 @Path( "/api/content/generic-http/{type: (hosted|group|remote)}/{name}" )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider( CustomClientRequestFilter.class)
 public interface GenericContentAccessServiceClient
 {
 

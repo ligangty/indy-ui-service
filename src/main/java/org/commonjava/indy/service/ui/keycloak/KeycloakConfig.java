@@ -27,6 +27,7 @@ import java.util.Properties;
 @Startup
 @ConfigMapping( prefix = "keycloak" )
 @ApplicationScoped
+@Deprecated
 interface KeycloakConfig
 {
     boolean DEFAULT_ENABLED = false;

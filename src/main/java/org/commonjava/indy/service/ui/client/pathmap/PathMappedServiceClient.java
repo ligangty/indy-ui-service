@@ -34,7 +34,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path( "/api/admin/pathmapped" )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider( CustomClientRequestFilter.class)
 public interface PathMappedServiceClient
 {
     String BROWSE_BASE = "/browse/{packageType}/{type: (hosted|group|remote)}/{name}";

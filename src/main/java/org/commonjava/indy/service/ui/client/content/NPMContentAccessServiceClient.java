@@ -32,7 +32,6 @@ import javax.ws.rs.core.UriInfo;
 
 @Path( "/api/content/npm/{type: (hosted|group|remote)}/{name}" )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider( CustomClientRequestFilter.class)
 public interface NPMContentAccessServiceClient
 {
 

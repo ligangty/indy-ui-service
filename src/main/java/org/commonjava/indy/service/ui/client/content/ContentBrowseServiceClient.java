@@ -29,7 +29,6 @@ import javax.ws.rs.core.UriInfo;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path( "/api/browse/{packageType}/{type: (hosted|group|remote)}/{name}" )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider( CustomClientRequestFilter.class)
 public interface ContentBrowseServiceClient
 {
 

@@ -38,7 +38,6 @@ import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PAT
 
 @Path( "/api/admin/stores/{packageType}/{type: (hosted|group|remote)}" )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider(CustomClientRequestFilter.class)
 public interface RepositoryAdminServiceClient
 {
 

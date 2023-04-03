@@ -35,7 +35,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path( "/api/repair/koji" )
 @Produces( APPLICATION_JSON )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider( CustomClientRequestFilter.class)
 public interface KojiRepairServiceClient
 {
 
