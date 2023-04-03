@@ -31,7 +31,6 @@ import javax.ws.rs.core.UriInfo;
 
 @Path( "/api/folo/track/{id}/npm/{type: (hosted|group|remote)}/{name}" )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider( CustomClientRequestFilter.class)
 public interface FoloNPMContentAccessServiceClient
 {
 

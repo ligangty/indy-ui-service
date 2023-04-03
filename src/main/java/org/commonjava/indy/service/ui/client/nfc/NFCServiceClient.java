@@ -29,7 +29,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path( "/api/nfc" )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider(CustomClientRequestFilter.class)
 public interface NFCServiceClient
 {
 

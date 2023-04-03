@@ -30,7 +30,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path( PromoteAdminServiceClient.PROMOTION_ADMIN_API )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider(CustomClientRequestFilter.class)
 public interface PromoteAdminServiceClient
 {
     String PROMOTION_ADMIN_API = "/api/promotion/admin";

@@ -15,8 +15,11 @@
  */
 package org.commonjava.indy.service.ui.client;
 
-
-import io.quarkus.oidc.client.OidcClient;
+import io.quarkus.oidc.IdToken;
+import io.quarkus.oidc.RefreshToken;
+import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -26,18 +29,36 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.ext.Provider;
 
-//@Provider
-//@Priority(Priorities.AUTHENTICATION)
-public class CustomClientRequestFilter
+@Provider
+@Priority( Priorities.AUTHENTICATION )
+public class AuthClientRequestFilter
         implements ClientRequestFilter
 {
+    private final Logger logger = LoggerFactory.getLogger( this.getClass() );
 
     @Inject
-    OidcClient client;
+    @IdToken
+    JsonWebToken idToken;
+
+    @Inject
+    JsonWebToken accessToken;
+
+    @Inject
+    RefreshToken refreshToken;
 
     @Override
     public void filter( ClientRequestContext requestContext )
     {
-        requestContext.getHeaders().add(HttpHeaders.AUTHORIZATION, "Bearer " + client.getTokens().await().indefinitely().getAccessToken());
+        if ( idToken != null )
+        {
+            Object userName = this.idToken.getClaim( "preferred_username" );
+            logger.debug( "User: {}", userName );
+        }
+        if ( accessToken != null )
+        {
+            String token = accessToken.getRawToken();
+            logger.debug( "Access Token: {}", token );
+            requestContext.getHeaders().add( HttpHeaders.AUTHORIZATION, String.format( "Bearer %s", token ) );
+        }
     }
 }

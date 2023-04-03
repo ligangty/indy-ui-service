@@ -34,7 +34,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path( "/api/admin/maint" )
 @RegisterRestClient( configKey = "service-api" )
-//@RegisterProvider( CustomClientRequestFilter.class)
 public interface MaintenanceServiceClient
 {
 

@@ -80,6 +80,7 @@ quarkus:
         strict-ssl: false
       install: "npm config set strict-ssl false && npm ci"
 
+# These REST APIs are not needed to show in rest docs
 mp:
   openapi:
     scan:
@@ -121,7 +122,7 @@ service-api/mp-rest/uri: http://localhost:8080/
 service-api/mp-rest/scope: javax.inject.Singleton
 #service-api/mp-rest/connectTimeout: 60000
 #service-api/mp-rest/readTimeout: 60000
-#service-api/mp-rest/providers: org.commonjava.indy.service.ui.client.CustomClientRequestFilter
+#service-api/mp-rest/providers: org.commonjava.indy.service.ui.client.AuthClientRequestFilter
 
 "%dev":
   quarkus:
