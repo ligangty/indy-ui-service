@@ -32,6 +32,10 @@ import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
+/**
+ * @deprecated Will use quarkus native oidc implementation. This is not needed anymore
+ */
+@Deprecated
 @ApplicationScoped
 public class SecurityController
 {
@@ -40,7 +44,7 @@ public class SecurityController
 
     private static final String DISABLED_KEYCLOAK_INIT_JS = "disabled-keycloak-init.js";
 
-    @Inject
+//    @Inject
     KeycloakConfig config;
 
     private String keycloakInitJs;
