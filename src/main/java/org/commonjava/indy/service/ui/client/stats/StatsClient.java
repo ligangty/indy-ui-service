@@ -39,7 +39,7 @@ public interface StatsClient
     @Path( "/addons/active.js" )
     @GET
     @Produces( APPLICATION_JSON )
-    Response getAddonInjectionJavascript();
+    String getAddonInjectionJavascript();
 
     @Path( "/version-info" )
     @GET
