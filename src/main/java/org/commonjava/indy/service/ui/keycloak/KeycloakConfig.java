@@ -24,11 +24,11 @@ import javax.enterprise.context.ApplicationScoped;
 import java.util.Optional;
 import java.util.Properties;
 
-//@Startup
-//@ConfigMapping( prefix = "keycloak" )
-//@ApplicationScoped
+@Startup
+@ConfigMapping( prefix = "keycloak" )
+@ApplicationScoped
 @Deprecated
-interface KeycloakConfig
+public interface KeycloakConfig
 {
     boolean DEFAULT_ENABLED = false;
 
@@ -60,45 +60,45 @@ interface KeycloakConfig
 
     String KEYCLOAK_REALM_PUBLIC_KEY = "keycloak.realmPublicKey";
 
-//    @WithName( "enabled" )
-//    @WithDefault( "false" )
+    @WithName( "enabled" )
+    @WithDefault( "false" )
     Boolean enabled();
 
-//    @WithName( "realm.name" )
-//    @WithDefault( DEFAULT_REALM )
+    @WithName( "realm.name" )
+    @WithDefault( DEFAULT_REALM )
     String getRealm();
 
-//    @WithName( "keycloak.json" )
-//    @WithDefault( DEFAULT_KEYCLOAK_JSON )
+    @WithName( "keycloak.json" )
+    @WithDefault( DEFAULT_KEYCLOAK_JSON )
     String getKeycloakJson();
 
-//    @WithName( "keycloak-ui.json" )
-//    @WithDefault( DEFAULT_KEYCLOAK_UI_JSON )
+    @WithName( "keycloak-ui.json" )
+    @WithDefault( DEFAULT_KEYCLOAK_UI_JSON )
     String getKeycloakUiJson();
 
-//    @WithName( "security-bindings.json" )
-//    @WithDefault( DEFAULT_SECURITY_BINDINGS_JSON )
+    @WithName( "security-bindings.json" )
+    @WithDefault( DEFAULT_SECURITY_BINDINGS_JSON )
     String getSecurityBindingsJson();
 
-//    @WithName( "url" )
-//    @WithDefault( DEFAULT_URL )
+    @WithName( "url" )
+    @WithDefault( DEFAULT_URL )
     String getUrl();
 
-//    @WithName( "server.credential.secret" )
+    @WithName( "server.credential.secret" )
     Optional<String> getServerCredentialSecret();
 
-//    @WithName( "server.resource" )
-//    @WithDefault( DEFAULT_SERVER_RESOURCE )
+    @WithName( "server.resource" )
+    @WithDefault( DEFAULT_SERVER_RESOURCE )
     String getServerResource();
 
-//    @WithName( "ui.resource" )
-//    @WithDefault( DEFAULT_UI_RESOURCE )
+    @WithName( "ui.resource" )
+    @WithDefault( DEFAULT_UI_RESOURCE )
     String getUiResource();
 
-//    @WithName( "realm.key" )
+    @WithName( "realm.key" )
     Optional<String> getRealmKey();
 
-//    @WithName( "realm.public.key" )
+    @WithName( "realm.public.key" )
     Optional<String> getRealmPublicKey();
 
     default KeycloakConfig setSystemProperties()
