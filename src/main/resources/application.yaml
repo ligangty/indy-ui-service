@@ -1,14 +1,19 @@
 quarkus:
+  application:
+    name: "Indy"
   http:
     port: 8080
     read-timeout: 30m
     enable-compression: true
     limits:
       max-body-size: 500M
+    auth:
+      permission:
+        authenticated:
+          paths: "/*"
+          policy: authenticated
   package:
     type: uber-jar
-  application:
-    name: "Indy"
   resteasy:
     gzip:
       enabled: true
@@ -76,17 +81,15 @@ mp:
           - org.commonjava.indy.service.ui.keycloak
 
 
-
 indy_security:
   enabled: False
-
 
 ## [rest client]
 service-api/mp-rest/uri: http://localhost:8080/
 service-api/mp-rest/scope: javax.inject.Singleton
 service-api/mp-rest/connectTimeout: 60000
 service-api/mp-rest/readTimeout: 60000
-#service-api/mp-rest/providers: org.commonjava.indy.service.ui.client.AuthClientRequestFilter
+service-api/mp-rest/providers: org.commonjava.indy.service.ui.client.AuthClientRequestFilter
 
 "%dev":
   quarkus:
