@@ -16,6 +16,7 @@
 package org.commonjava.indy.service.ui.jaxrs.stats;
 
 import org.commonjava.indy.service.ui.client.stats.StatsClient;
+import org.commonjava.indy.service.ui.jaxrs.ResponseHelper;
 import org.commonjava.indy.service.ui.models.stats.AddOnListing;
 import org.commonjava.indy.service.ui.models.stats.EndpointView;
 import org.commonjava.indy.service.ui.models.stats.IndyVersioning;
@@ -25,6 +26,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -42,20 +45,36 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path( "/api/stats" )
 public class StatsResource
 {
+    private Logger logger = LoggerFactory.getLogger( this.getClass() );
 
     @Inject
     @RestClient
     StatsClient client;
+
+    @Inject
+    ResponseHelper responseHelper;
 
     @Operation(
             description = "Aggregate javascript content for all add-ons and format as a single Javascript stream (this gives the UI a static URL to load add-on logic)" )
     @APIResponse( responseCode = "200", description = "The add-on Javascript wrapped as a JSON object" )
     @Path( "/addons/active.js" )
     @GET
-    @Produces( APPLICATION_JSON )
+    @Produces( "application/javascript" )
     public Response getAddonInjectionJavascript()
     {
-        return client.getAddonInjectionJavascript();
+        Response response;
+        try
+        {
+            String activeJs = client.getAddonInjectionJavascript();
+            logger.trace( "Active.js content from service api: {}",  activeJs );
+            return responseHelper.formatOkResponseWithEntity( activeJs, "application/javascript" );
+        }
+        catch ( Exception e )
+        {
+            response = responseHelper.formatResponse( e );
+        }
+
+        return response;
     }
 
     @Operation( description = "Retrieve JSON describing the add-ons that are available on the system" )
