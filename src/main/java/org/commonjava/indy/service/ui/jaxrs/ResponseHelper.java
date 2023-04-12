@@ -99,6 +99,12 @@ public class ResponseHelper
         return formulateResponse( null, error, null, false, null );
     }
 
+    public Response formatResponse( final Throwable error, final String message )
+    {
+        return formulateResponse( null, error, message, false, null );
+    }
+
+
     public CharSequence formatEntity( final Throwable error )
     {
         return formatEntity( generateErrorId(), error, null );
