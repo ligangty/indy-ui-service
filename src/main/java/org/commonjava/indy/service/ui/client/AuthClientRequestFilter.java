@@ -57,7 +57,7 @@ public class AuthClientRequestFilter
         if ( accessToken != null )
         {
             String token = accessToken.getRawToken();
-            logger.debug( "Access Token: {}", token );
+            logger.trace( "Access Token: {}", token );
             requestContext.getHeaders().add( HttpHeaders.AUTHORIZATION, String.format( "Bearer %s", token ) );
         }
     }
