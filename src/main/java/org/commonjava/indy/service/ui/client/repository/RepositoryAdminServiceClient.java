@@ -52,6 +52,7 @@ public interface RepositoryAdminServiceClient
                        @PathParam( "name" ) String name );
 
     @POST
+    @Consumes( APPLICATION_JSON )
     Response createStore( @PathParam( "packageType" ) String packageType, @PathParam( "type" ) String type,
                           String repoJson );
 
@@ -59,7 +60,7 @@ public interface RepositoryAdminServiceClient
     @PUT
     @Consumes( APPLICATION_JSON )
     Response updateStore( final @PathParam( "packageType" ) String packageType, final @PathParam( "type" ) String type,
-                          final @PathParam( "name" ) String name, final @Context HttpRequest request );
+                          final @PathParam( "name" ) String name, final String repoJson );
 
     @GET
     @Produces( APPLICATION_JSON )
@@ -94,4 +95,5 @@ public interface RepositoryAdminServiceClient
             final @Parameter( in = PATH, required = true ) @PathParam( "packageType" ) String packageType,
             final @Parameter( in = PATH, schema = @Schema( enumeration = { "remote" } ), required = true )
             @PathParam( "type" ) String type );
+
 }

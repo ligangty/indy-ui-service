@@ -51,6 +51,8 @@ import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PATH;
@@ -102,20 +104,7 @@ public class RepositoryAdminResource
                             final @PathParam( "type" ) String type, final @Context UriInfo uriInfo,
                             final @Context HttpRequest request )
     {
-        final StoreType st = StoreType.get( type );
-        String json = null;
-        try
-        {
-            json = IOUtils.toString( request.getInputStream(), Charset.defaultCharset() );
-            return client.createStore( packageType, type, json );
-        }
-        catch ( final IOException e )
-        {
-            final String message = "Failed to read " + st.getStoreClass().getSimpleName() + " from request body.";
-
-            return responseHelper.formatResponse( e, message );
-        }
-
+        return consumeBodyJson( type, request, json -> client.createStore( packageType, type, json ) );
     }
 
     @Operation( description = "Update an existing store" )
@@ -136,7 +125,25 @@ public class RepositoryAdminResource
     public Response store( final @PathParam( "packageType" ) String packageType, final @PathParam( "type" ) String type,
                            final @PathParam( "name" ) String name, final @Context HttpRequest request )
     {
-        return client.updateStore( packageType, type, name, request );
+        return consumeBodyJson( type, request, json -> client.updateStore( packageType, type, name, json ) );
+    }
+
+    private Response consumeBodyJson( final String type, final HttpRequest request,
+                                      Function<String, Response> responseFunc )
+    {
+        final StoreType st = StoreType.get( type );
+        String json;
+        try
+        {
+            json = IOUtils.toString( request.getInputStream(), Charset.defaultCharset() );
+            return responseFunc.apply( json );
+        }
+        catch ( final IOException e )
+        {
+            final String message = "Failed to read " + st.getStoreClass().getSimpleName() + " from request body.";
+
+            return responseHelper.formatResponse( e, message );
+        }
     }
 
     @Operation( description = "Retrieve the definitions of all artifact stores of a given type on the system" )
