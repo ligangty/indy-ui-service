@@ -17,6 +17,7 @@ package org.commonjava.indy.service.ui.client;
 
 import io.quarkus.oidc.IdToken;
 import io.quarkus.oidc.RefreshToken;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +44,8 @@ public class AuthClientRequestFilter
     @Inject
     JsonWebToken accessToken;
 
-    @Inject
-    RefreshToken refreshToken;
+//    @Inject
+//    RefreshToken refreshToken;
 
     @Override
     public void filter( ClientRequestContext requestContext )
@@ -54,11 +55,10 @@ public class AuthClientRequestFilter
             Object userName = this.idToken.getClaim( "preferred_username" );
             logger.debug( "User: {}", userName );
         }
-        if ( accessToken != null )
+        if ( accessToken != null && StringUtils.isNotBlank( accessToken.getRawToken() ) )
         {
-            String token = accessToken.getRawToken();
-            logger.trace( "Access Token: {}", token );
-            requestContext.getHeaders().add( HttpHeaders.AUTHORIZATION, String.format( "Bearer %s", token ) );
+            requestContext.getHeaders()
+                          .add( HttpHeaders.AUTHORIZATION, String.format( "Bearer %s", accessToken.getRawToken() ) );
         }
     }
 }

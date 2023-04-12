@@ -53,7 +53,7 @@ public interface RepositoryAdminServiceClient
 
     @POST
     Response createStore( @PathParam( "packageType" ) String packageType, @PathParam( "type" ) String type,
-                          @Context HttpRequest request );
+                          String repoJson );
 
     @Path( "/{name}" )
     @PUT

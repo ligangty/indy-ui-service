@@ -21,6 +21,7 @@ import org.codehaus.plexus.interpolation.InterpolationException;
 import org.codehaus.plexus.interpolation.PropertiesBasedValueSource;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.commonjava.indy.service.ui.exception.IndyUIException;
+import org.commonjava.indy.service.ui.util.ResourceUtils;
 import org.commonjava.indy.service.ui.util.UrlUtils;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -31,6 +32,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.Properties;
+
+import static org.commonjava.indy.service.ui.util.ResourceUtils.loadClasspathContent;
 
 /**
  * @deprecated Will use quarkus native oidc implementation. This is not needed anymore
@@ -44,7 +47,7 @@ public class SecurityController
 
     private static final String DISABLED_KEYCLOAK_INIT_JS = "disabled-keycloak-init.js";
 
-//    @Inject
+    //    @Inject
     KeycloakConfig config;
 
     private String keycloakInitJs;
@@ -168,26 +171,6 @@ public class SecurityController
         catch ( final IOException e )
         {
             throw new IndyUIException( "Cannot read path: %s. Reason: %s", e, path, e.getMessage() );
-        }
-    }
-
-    private String loadClasspathContent( final String jsFile )
-            throws IndyUIException
-    {
-        try (InputStream jsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream( jsFile ))
-        {
-            if ( jsStream == null )
-            {
-                throw new IndyUIException( "Failed to load javascript from classpath: %s. Resource not found.",
-                                           jsFile );
-            }
-
-            return IOUtils.toString( jsStream, Charset.defaultCharset() );
-        }
-        catch ( final IOException e )
-        {
-            throw new IndyUIException( "Failed to read javascript from classpath: %s. Reason: %s.", e, jsFile,
-                                       e.getMessage() );
         }
     }
 

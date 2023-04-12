@@ -15,7 +15,9 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.repository;
 
+import org.apache.commons.io.IOUtils;
 import org.commonjava.indy.service.ui.client.repository.RepositoryAdminServiceClient;
+import org.commonjava.indy.service.ui.jaxrs.ResponseHelper;
 import org.commonjava.indy.service.ui.models.repository.ArtifactStore;
 import org.commonjava.indy.service.ui.models.repository.ArtifactStoreValidateData;
 import org.commonjava.indy.service.ui.models.repository.StoreListingDTO;
@@ -46,6 +48,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -60,6 +64,9 @@ public class RepositoryAdminResource
     @Inject
     @RestClient
     RepositoryAdminServiceClient client;
+
+    @Inject
+    ResponseHelper responseHelper;
 
     @Operation( description = "Check if a given store exists" )
     @APIResponse( responseCode = "200", description = "The store exists" )
@@ -95,7 +102,20 @@ public class RepositoryAdminResource
                             final @PathParam( "type" ) String type, final @Context UriInfo uriInfo,
                             final @Context HttpRequest request )
     {
-        return client.createStore( packageType, type, request );
+        final StoreType st = StoreType.get( type );
+        String json = null;
+        try
+        {
+            json = IOUtils.toString( request.getInputStream(), Charset.defaultCharset() );
+            return client.createStore( packageType, type, json );
+        }
+        catch ( final IOException e )
+        {
+            final String message = "Failed to read " + st.getStoreClass().getSimpleName() + " from request body.";
+
+            return responseHelper.formatResponse( e, message );
+        }
+
     }
 
     @Operation( description = "Update an existing store" )

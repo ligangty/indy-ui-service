@@ -15,11 +15,16 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.stats;
 
+import io.quarkus.launcher.QuarkusLauncher;
+import io.quarkus.runtime.LaunchMode;
+import org.apache.commons.io.IOUtils;
 import org.commonjava.indy.service.ui.client.stats.StatsClient;
+import org.commonjava.indy.service.ui.exception.IndyUIException;
 import org.commonjava.indy.service.ui.jaxrs.ResponseHelper;
 import org.commonjava.indy.service.ui.models.stats.AddOnListing;
 import org.commonjava.indy.service.ui.models.stats.EndpointView;
 import org.commonjava.indy.service.ui.models.stats.IndyVersioning;
+import org.commonjava.indy.service.ui.util.ResourceUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -36,9 +41,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.commonjava.indy.service.ui.util.ResourceUtils.loadClasspathContent;
 
 @Tag( description = "Various read-only operations for retrieving information about the system.",
       name = "Generic Infrastructure Queries (UI Support)" )
@@ -62,19 +71,40 @@ public class StatsResource
     @Produces( "application/javascript" )
     public Response getAddonInjectionJavascript()
     {
-        Response response;
         try
         {
             String activeJs = client.getAddonInjectionJavascript();
-            logger.trace( "Active.js content from service api: {}",  activeJs );
+            logger.trace( "Active.js content from service api: {}", activeJs );
             return responseHelper.formatOkResponseWithEntity( activeJs, "application/javascript" );
         }
         catch ( Exception e )
         {
-            response = responseHelper.formatResponse( e );
+            if ( LaunchMode.current() == LaunchMode.NORMAL )
+            {
+                return responseHelper.formatResponse( e );
+            }
+            else
+            {
+                return debugActiveJs();
+            }
         }
 
-        return response;
+    }
+
+    /**
+     * This is used for local development or testing.
+     */
+    private Response debugActiveJs()
+    {
+        try
+        {
+            return responseHelper.formatOkResponseWithEntity( loadClasspathContent( "debug-active.js" ),
+                                                              "application/javascript" );
+        }
+        catch ( IndyUIException e )
+        {
+            return responseHelper.formatResponse( e );
+        }
     }
 
     @Operation( description = "Retrieve JSON describing the add-ons that are available on the system" )
