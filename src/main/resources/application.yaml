@@ -28,7 +28,7 @@ quarkus:
       "org.jboss":
         level: WARN
       "org.apache.http":
-        level: ERROR
+        level: WARN
       "io.quarkus":
         level: WARN
       "io.smallrye":
@@ -40,7 +40,7 @@ quarkus:
       "io.grpc":
         level: WARN
       "org.commonjava.indy.service":
-        level: TRACE
+        level: INFO
     console:
       enable: true
       level: DEBUG
@@ -100,7 +100,7 @@ service-api/mp-rest/providers: org.commonjava.indy.service.ui.client.AuthClientR
         "org.jboss":
           level: INFO
         "org.apache.http":
-          level: ERROR
+          level: WARN
         "io.quarkus":
           level: INFO
         "io.smallrye":

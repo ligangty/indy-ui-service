@@ -42,7 +42,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
 
-import static javax.ws.rs.core.MediaType.WILDCARD;
+import static javax.ws.rs.core.MediaType.MEDIA_TYPE_WILDCARD;
 import static org.commonjava.indy.service.ui.client.Constants.CHECK_CACHE_ONLY;
 import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PATH;
 import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.QUERY;
@@ -129,7 +129,7 @@ public class MavenContentAccessResource
                           description = "Rendered content listing (when path ends with '/index.html' or '/') or Content stream" ) } )
     @GET
     @Path( "/{path: (.*)}" )
-    @Produces( WILDCARD )
+    @Produces( MEDIA_TYPE_WILDCARD )
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            final @PathParam( "path" ) String path, @Context final UriInfo uriInfo,
                            @Context final HttpServletRequest request )
