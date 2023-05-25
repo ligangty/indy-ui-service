@@ -42,7 +42,6 @@
     <apiVersion>1</apiVersion>
     <projectEmail>https://github.com/Commonjava/indy-ui-service</projectEmail>
 
-    
     <indysecurity.verison>1.0</indysecurity.verison>
     
     <skipTests>false</skipTests>
