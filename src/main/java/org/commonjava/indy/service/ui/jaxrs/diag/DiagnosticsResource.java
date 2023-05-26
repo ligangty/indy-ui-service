@@ -20,6 +20,7 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -38,6 +39,7 @@ import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 public class DiagnosticsResource
 {
     @Inject
+    @RestClient
     private DiagnosticsServiceClient client;
 
     @Operation( description = "Retrieve a thread dump for Indy." )
