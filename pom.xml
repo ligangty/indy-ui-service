@@ -245,7 +245,7 @@
               <exclude>**/node_modules/**</exclude>
               <exclude>**/Jenkinsfile</exclude>
               <exclude>**/MAVEN_ENV</exclude>
-              <exclude>.quinoa/*</exclude>
+              <exclude>.quinoa/**</exclude>
             </excludes>
           </configuration>
         </plugin>
