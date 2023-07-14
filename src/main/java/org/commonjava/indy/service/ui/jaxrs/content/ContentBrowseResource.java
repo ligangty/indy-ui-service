@@ -15,6 +15,7 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.content;
 
+import org.commonjava.indy.service.ui.client.content.ContentBrowseReGenClient;
 import org.commonjava.indy.service.ui.client.content.ContentBrowseServiceClient;
 import org.commonjava.indy.service.ui.models.content.ContentBrowseResult;
 import org.commonjava.indy.service.ui.models.repository.StoreType;
@@ -50,8 +51,7 @@ public class ContentBrowseResource
     private final Logger logger = LoggerFactory.getLogger( this.getClass() );
 
     @Inject
-    @RestClient
-    ContentBrowseServiceClient client;
+    ContentBrowseReGenClient client;
 
     @Operation(
             description = "Retrieve directory content under the given artifact store (type/name) and directory path." )
@@ -95,13 +95,7 @@ public class ContentBrowseResource
                                      final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                                      final @PathParam( "path" ) String path, @Context final UriInfo uriInfo )
     {
-        try (Response r = client.browseDirectory( packageType, type, name, path, uriInfo ))
-        {
-            ContentBrowseResult result = r.readEntity( ContentBrowseResult.class );
-            logger.debug( "Returning: {}", result );
-            return Response.ok( result ).build();
-        }
-
+        return client.browseDirectory( packageType, type, name, path, uriInfo );
     }
 
     @Operation( description = "Retrieve root listing under the given artifact store (type/name)." )
@@ -121,12 +115,7 @@ public class ContentBrowseResource
                                 final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                                 @Context final UriInfo uriInfo )
     {
-        try (Response r = client.browseRoot( packageType, type, name, uriInfo ))
-        {
-            ContentBrowseResult result = r.readEntity( ContentBrowseResult.class );
-            logger.debug( "{}", result );
-            return Response.ok( result ).build();
-        }
+        return client.browseRoot( packageType, type, name, uriInfo );
     }
 
 }

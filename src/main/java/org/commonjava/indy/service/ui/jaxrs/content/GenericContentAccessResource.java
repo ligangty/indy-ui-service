@@ -15,11 +15,8 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.content;
 
-import org.commonjava.indy.service.ui.client.content.ContentBrowseServiceClient;
 import org.commonjava.indy.service.ui.client.content.GenericContentAccessServiceClient;
-import org.commonjava.indy.service.ui.models.content.ContentBrowseResult;
 import org.commonjava.indy.service.ui.models.repository.StoreType;
-import org.commonjava.indy.service.ui.util.PackageTypeConstants;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -58,10 +55,6 @@ public class GenericContentAccessResource
     @Inject
     @RestClient
     GenericContentAccessServiceClient client;
-
-    @Inject
-    @RestClient
-    ContentBrowseServiceClient browseClient;
 
     @Operation( description = "Store content under the given artifact store (type/name) and path." )
     @Parameters( { @Parameter( name = "type", in = PATH, description = "The type of the repository.",
@@ -137,14 +130,15 @@ public class GenericContentAccessResource
                            final @PathParam( "path" ) String path, @Context final UriInfo uriInfo,
                            @Context final HttpServletRequest request )
     {
-        if ( path.trim().endsWith( "/" ) )
+        if ( uriInfo.getAbsolutePath().toString().trim().endsWith( "/" ) )
         {
-            try (Response r = browseClient.browseDirectory( PackageTypeConstants.PKG_TYPE_GENERIC_HTTP, type, name,
-                                                            path, uriInfo ))
-            {
-                ContentBrowseResult result = r.readEntity( ContentBrowseResult.class );
-                return Response.ok( result ).build();
-            }
+            return Response.seeOther( uriInfo.getBaseUriBuilder()
+                                             .path( "browse/generic-http" )
+                                             .path( type )
+                                             .path( name )
+                                             .path( path )
+                                             .build() ).build();
+
         }
         return client.doGet( type, name, path, uriInfo, request );
     }
@@ -163,7 +157,8 @@ public class GenericContentAccessResource
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            @Context final UriInfo uriInfo, @Context final HttpServletRequest request )
     {
-        return client.doGet( type, name, uriInfo, request );
+        return Response.seeOther(
+                uriInfo.getBaseUriBuilder().path( "browse/generic-http" ).path( type ).path( name ).build() ).build();
     }
 
 }
