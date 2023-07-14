@@ -7,11 +7,11 @@ quarkus:
     enable-compression: true
     limits:
       max-body-size: 500M
-    auth:
-      permission:
-        authenticated:
-          paths: "/*"
-          policy: authenticated
+#    auth:
+#      permission:
+#        authenticated:
+#          paths: "/*"
+#          policy: authenticated
   package:
     type: uber-jar
   resteasy:
@@ -21,6 +21,12 @@ quarkus:
   keycloak:
     devservices:
       enabled: false
+  oidc:
+    enabled: true
+    auth-server-url: "http://localhost:8080/realms/pncredhat"
+  security:
+    auth:
+      enabled-in-dev-mode: false
   log:
     level: INFO
     min-level: TRACE

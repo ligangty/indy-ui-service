@@ -17,9 +17,12 @@ package org.commonjava.indy.service.ui.util;
 
 import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.Map;
 
 public final class UrlUtils
@@ -152,6 +155,23 @@ public final class UrlUtils
     public static String uriDecode( String source )
     {
         return uriDecode( source, null );
+    }
+
+    public static String replaceHostInUrl( String originalURL, String newHost )
+
+    {
+        try
+        {
+            URI uri = new URI( originalURL );
+            uri = new URI( uri.getScheme().toLowerCase( Locale.US ), newHost, uri.getPath(), uri.getQuery(),
+                           uri.getFragment() );
+
+            return uri.toString();
+        }
+        catch ( URISyntaxException e )
+        {
+            return originalURL;
+        }
     }
 
 }

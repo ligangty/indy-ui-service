@@ -15,11 +15,8 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.content;
 
-import org.commonjava.indy.service.ui.client.content.ContentBrowseServiceClient;
 import org.commonjava.indy.service.ui.client.content.MavenContentAccessServiceClient;
-import org.commonjava.indy.service.ui.models.content.ContentBrowseResult;
 import org.commonjava.indy.service.ui.models.repository.StoreType;
-import org.commonjava.indy.service.ui.util.PackageTypeConstants;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -29,6 +26,8 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -55,14 +54,14 @@ import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.QUE
 @Path( "/api/content/maven/{type: (hosted|group|remote)}/{name}" )
 public class MavenContentAccessResource
 {
+    private final Logger logger = LoggerFactory.getLogger( this.getClass() );
 
     @Inject
     @RestClient
     MavenContentAccessServiceClient client;
 
-    @Inject
-    @RestClient
-    ContentBrowseServiceClient browseClient;
+    //    @Inject
+    //    ContentBrowseReGenClient browseClient;
 
     @Operation( description = "Store Maven artifact content under the given artifact store (type/name) and path." )
     @Parameters( { @Parameter( name = "type", in = PATH, description = "The type of the repository.",
@@ -150,15 +149,14 @@ public class MavenContentAccessResource
         //        return builder.build();
         //        System.out.println(response.getHeaders());
         //        return response;
-        if ( path.trim().endsWith( "/" ) )
+        if ( uriInfo.getAbsolutePath().toString().trim().endsWith( "/" ) )
         {
-            try (Response r = browseClient.browseDirectory( PackageTypeConstants.PKG_TYPE_GENERIC_HTTP, type, name,
-                                                            path, uriInfo ))
-            {
-                ContentBrowseResult result = r.readEntity( ContentBrowseResult.class );
-                return Response.ok( result ).build();
-            }
+            //            return browseClient.browseDirectory( PackageTypeConstants.PKG_TYPE_MAVEN, type, name, path, uriInfo );
+            return Response.seeOther(
+                                   uriInfo.getBaseUriBuilder().path( "browse/maven" ).path( type ).path( name ).path( path ).build() )
+                           .build();
         }
+
         return client.doGet( type, name, path, uriInfo, request );
     }
 
@@ -180,7 +178,9 @@ public class MavenContentAccessResource
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            @Context final UriInfo uriInfo, @Context final HttpServletRequest request )
     {
-        return client.doGet( type, name, uriInfo, request );
+        //        return browseClient.browseRoot( PackageTypeConstants.PKG_TYPE_MAVEN, type, name, uriInfo );
+        return Response.seeOther( uriInfo.getBaseUriBuilder().path( "browse/maven" ).path( type ).path( name ).build() )
+                       .build();
     }
 
 }
