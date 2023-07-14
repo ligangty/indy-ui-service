@@ -40,7 +40,7 @@ public class DiagnosticsResource
 {
     @Inject
     @RestClient
-    private DiagnosticsServiceClient client;
+    DiagnosticsServiceClient client;
 
     @Operation( description = "Retrieve a thread dump for Indy." )
     @APIResponse( responseCode = "200", description = "Thread dump content" )
