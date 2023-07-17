@@ -66,9 +66,10 @@ public class ContentBrowseReGenClient
         ContentBrowseResult result = original.readEntity( ContentBrowseResult.class );
         final String localHost = uriInfo.getBaseUri().getHost();
         final int localPort = uriInfo.getBaseUri().getPort();
-        final String newHost =
-                localPort != 80 && localPort != 443 ? String.format( "%s:%s", localHost, localPort ) : localHost;
-        logger.warn( "Base Host:{}", newHost );
+        final String newHost = localPort > 0 && localPort != 80 && localPort != 443 ?
+                String.format( "%s:%s", localHost, localPort ) :
+                localHost;
+        logger.debug( "Base Host:{}", newHost );
         if ( isNotBlank( result.getParentUrl() ) )
         {
             result.setParentUrl( replaceHostInUrl( result.getParentUrl(), newHost ) );
