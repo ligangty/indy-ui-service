@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.stream.Collectors;
@@ -62,49 +63,65 @@ public class ContentBrowseReGenClient
 
     public Response doResponse( final Response original, final UriInfo uriInfo )
     {
-        Response.ResponseBuilder newRes = Response.fromResponse( original );
-        ContentBrowseResult result = original.readEntity( ContentBrowseResult.class );
-        final String localHost = uriInfo.getBaseUri().getHost();
-        final int localPort = uriInfo.getBaseUri().getPort();
-        final String newHost = localPort > 0 && localPort != 80 && localPort != 443 ?
-                String.format( "%s:%s", localHost, localPort ) :
-                localHost;
-        logger.debug( "Base Host:{}", newHost );
-        if ( isNotBlank( result.getParentUrl() ) )
+        if ( original.getStatus() == Response.Status.OK.getStatusCode() )
         {
-            result.setParentUrl( replaceHostInUrl( result.getParentUrl(), newHost ) );
-        }
-        if ( isNotBlank( result.getBaseBrowseUrl() ) )
-        {
-            result.setBaseBrowseUrl( replaceHostInUrl( result.getBaseBrowseUrl(), newHost ) );
-        }
-        if ( isNotBlank( result.getBaseContentUrl() ) )
-        {
-            result.setBaseContentUrl( replaceHostInUrl( result.getBaseContentUrl(), newHost ) );
-        }
-        if ( isNotBlank( result.getStoreBrowseUrl() ) )
-        {
-            result.setStoreBrowseUrl( replaceHostInUrl( result.getStoreBrowseUrl(), newHost ) );
-        }
-        if ( isNotBlank( result.getStoreContentUrl() ) )
-        {
-            result.setStoreContentUrl( replaceHostInUrl( result.getStoreContentUrl(), newHost ) );
-        }
-        if ( result.getSources() != null && !result.getSources().isEmpty() )
-        {
-            result.setSources( result.getSources()
-                                     .stream()
-                                     .map( s -> replaceHostInUrl( s, newHost ) )
-                                     .collect( Collectors.toList() ) );
-        }
-        if ( result.getListingUrls() != null && !result.getListingUrls().isEmpty() )
-        {
-            for ( ContentBrowseResult.ListingURLResult listResult : result.getListingUrls() )
+            ContentBrowseResult result = original.readEntity( ContentBrowseResult.class );
+            final String localHost = uriInfo.getBaseUri().getHost();
+            final int localPort = uriInfo.getBaseUri().getPort();
+            final String newHost = localPort > 0 && localPort != 80 && localPort != 443 ?
+                    String.format( "%s:%s", localHost, localPort ) :
+                    localHost;
+            logger.debug( "Base Host:{}", newHost );
+            if ( isNotBlank( result.getParentUrl() ) )
             {
-                listResult.setListingUrl( replaceHostInUrl( listResult.getListingUrl(), newHost ) );
+                result.setParentUrl( replaceHostInUrl( result.getParentUrl(), newHost ) );
             }
+            if ( isNotBlank( result.getBaseBrowseUrl() ) )
+            {
+                result.setBaseBrowseUrl( replaceHostInUrl( result.getBaseBrowseUrl(), newHost ) );
+            }
+            if ( isNotBlank( result.getBaseContentUrl() ) )
+            {
+                result.setBaseContentUrl( replaceHostInUrl( result.getBaseContentUrl(), newHost ) );
+            }
+            if ( isNotBlank( result.getStoreBrowseUrl() ) )
+            {
+                result.setStoreBrowseUrl( replaceHostInUrl( result.getStoreBrowseUrl(), newHost ) );
+            }
+            if ( isNotBlank( result.getStoreContentUrl() ) )
+            {
+                result.setStoreContentUrl( replaceHostInUrl( result.getStoreContentUrl(), newHost ) );
+            }
+            if ( result.getSources() != null && !result.getSources().isEmpty() )
+            {
+                result.setSources( result.getSources()
+                                         .stream()
+                                         .map( s -> replaceHostInUrl( s, newHost ) )
+                                         .collect( Collectors.toList() ) );
+            }
+            if ( result.getListingUrls() != null && !result.getListingUrls().isEmpty() )
+            {
+                for ( ContentBrowseResult.ListingURLResult listResult : result.getListingUrls() )
+                {
+                    listResult.setListingUrl( replaceHostInUrl( listResult.getListingUrl(), newHost ) );
+                }
+            }
+            Response.ResponseBuilder newRes = Response.ok( result );
+            original.getStringHeaders().forEach( ( k, v ) -> {
+                // Seems the new generated json length is not equal to original, so ignore the original header.
+                if ( !HttpHeaders.CONTENT_LENGTH.equalsIgnoreCase( k ) )
+                {
+                    String value = v.stream().findFirst().orElse( "" );
+                    logger.debug( "Original http headers: {} -> {}", k, value );
+                    newRes.header( k, value );
+                }
+            } );
+            return newRes.build();
         }
-        return newRes.entity( result ).build();
+        else
+        {
+            return original;
+        }
     }
 
 }
