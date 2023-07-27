@@ -25,7 +25,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.commonjava.indy.service</groupId>
   <artifactId>indy-ui-service</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
   <name>Indy UI</name>
   <url>https://github.com/Commonjava/indy-ui-service</url>
   <description>Indy UI</description>
@@ -35,7 +35,7 @@
     <connection>scm:git:https://github.com/Commonjava/indy-ui-service</connection>
     <developerConnection>scm:git:https://github.com/Commonjava/indy-ui-service</developerConnection>
     <url>https://github.com/Commonjava/indy-ui-service</url>
-    <tag>HEAD</tag>
+    <tag>indy-ui-service-1.0.2</tag>
   </scm>
 
   <properties>
