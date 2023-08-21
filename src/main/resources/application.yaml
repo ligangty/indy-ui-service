@@ -27,6 +27,8 @@ quarkus:
   security:
     auth:
       enabled-in-dev-mode: false
+  opentelemetry:
+    enabled: true
   log:
     level: INFO
     min-level: TRACE
@@ -61,8 +63,6 @@ quarkus:
   swagger-ui:
     always-include: true
     title: "Indy"
-  opentelemetry:
-    enabled: false
 
   quinoa:
     # ui-dir: "webui"
