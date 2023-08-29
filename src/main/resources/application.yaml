@@ -12,6 +12,13 @@ quarkus:
 #        authenticated:
 #          paths: "/*"
 #          policy: authenticated
+#      token-auth:
+#        paths: "/api/admin/auth/*"
+#        policy: authenticated
+#      public:
+#        paths: "/api/*"
+#        policy: permit
+#        methods: GET
   package:
     type: uber-jar
   resteasy:
