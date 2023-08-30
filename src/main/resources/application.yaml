@@ -1,36 +1,54 @@
 quarkus:
   application:
     name: "Indy"
-  http:
-    port: 8080
-    read-timeout: 30m
-    enable-compression: true
-    limits:
-      max-body-size: 500M
-#    auth:
-#      permission:
-#        authenticated:
-#          paths: "/*"
-#          policy: authenticated
-#      token-auth:
-#        paths: "/api/admin/auth/*"
-#        policy: authenticated
-#      public:
-#        paths: "/api/*"
-#        policy: permit
-#        methods: GET
   package:
     type: uber-jar
   resteasy:
     gzip:
       enabled: true
       max-input: 64M
+  http:
+    port: 8080
+    read-timeout: 30m
+    enable-compression: true
+    limits:
+      max-body-size: 500M
+    auth:
+      permission:
+        authenticated:
+          paths: "/*"
+          policy: authenticated
+        token-auth:
+          paths: "/api/admin/auth/*"
+          policy: authenticated
+        public:
+          paths: "/api/*"
+          policy: permit
+          methods: GET
+  oidc:
+    enabled: true
+#    auth-server-url: "http://localhost:8180/realms/test"
+#    client-id: test
+#    credentials:
+#      secret: "UNSPECIFIED"
+#    tls:
+#      verification: none
+#    token:
+#      issuer: any
+#    authentication:
+#      user-info-required: true
+#      redirect-path: "/"
+#      restore-path-after-redirect: true
+#    # "web-app" will use idtoken to get roles. So we set to accesstoken as its source here
+#    roles:
+#      source: "accesstoken"
+#    logout:
+#      path: "/logout"
+#      post-logout-path: "/"
+#    "application-type": "web-app"
   keycloak:
     devservices:
       enabled: false
-  oidc:
-    enabled: true
-    auth-server-url: "http://localhost:8080/realms/pncredhat"
   security:
     auth:
       enabled-in-dev-mode: false
@@ -103,38 +121,3 @@ service-api/mp-rest/scope: javax.inject.Singleton
 service-api/mp-rest/connectTimeout: 60000
 service-api/mp-rest/readTimeout: 60000
 service-api/mp-rest/providers: org.commonjava.indy.service.ui.client.AuthClientRequestFilter
-
-"%dev":
-  quarkus:
-    log:
-      level: TRACE
-      min-level: TRACE
-      category:
-        "org.jboss":
-          level: INFO
-        "org.apache.http":
-          level: WARN
-        "io.quarkus":
-          level: INFO
-        "io.smallrye":
-          level: INFO
-        "org.eclipse":
-          level: INFO
-        "io.netty":
-          level: INFO
-        "io.grpc":
-          level: INFO
-        "org.commonjava.indy.service":
-          level: TRACE
-      console:
-        enable: true
-      file:
-        enable: true
-        path: "/tmp/indy-ui-service.log"
-        format: "%d{HH:mm:ss} %-5p [%c{2.}] (%t) %s%e%n"
-        rotation:
-          max-backup-index: 5
-          max-file-size: 10M
-    quinoa:
-      package-manager-command:
-        install: "npm config set strict-ssl false && npm ci"
