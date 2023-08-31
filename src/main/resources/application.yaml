@@ -21,10 +21,15 @@ quarkus:
         token-auth:
           paths: "/api/admin/auth/*"
           policy: authenticated
-        public:
+        api-auth:
+          paths: "/api/*"
+          policy: authenticated
+          methods: POST,PUT,DELETE
+        api-public:
           paths: "/api/*"
           policy: permit
-          methods: GET
+          methods: HEAD,GET
+
   oidc:
     enabled: true
 #    auth-server-url: "http://localhost:8180/realms/test"

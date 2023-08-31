@@ -37,9 +37,9 @@ public class AuthClientRequestFilter
 {
     private final Logger logger = LoggerFactory.getLogger( this.getClass() );
 
-    @Inject
-    @IdToken
-    JsonWebToken idToken;
+//    @Inject
+//    @IdToken
+//    JsonWebToken idToken;
 
     @Inject
     JsonWebToken accessToken;
@@ -50,15 +50,17 @@ public class AuthClientRequestFilter
     @Override
     public void filter( ClientRequestContext requestContext )
     {
-        if ( idToken != null )
-        {
-            Object userName = this.idToken.getClaim( "preferred_username" );
-            logger.debug( "User: {}", userName );
-        }
+//        if ( idToken != null )
+//        {
+//            Object userName = this.idToken.getClaim( "preferred_username" );
+//            logger.debug( "User: {}", userName );
+//        }
         if ( accessToken != null && StringUtils.isNotBlank( accessToken.getRawToken() ) )
         {
+            final String accToken = accessToken.getRawToken();
+            logger.trace( "User {}, access token in authenticate header: {}", accessToken.getName(), accToken );
             requestContext.getHeaders()
-                          .add( HttpHeaders.AUTHORIZATION, String.format( "Bearer %s", accessToken.getRawToken() ) );
+                          .add( HttpHeaders.AUTHORIZATION, String.format( "Bearer %s", accToken ) );
         }
     }
 }
