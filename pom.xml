@@ -42,7 +42,7 @@
     <apiVersion>1</apiVersion>
     <projectEmail>https://github.com/Commonjava/indy-ui-service</projectEmail>
 
-    <indysecurity.verison>1.0</indysecurity.verison>
+    <indysecurity.verison>1.1-SNAPSHOT</indysecurity.verison>
     
     <skipTests>false</skipTests>
     <plugin.jacoco.skip>false</plugin.jacoco.skip>
