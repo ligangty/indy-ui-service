@@ -30,8 +30,8 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.ext.Provider;
 
-@Provider
-@Priority( Priorities.AUTHENTICATION )
+//@Provider
+//@Priority( Priorities.AUTHENTICATION )
 public class AuthClientRequestFilter
         implements ClientRequestFilter
 {

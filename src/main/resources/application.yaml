@@ -46,6 +46,12 @@ quarkus:
 #      path: "/logout"
 #      post-logout-path: "/"
 #    "application-type": "web-app"
+#  oidc-client:
+#    auth-server-url: "http://localhost:8180/realms/test"
+#    client-id: test
+  # This is used to do oidc token propagation with quarkus-oidc-token-propagation extension
+  oidc-token-propagation:
+    register-filter: true
   keycloak:
     devservices:
       enabled: false
@@ -120,4 +126,5 @@ service-api/mp-rest/uri: http://localhost:8080/
 service-api/mp-rest/scope: javax.inject.Singleton
 service-api/mp-rest/connectTimeout: 60000
 service-api/mp-rest/readTimeout: 60000
-service-api/mp-rest/providers: org.commonjava.indy.service.ui.client.AuthClientRequestFilter
+#service-api/mp-rest/providers: org.commonjava.indy.service.ui.client.AuthClientRequestFilter
+service-api/mp-rest/providers: io.quarkus.oidc.token.propagation.AccessTokenRequestFilter
