@@ -16,7 +16,6 @@
 'use strict'
 
 import React, {useState, useEffect} from 'react';
-import {createRoot} from 'react-dom/client';
 import axios from 'axios';
 import {styles} from './style.js';
 
@@ -113,34 +112,28 @@ const getStoreKey = state => {
   }
 }
 
-const URLPage = ()=>{
-    const [state, setState] = useState({
-        error: null,
-        isLoaded: false,
-        data: {}
-    });
+export const URLPage = ()=>{
+  const [state, setState] = useState({
+      error: null,
+      isLoaded: false,
+      data: {}
+  });
 
-    init(setState);
+  init(setState);
 
-    
-
-    const { error, isLoaded, data } = state;
-    if (error) {
-      return <div>Error: {error}</div>;
-    } else if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-        document.title = `Directory listing for ${data.path} on ${getStoreKey(state).name}`;
-      return (
-        <div>
-          <h2 style={styles.Header} key="title">Directory listing for {data.path} on {getStoreKey(state).name}</h2>
-          <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
-          <Footer key="footer" sources={data.sources} />
-        </div>
-      );
-    }
+  const { error, isLoaded, data } = state;
+  if (error) {
+    return <div>Error: {error}</div>;
+  } else if (!isLoaded) {
+    return <div>Loading...</div>;
+  } else {
+      document.title = `Directory listing for ${data.path} on ${getStoreKey(state).name}`;
+    return (
+      <div>
+        <h2 style={styles.Header} key="title">Directory listing for {data.path} on {getStoreKey(state).name}</h2>
+        <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
+        <Footer key="footer" sources={data.sources} />
+      </div>
+    );
+  }
 }
-
-const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<URLPage/>);
