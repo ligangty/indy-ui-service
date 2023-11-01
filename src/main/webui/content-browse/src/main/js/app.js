@@ -15,8 +15,9 @@
  */
 'use strict'
 
-import React from 'react';
-import {render} from 'react-dom';
+import React, {useState, useEffect} from 'react';
+import {createRoot} from 'react-dom/client';
+import axios from 'axios';
 import {styles} from './style.js';
 
 function replaceUrl(url){
@@ -74,68 +75,72 @@ const Footer = (props) => {
   );
 }
 
-class URLPage extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      error: null,
-      isLoaded: false,
-      data: {}
-    };
-  }
-
-  getStoreKey(){
-    let storeElems = this.state.data.storeKey.split(":");
-    return {
-      "packageType": storeElems[0],
-      "type": storeElems[1],
-      "name": storeElems[2]
-    }
-  }
-
-  componentDidMount() {
-    fetch("/api" + document.location.pathname, {
-      method: "GET",
-      credentials: 'same-origin',
-      headers: {
-        "Content-Type": "application/json",
-      }
-    }).then(response => {
-      if(response.ok){
-        response.json().then(data=>{          
-          this.setState({
+const init = setState => {
+  const url =`/api${document.location.pathname}`;
+  console.log(url);
+  useEffect(()=>{
+    const fetchData = async () => {
+      const response = await axios.get(url).catch(error=>{
+        if (error.response) {
+          setState({
             isLoaded: true,
-            data
+            error: JSON.parse(error.response.data).error
           });
-        });
-      }else if(!response.ok){
-        response.text().then(data=>{
-          this.setState({
+        }else{
+          setState({
             isLoaded: true,
-            error: data
-          });         
+            error
+          });
+        }
+      })
+      if(response.status === 200){
+        setState({
+          isLoaded: true,
+          data: response.data
         });
       }
-    });
+    };
+    fetchData();
+  }, []);
+};
+
+const getStoreKey = state => {
+  let storeElems = state.data.storeKey.split(":");
+  return {
+    "packageType": storeElems[0],
+    "type": storeElems[1],
+    "name": storeElems[2]
+  }
 }
 
-  render() {
-    const { error, isLoaded, data } = this.state;
+const URLPage = ()=>{
+    const [state, setState] = useState({
+        error: null,
+        isLoaded: false,
+        data: {}
+    });
+
+    init(setState);
+
+    
+
+    const { error, isLoaded, data } = state;
     if (error) {
       return <div>Error: {error}</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
-        document.title = `Directory listing for ${data.path} on ${this.getStoreKey().name}`;
+        document.title = `Directory listing for ${data.path} on ${getStoreKey(state).name}`;
       return (
         <div>
-          <h2 style={styles.Header} key="title">Directory listing for {data.path} on {this.getStoreKey().name}</h2>
+          <h2 style={styles.Header} key="title">Directory listing for {data.path} on {getStoreKey(state).name}</h2>
           <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
           <Footer key="footer" sources={data.sources} />
         </div>
       );
     }
-  }
 }
 
-render(<URLPage/>, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<URLPage/>);

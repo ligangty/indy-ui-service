@@ -15,10 +15,14 @@
     "ng-dialog": "~0.6.4",
     "components-font-awesome": "4.2.0",
     "bootstrap": "^3.4.1",
-    "keycloak-js": "^1.9.8",
     "jquery": "^3.5.0",
-    "react": "16.14.0",
-    "react-dom": "16.14.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "prop-types": "^15.8.1",
+    "react-json-pretty": "^1.7.9",
+    "react-router": "^6.16.0",
+    "react-router-dom": "^6.16.0",
+    "axios": "^1.5.1"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
