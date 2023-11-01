@@ -17,7 +17,7 @@ const path = require('path')
 const webpack = require('webpack')
 
 module.exports = {
-  entry: './content-browse/src/main/js/app.js',
+  entry: './content-browse/src/main/js/index.js',
   output: {
     path: path.resolve(__dirname, 'dist/content-browse'),
     filename: 'app_bundle.js'

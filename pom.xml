@@ -230,7 +230,11 @@
               <exclude>**/Jenkinsfile</exclude>
               <exclude>**/MAVEN_ENV</exclude>
               <exclude>.quinoa/**</exclude>
+              <exclude>**/.babel*</exclude>
             </excludes>
+            <mapping>
+              <jsx>SLASHSTAR_STYLE</jsx>
+            </mapping>
           </configuration>
         </plugin>
       </plugins>
