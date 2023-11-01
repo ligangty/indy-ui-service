@@ -18,7 +18,7 @@ const webpack = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
-  entry: './content-browse/src/main/js/index.js',
+  entry: './src/content-browse/index.js',
   output: {
     path: path.resolve(__dirname, './dist/content-browse'),
     filename: 'app_bundle.js'
