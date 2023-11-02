@@ -231,9 +231,11 @@
               <exclude>**/MAVEN_ENV</exclude>
               <exclude>.quinoa/**</exclude>
               <exclude>**/.babel*</exclude>
+              <exclude>**/.eslint*</exclude>
             </excludes>
             <mapping>
-              <jsx>SLASHSTAR_STYLE</jsx>
+              <jsx>DOUBLESLASH_STYLE</jsx>
+              <js>DOUBLESLASH_STYLE</js>
             </mapping>
           </configuration>
         </plugin>

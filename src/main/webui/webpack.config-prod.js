@@ -14,11 +14,30 @@
 // limitations under the License.
 //
 
+const path = require('path');
 
-import React from 'react';
-import {createRoot} from 'react-dom/client';
-import {URLPage} from './DirectoryListing.jsx';
+const outputDirectory = 'dist';
 
-const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<URLPage/>);
+module.exports = {
+  entry: './src/app/index.js',
+  output: {
+    path: path.resolve(__dirname, outputDirectory),
+    filename: 'app_bundle.js'
+  },
+  mode: 'production',
+  module: {
+    rules: [
+      {test: /\.js$/u, use: 'babel-loader', exclude: /node_modules/u},
+      {test: /\.jsx?$/u, use: 'babel-loader', exclude: /node_modules/u},
+      {test: /\.css$/u, use: ['style-loader', 'css-loader']},
+      {
+        test: /\.(pdf|jpg|png|gif|svg|ico)$/u,
+        use: [
+          {
+            loader: 'url-loader'
+          },
+        ]
+      }
+    ]
+  }
+};

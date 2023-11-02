@@ -14,11 +14,20 @@
 // limitations under the License.
 //
 
+// mock data: options
+const remoteOptionLegend = [
+  {icon: "S", title: "Snapshots allowed"},
+  {icon: "R", title: "Releases allowed"}
+];
 
-import React from 'react';
-import {createRoot} from 'react-dom/client';
-import {URLPage} from './DirectoryListing.jsx';
+const hostedOptionLegend = [
+  {icon: 'S', title: 'Snapshots allowed'},
+  {icon: 'R', title: 'Releases allowed'},
+  {icon: 'D', title: 'Deployment allowed'}
+];
 
-const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<URLPage/>);
+// TODO this should be fetched from backend
+const PACKAGE_TYPES = ["maven", "generic","npm"];
+
+
+export {remoteOptionLegend, hostedOptionLegend, PACKAGE_TYPES};

@@ -1,43 +1,44 @@
-/*
- * Copyright (C) 2023 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+//
+// Copyright (C) 2023 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//         http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const Assets = require('./assets');
+const outputDirectory = 'dist';
 
-module.exports = 
-{
-    "mode": "production",
-    "entry": "./src/app/index.js",
-    "output": {
-        "path": path.resolve(__dirname, 'dist'),
-        "filename": "indy.bundle.js"
-    },
-    plugins: [
-      new CopyWebpackPlugin({
-        patterns: Assets.map(asset => {
-          return {
-            from: path.resolve(__dirname, `./${asset.from?asset.from:asset}`),
-            to: path.resolve(__dirname, `./dist/${asset.to?asset.to:asset}`)
-          };
-        })
-      })
-    ],
-    devServer: {
-      port: 3000,
-      contentBase: './dist'
-    }
-}
+module.exports = {
+  entry: './src/app/index.js',
+  output: {
+    path: path.resolve(__dirname, outputDirectory),
+    filename: 'app_bundle.js'
+  },
+  mode: 'development',
+  devtool: 'inline-source-map',
+  module: {
+    rules: [
+      {test: /\.js$/u, use: 'babel-loader', exclude: /node_modules/u},
+      {test: /\.jsx?$/u, use: 'babel-loader', exclude: /node_modules/u},
+      {test: /\.css$/u, use: ['style-loader', 'css-loader']},
+      {
+        test: /\.(pdf|jpg|png|gif|svg|ico)$/u,
+        use: [
+          {
+            loader: 'url-loader'
+          },
+        ]
+      }
+    ]
+  }
+};
