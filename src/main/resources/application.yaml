@@ -99,8 +99,8 @@ quarkus:
     build-dir: "dist"
     package-manager-install:
       ~: true
-      node-version: "18.12.1"
-      npm-version: "9.4.0"
+      node-version: "18.18.2"
+      npm-version: "9.8.1"
     package-manager-command:
       install-env:
         strict-ssl: false
