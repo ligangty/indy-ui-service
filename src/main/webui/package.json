@@ -24,14 +24,17 @@
     "@babel/plugin-transform-modules-commonjs": "^7.23.0",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
+    "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
     "babel-loader": "^9.1.3",
     "css-loader": "^6.8.1",
     "eslint": "^8.51.0",
+    "eslint-plugin-jest": "^27.6.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-webpack-plugin": "^4.0.1",
     "express": "^4.18.2",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "nodemon": "^3.0.1",
     "style-loader": "^3.3.3",
     "url-loader": "^4.1.1",
@@ -43,14 +46,15 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "build-dev": "npm run clean && npm run compile-dev && npm run deploy && cp ./src/content-browse/html/* ./dist/content-browse/",
-    "build": "npm run clean && npm run compile && npm run deploy && cp ./src/content-browse/html/* ./dist/content-browse/",
+    "build-dev": "npm run clean && npm run compile-dev && npm run test && npm run deploy && cp ./src/content-browse/html/* ./dist/content-browse/",
+    "build": "npm run clean && npm run compile && npm run test && npm run deploy && cp ./src/content-browse/html/* ./dist/content-browse/",
     "clean": "rm -rf ./dist/*",
     "compile-dev": "NODE_ENV=production webpack --config ./webpack.config.js --progress && webpack --config ./webpack-content-browse.dev.config.js --progress",
     "compile": "NODE_ENV=production webpack --config ./webpack.config-prod.js --progress && webpack --config ./webpack-content-browse.prod.config.js --progress",
     "deploy": "cp -r ./src/app/html/* ./dist/",
     "dev": "webpack-dev-server --open --hot",
     "lint": "eslint './src/**'",
-    "lint-fix": "eslint './src/**' --fix"
+    "lint-fix": "eslint './src/**' --fix",
+    "test": "jest"
   }
 }

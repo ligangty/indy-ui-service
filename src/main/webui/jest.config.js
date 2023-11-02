@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import React from 'react';
-import {createRoot} from 'react-dom/client';
-import {URLPage} from './DirectoryListing.jsx';
+/** @type {import('jest').Config} */
+const config = {
+  verbose: true,
+  testEnvironment: 'jsdom',
+};
 
-const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<URLPage/>);
+module.exports = config;

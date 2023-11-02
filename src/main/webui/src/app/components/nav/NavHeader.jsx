@@ -17,7 +17,7 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 
-// mock user login
+// TODO: This is mock user login, need to implement later for real login
 const isUserloggedIn = true;
 const username = "mock";
 
