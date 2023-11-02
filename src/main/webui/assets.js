@@ -20,7 +20,7 @@ const CSS = [
   'node_modules/ng-dialog/css/ngDialog-theme-default.css',
   'node_modules/bootstrap/dist/css/bootstrap.min.css',
   'node_modules/bootstrap/dist/css/bootstrap-theme.min.css',  
-  {"from":"app/css/", "to":"css/"}
+  {"from":"src/app/css/", "to":"css/"}
 ];
 const JS = [
   'node_modules/angular/angular.min.js',
@@ -30,19 +30,15 @@ const JS = [
   'node_modules/ng-dialog/js/ngDialog.min.js',
   'node_modules/jquery/dist/jquery.min.js',
   'node_modules/bootstrap/dist/js/bootstrap.min.js',  
-  {"from":"app/js/", "to":"js/"}
+  {"from":"src/app/js/", "to":"js/"}
 ];
 const IMG=[  
-  {"from":"app/img/", "to":"img/"}
+  {"from":"src/app/img/", "to":"img/"}
 ];
-// const SWAGGER=[
-//   'node_modules/swagger-ui-dist/',
-//   {"from":"app/rest-api.html", "to":"rest-api.html"}
-// ];
 const OTHER=[
-  {"from":"app/index.html", "to":"index.html"},
-  {"from":"app/partials/", "to":"partials/"},
-  {"from":"app/keycloak.json", "to":"keycloak.json"}
+  {"from":"src/app/index.html", "to":"index.html"},
+  {"from":"src/app/partials/", "to":"partials/"},
+  {"from":"src/app/keycloak.json", "to":"keycloak.json"}
 ]
 
 module.exports = [...JS, ...CSS, ...IMG, ...OTHER];

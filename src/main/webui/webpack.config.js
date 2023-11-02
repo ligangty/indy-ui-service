@@ -21,7 +21,7 @@ const Assets = require('./assets');
 module.exports = 
 {
     "mode": "production",
-    "entry": "./app/index.js",
+    "entry": "./src/app/index.js",
     "output": {
         "path": path.resolve(__dirname, 'dist'),
         "filename": "indy.bundle.js"
