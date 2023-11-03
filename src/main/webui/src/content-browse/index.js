@@ -16,8 +16,8 @@
 
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-import {URLPage} from './DirectoryListing.jsx';
+import DirectoryListing from './DirectoryListing.jsx';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
-root.render(<URLPage/>);
+root.render(<DirectoryListing/>);
