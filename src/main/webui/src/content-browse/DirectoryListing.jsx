@@ -1,41 +1,39 @@
-/*
- * Copyright (C) 2023 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-'use strict'
-
+//
+// Copyright (C) 2023 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//         http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+/* eslint-disable react/prop-types */
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {styles} from './style.js';
 
-function replaceUrl(url){
+const replaceUrl = url =>{
   if (url.includes("api/browse")){
-    return url.replace(/http(s{0,1}):\/\/.*\/api/, "");
-  } else {
-    return url.replace(/http(s{0,1}):\/\/.*?\//, "/");
+    return url.replace(/http(s{0,1}):\/\/.*\/api/u, "");
   }
-}
+  return url.replace(/http(s{0,1}):\/\/.*?\//u, "/");
+};
 
-function getFullHost(){
-  let fullHost = location.protocol + "//" + location.hostname
+const getFullHost = () => {
+  let fullHost = location.protocol + "//" + location.hostname;
   if (location.port){
-    fullHost = fullHost + ":" + location.port
+    fullHost = fullHost + ":" + location.port;
   }
-  return fullHost
-}
+  return fullHost;
+};
 
-const URLList = (props)=> {
+const URLList = props => {
   let elems = [];
   if(props.parentUrl){
     let parentUrl = props.parentUrl.replace("/api/browse", "/browse");
@@ -55,15 +53,13 @@ const URLList = (props)=> {
       {elems}
     </ul>
   );
-}
+};
 
-const Footer = (props) => {
-  let elems = props.sources && props.sources.map(
-    (src, index)=>{
-      let url = src.replace(/http(s{0,1}):\/\/.*?\//, getFullHost()+"/");
-      return (<li key={"footer"+index}><a className="source-link" title={url} href={url}>{url}</a></li>)
-    }
-  );
+const Footer = props => {
+  const elems = props.sources && props.sources.map((src, index)=>{
+      let url = src.replace(/http(s{0,1}):\/\/.*?\//u, getFullHost()+"/");
+      return <li key={"footer"+index}><a className="source-link" title={url} href={url}>{url}</a></li>;
+    });
   return(
     <footer style={styles.Footer}>
       <p>Sources for this page:</p>
@@ -72,11 +68,10 @@ const Footer = (props) => {
       </ul>
     </footer>
   );
-}
+};
 
 const init = setState => {
   const url =`/api${document.location.pathname}`;
-  console.log(url);
   useEffect(()=>{
     const fetchData = async () => {
       const response = await axios.get(url).catch(error=>{
@@ -91,7 +86,7 @@ const init = setState => {
             error
           });
         }
-      })
+      });
       if(response.status === 200){
         setState({
           isLoaded: true,
@@ -109,8 +104,8 @@ const getStoreKey = state => {
     "packageType": storeElems[0],
     "type": storeElems[1],
     "name": storeElems[2]
-  }
-}
+  };
+};
 
 export const URLPage = ()=>{
   const [state, setState] = useState({
@@ -121,19 +116,18 @@ export const URLPage = ()=>{
 
   init(setState);
 
-  const { error, isLoaded, data } = state;
+  const {error, isLoaded, data} = state;
   if (error) {
     return <div>Error: {error}</div>;
   } else if (!isLoaded) {
     return <div>Loading...</div>;
-  } else {
-      document.title = `Directory listing for ${data.path} on ${getStoreKey(state).name}`;
-    return (
-      <div>
-        <h2 style={styles.Header} key="title">Directory listing for {data.path} on {getStoreKey(state).name}</h2>
-        <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
-        <Footer key="footer" sources={data.sources} />
-      </div>
-    );
   }
-}
+  document.title = `Directory listing for ${data.path} on ${getStoreKey(state).name}`;
+  return (
+    <div>
+      <h2 style={styles.Header} key="title">Directory listing for {data.path} on {getStoreKey(state).name}</h2>
+      <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
+      <Footer key="footer" sources={data.sources} />
+    </div>
+  );
+};

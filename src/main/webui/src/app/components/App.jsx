@@ -14,11 +14,22 @@
 // limitations under the License.
 //
 
-
 import React from 'react';
-import {createRoot} from 'react-dom/client';
-import {URLPage} from './DirectoryListing.jsx';
+import {HashRouter, Route, Routes} from 'react-router-dom';
+import NavHeader from './nav/NavHeader.jsx';
+import NavFooter from './nav/NavFooter.jsx';
+import {Main} from './content/Main.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/indy.css';
 
-const container = document.getElementById('root');
-const root = createRoot(container);
-root.render(<URLPage/>);
+const Root = () => <React.Fragment>
+    <NavHeader />
+    <Main />
+    <NavFooter />
+  </React.Fragment>;
+
+export const App = ()=> <HashRouter basename="">
+    <Routes>
+      <Route path="*" element={<Root />} />
+    </Routes>
+  </HashRouter>;
