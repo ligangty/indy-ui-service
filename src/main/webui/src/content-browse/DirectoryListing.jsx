@@ -13,8 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-/* eslint-disable react/prop-types */
+
 import React, {useState, useEffect} from 'react';
+import {PropTypes} from 'prop-types';
 import axios from 'axios';
 import {styles} from './style.js';
 
@@ -55,6 +56,11 @@ const URLList = props => {
   );
 };
 
+URLList.propTypes = {
+  urls: PropTypes.array.isRequired,
+  parentUrl: PropTypes.string
+};
+
 const Footer = props => {
   const elems = props.sources && props.sources.map((src, index)=>{
       let url = src.replace(/http(s{0,1}):\/\/.*?\//u, getFullHost()+"/");
@@ -68,6 +74,32 @@ const Footer = props => {
       </ul>
     </footer>
   );
+};
+
+Footer.propTypes = {
+  sources: PropTypes.array.isRequired
+};
+
+const getStoreKey = storeKey => {
+  let storeElems = storeKey.split(":");
+  return {
+    "packageType": storeElems[0],
+    "type": storeElems[1],
+    "name": storeElems[2]
+  };
+};
+
+export const URLPage = props => {
+  const data = props.listingData;
+  return <div>
+    <h2 style={styles.Header} key="title">Directory listing for {data.path} on {getStoreKey(data.storeKey).name}</h2>
+    <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
+    <Footer key="footer" sources={data.sources} />
+  </div>;
+};
+
+URLPage.propTypes = {
+  listingData: PropTypes.object.isRequired
 };
 
 const init = setState => {
@@ -98,16 +130,7 @@ const init = setState => {
   }, []);
 };
 
-const getStoreKey = state => {
-  let storeElems = state.data.storeKey.split(":");
-  return {
-    "packageType": storeElems[0],
-    "type": storeElems[1],
-    "name": storeElems[2]
-  };
-};
-
-export const URLPage = ()=>{
+export default function DirectoryListing () {
   const [state, setState] = useState({
       error: null,
       isLoaded: false,
@@ -122,12 +145,6 @@ export const URLPage = ()=>{
   } else if (!isLoaded) {
     return <div>Loading...</div>;
   }
-  document.title = `Directory listing for ${data.path} on ${getStoreKey(state).name}`;
-  return (
-    <div>
-      <h2 style={styles.Header} key="title">Directory listing for {data.path} on {getStoreKey(state).name}</h2>
-      <URLList key="urllist" parentUrl={data.parentUrl} urls={data.listingUrls} />
-      <Footer key="footer" sources={data.sources} />
-    </div>
-  );
-};
+  document.title = `Directory listing for ${data.path} on ${getStoreKey(data.storeKey).name}`;
+  return <URLPage listingData={data} />;
+}
