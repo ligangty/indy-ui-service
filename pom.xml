@@ -234,8 +234,8 @@
               <exclude>**/.eslint*</exclude>
             </excludes>
             <mapping>
-              <jsx>DOUBLESLASH_STYLE</jsx>
-              <js>DOUBLESLASH_STYLE</js>
+              <js>JAVADOC_STYLE</js>
+              <jsx>JAVADOC_STYLE</jsx>
             </mapping>
           </configuration>
         </plugin>
