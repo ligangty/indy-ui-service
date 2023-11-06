@@ -1,0 +1,76 @@
+{
+  "items" : [
+    {
+      "type" : "hosted",
+      "key" : "maven:hosted:FisZYfNgpR",
+      "description" : "Build output for PNC build #48216536",
+      "metadata" : {
+        "changelog" : "Creating hosted repository for build: 48216536 (repo: FisZYfNgpR)"
+      },
+      "disabled" : false,
+      "snapshotTimeoutSeconds" : 0,
+      "readonly" : true,
+      "packageType" : "maven",
+      "name" : "FisZYfNgpR",
+      "disable_timeout" : 0,
+      "path_style" : "plain",
+      "authoritative_index" : true,
+      "allow_snapshots" : false,
+      "allow_releases" : true
+    },
+    {
+      "type" : "hosted",
+      "key" : "maven:hosted:tYMtROxQUA",
+      "description" : "Build output for PNC build #49682846",
+      "metadata" : {
+        "changelog" : "Creating hosted repository for build: 49682846 (repo: tYMtROxQUA)"
+      },
+      "disabled" : false,
+      "snapshotTimeoutSeconds" : 0,
+      "readonly" : false,
+      "packageType" : "maven",
+      "name" : "tYMtROxQUA",
+      "disable_timeout" : 0,
+      "path_style" : "plain",
+      "authoritative_index" : false,
+      "allow_snapshots" : false,
+      "allow_releases" : true
+    },
+    {
+      "type" : "hosted",
+      "key" : "maven:hosted:LYnrVCMAZP",
+      "description" : "Build output for PNC build #40419410",
+      "metadata" : {
+        "changelog" : "Creating hosted repository for build: 40419410 (repo: LYnrVCMAZP)"
+      },
+      "disabled" : false,
+      "snapshotTimeoutSeconds" : 0,
+      "readonly" : false,
+      "packageType" : "maven",
+      "name" : "LYnrVCMAZP",
+      "disable_timeout" : 0,
+      "path_style" : "plain",
+      "authoritative_index" : false,
+      "allow_snapshots" : false,
+      "allow_releases" : true
+    },
+    {
+      "type" : "hosted",
+      "key" : "maven:hosted:build_kie-soup_20180628.0657",
+      "description" : "Build output for PNC build #2601",
+      "metadata" : {
+        "changelog" : "Creating hosted repository for build: 2601 (repo: build_kie-soup_20180628.0657)"
+      },
+      "disabled" : false,
+      "snapshotTimeoutSeconds" : 0,
+      "readonly" : false,
+      "packageType" : "maven",
+      "name" : "build_kie-soup_20180628.0657",
+      "disable_timeout" : 0,
+      "path_style" : "plain",
+      "authoritative_index" : false,
+      "allow_snapshots" : false,
+      "allow_releases" : true
+    }
+  ]
+}

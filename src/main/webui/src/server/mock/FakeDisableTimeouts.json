@@ -1,0 +1,25 @@
+{
+  "items" : [
+    {
+      "name" : "Disable-Timeout",
+      "group" : "maven:remote:koji-org.jboss.ws-jbossws-common-tools-1.2.4.Final_redhat_1-1",
+      "expiration": "1541577250077"
+    },
+    {
+      "name" : "Disable-Timeout",
+      "group" : "maven:remote:i-maven-restlet-4"
+    },
+    {
+      "name" : "Disable-Timeout",
+      "group" : "maven:hosted:FisZYfNgpR"
+    },
+    {
+      "name" : "Disable-Timeout",
+      "group" : "maven:group:build_org-keycloak-keycloak-parent-4-x_20180515.1724"
+    },
+    {
+      "name" : "Disable-Timeout",
+      "group" : "maven:group:build_org-keycloak-keycloak-parent-4-x_20180531.0218"
+    }
+  ]
+}

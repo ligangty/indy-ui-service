@@ -1,0 +1,83 @@
+{
+  "items" : [
+    {
+      "type" : "group",
+      "key" : "maven:group:build_org-keycloak-keycloak-parent-4-x_20180515.1724",
+      "description" : "Aggregation group for PNC build #1859",
+      "metadata" : {
+        "changelog" : "Creating repository group for resolving artifacts in build: 1859 (repo: build_org-keycloak-keycloak-parent-4-x_20180515.1724)"
+      },
+      "disabled" : false,
+      "constituents" : [ "maven:hosted:FisZYfNgpR", "maven:remote:koji-org.jboss.ws-jbossws-common-tools-1.2.4.Final_redhat_1-1", "maven:group:build_vertx-infinispan-3-5-1_20180705.1313"],
+      "packageType" : "maven",
+      "name" : "build_org-keycloak-keycloak-parent-4-x_20180515.1724",
+      "disable_timeout" : 0,
+      "path_style" : "plain",
+      "authoritative_index" : false,
+      "prepend_constituent" : false
+    },
+    {
+      "type" : "group",
+      "key" : "maven:group:build_org-keycloak-keycloak-parent-4-x_20180531.0218",
+      "description" : "Aggregation group for PNC build #1981",
+      "metadata" : {
+        "changelog" : "Creating repository group for resolving artifacts in build: 1981 (repo: build_org-keycloak-keycloak-parent-4-x_20180531.0218)"
+      },
+      "disabled" : false,
+      "constituents" : [ "maven:hosted:tYMtROxQUA", "maven:remote:i-maven-restlet-4"],
+      "packageType" : "maven",
+      "name" : "build_org-keycloak-keycloak-parent-4-x_20180531.0218",
+      "disable_timeout" : 0,
+      "path_style" : "plain",
+      "authoritative_index" : false,
+      "prepend_constituent" : false
+    },
+    {
+      "type" : "group",
+      "key" : "maven:group:build_org-keycloak-keycloak-nodejs-auth-utils-3-xnpm_1-2-stage-4_20180104.1216",
+      "description" : "Aggregation group for PNC build #333",
+      "metadata" : {
+        "changelog" : "Creating repository group for resolving artifacts in build: 333 (repo: build_org-keycloak-keycloak-nodejs-auth-utils-3-xnpm_1-2-stage-4_20180104.1216)"
+      },
+      "disabled" : false,
+      "constituents" : [ "maven:hosted:LYnrVCMAZP", "maven:group:public", "maven:remote:repo.eclipse.org", "maven:remote:microprofile.repo.eclipse.org" ],
+      "packageType" : "maven",
+      "name" : "build_org-keycloak-keycloak-nodejs-auth-utils-3-xnpm_1-2-stage-4_20180104.1216",
+      "disable_timeout" : 0,
+      "path_style" : "plain",
+      "authoritative_index" : false,
+      "prepend_constituent" : false
+    },
+    {
+      "type" : "group",
+      "key" : "maven:group:build_vertx-infinispan-3-5-1_20180705.1313",
+      "description" : "Aggregation group for PNC build #2759",
+      "metadata" : {
+        "changelog" : "Creating repository group for resolving artifacts in build: 2759 (repo: build_vertx-infinispan-3-5-1_20180705.1313)"
+      },
+      "disabled" : false,
+      "constituents" : [ "maven:hosted:build_kie-soup_20180628.0657", "maven:group:public" ],
+      "packageType" : "maven",
+      "name" : "build_vertx-infinispan-3-5-1_20180705.1313",
+      "disable_timeout" : 0,
+      "path_style" : "plain",
+      "authoritative_index" : false,
+      "prepend_constituent" : false
+    },
+    {
+      "type" : "group",
+      "key" : "maven:group:public",
+      "metadata" : {
+        "changelog" : "test"
+      },
+      "disabled" : false,
+      "constituents" : [ "maven:remote:central", "maven:remote:mrrc-ga", "maven:remote:repo.eclipse.org", "maven:remote:microprofile.repo.eclipse.org" ],
+      "packageType" : "maven",
+      "name" : "public",
+      "disable_timeout" : 0,
+      "path_style" : "plain",
+      "authoritative_index" : false,
+      "prepend_constituent" : false
+    }
+  ]
+}
