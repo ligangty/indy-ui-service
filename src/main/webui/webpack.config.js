@@ -15,6 +15,7 @@
  */
 
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const outputDirectory = 'dist';
 
@@ -26,6 +27,19 @@ module.exports = {
   },
   mode: 'development',
   devtool: 'inline-source-map',
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false,
+        terserOptions: {
+          format: {
+            comments: false,
+          },
+        },
+      }),
+    ],
+  },
   module: {
     rules: [
       {test: /\.js$/u, use: 'babel-loader', exclude: /node_modules/u},
