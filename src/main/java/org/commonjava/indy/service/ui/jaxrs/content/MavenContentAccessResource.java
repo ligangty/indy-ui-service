@@ -15,6 +15,7 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.content;
 
+import org.apache.commons.io.IOUtils;
 import org.commonjava.indy.service.ui.client.content.MavenContentAccessServiceClient;
 import org.commonjava.indy.service.ui.models.repository.StoreType;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -37,14 +38,13 @@ import javax.ws.rs.HEAD;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.ws.rs.core.UriInfo;
+import java.io.InputStream;
 
-import static javax.ws.rs.core.MediaType.MEDIA_TYPE_WILDCARD;
 import static org.commonjava.indy.service.ui.client.Constants.CHECK_CACHE_ONLY;
 import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PATH;
 import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.QUERY;
@@ -59,9 +59,6 @@ public class MavenContentAccessResource
     @Inject
     @RestClient
     MavenContentAccessServiceClient client;
-
-    //    @Inject
-    //    ContentBrowseReGenClient browseClient;
 
     @Operation( description = "Store Maven artifact content under the given artifact store (type/name) and path." )
     @Parameters( { @Parameter( name = "type", in = PATH, description = "The type of the repository.",
@@ -135,29 +132,23 @@ public class MavenContentAccessResource
                           description = "Rendered content listing (when path ends with '/index.html' or '/') or Content stream" ) } )
     @GET
     @Path( "/{path: (.*)}" )
-    @Produces( MEDIA_TYPE_WILDCARD )
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            final @PathParam( "path" ) String path, @Context final UriInfo uriInfo,
                            @Context final HttpServletRequest request )
     {
-        //        Response response = client.doGet( type, name, path, uriInfo, request );
-        //
-        //        Response.ResponseBuilder builder = Response.ok(response.getEntity());
-        //        response.getHeaders().forEach( builder::header );
-        //        builder.header( CONTENT_TYPE, TEXT_XML );
-        //
-        //        return builder.build();
-        //        System.out.println(response.getHeaders());
-        //        return response;
         if ( uriInfo.getAbsolutePath().toString().trim().endsWith( "/" ) )
         {
-            //            return browseClient.browseDirectory( PackageTypeConstants.PKG_TYPE_MAVEN, type, name, path, uriInfo );
             return Response.seeOther(
                                    uriInfo.getBaseUriBuilder().path( "browse/maven" ).path( type ).path( name ).path( path ).build() )
                            .build();
         }
-
-        return client.doGet( type, name, path, uriInfo, request );
+        // When direct send back the origin Response from client, not sure why it will cause encoding issue which will
+        // send back the malformed content. So here we re-wrapped the original response content from client to a streamed
+        // content.
+        final Response response = client.doGet( type, name, path, uriInfo, request );
+        final InputStream clientIn = response.readEntity( InputStream.class );
+        StreamingOutput out = output -> IOUtils.copy( clientIn, output );
+        return Response.status( response.getStatus() ).entity( out ).replaceAll( response.getHeaders() ).build();
     }
 
     @Operation( description = "Retrieve root listing under the given artifact store (type/name)." )
@@ -178,7 +169,6 @@ public class MavenContentAccessResource
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            @Context final UriInfo uriInfo, @Context final HttpServletRequest request )
     {
-        //        return browseClient.browseRoot( PackageTypeConstants.PKG_TYPE_MAVEN, type, name, uriInfo );
         return Response.seeOther( uriInfo.getBaseUriBuilder().path( "browse/maven" ).path( type ).path( name ).build() )
                        .build();
     }
