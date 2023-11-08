@@ -40,7 +40,7 @@
   },
   "scripts": {
     "webpack": "node node_modules/webpack/bin/webpack.js --openssl-legacy-provider",
-    "compile": "NODE_ENV=production webpack --config ./webpack.config.js --progress && webpack --config ./webpack-content-browse.prod.config.js --progress",
+    "compile": "NODE_ENV=production webpack --config ./webpack.config.js && webpack --config ./webpack-content-browse.prod.config.js",
     "clean": "rm -rf ./dist",
     "build": "npm run-script clean && npm run-script compile && cp ./content-browse/src/main/html/* ./dist/content-browse/ && rm ./dist/indy.bundle.js",
     "start": "http-server ./dist -a localhost -p 8000",
