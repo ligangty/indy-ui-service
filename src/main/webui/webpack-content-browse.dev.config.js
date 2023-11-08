@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const path = require('path')
-const webpack = require('webpack')
+const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   entry: './content-browse/src/main/js/app.js',
@@ -47,4 +47,4 @@ module.exports = {
       { test: /\.jsx?$/, use: 'babel-loader', exclude: /node_modules/ }
     ]
   }
-}
+};
