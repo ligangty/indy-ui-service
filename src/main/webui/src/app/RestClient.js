@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-export const jsonGet = async function(payload){
-  const response = await fetch(payload.url, {
-    method: "GET",
-    credentials: 'same-origin',
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: payload.data ? payload.data : undefined
-  });
-  if(response.ok && payload.done){
-    await response.json().then(data=>payload.done(data));
-  }else if(!response.ok && payload.fail){
-    await response.text().then(data=>{
-      payload.fail(data, response.status, response.statusText);
-    });
-  }
+const httpCall = (url, method, headers={}, payload) => fetch(url, {
+  method,
+  credentials: 'same-origin',
+  headers,
+  body: payload? payload : undefined
+});
+
+const http = {
+  get: (url, headers, payload) => httpCall(url, "GET", headers, payload),
+  post: (url, headers, payload) => httpCall(url, "POST", headers, payload),
+  put: (url, headers, payload) => httpCall(url, "PUT", headers, payload),
+  delete: (url, headers, payload) => httpCall(url, "DELETE", headers, payload)
 };
+
+const jsonRest ={
+  get: (url, payload) => httpCall(url, "GET", {"Content-type": "application/json"}, payload),
+  post: (url, payload) => httpCall(url, "POST", {"Content-type": "application/json"}, payload),
+  put: (url, payload) => httpCall(url, "PUT", {"Content-type": "application/json"}, payload)
+};
+
+export {http, jsonRest};

@@ -17,8 +17,8 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import axios from 'axios';
 import {Utils} from '../CompUtils';
+import {http} from '../../RestClient';
 
 const StoreEditControlPanel = ({handleSave, handleCancel, handleRemove}) => <div className="cp-row">
     <button name="save" onClick={handleSave} className="cp-button">Save</button>{'  '}
@@ -40,11 +40,12 @@ const StoreViewControlPanel = function({enabled, storeObj, handleDisable, handle
   const [pkgType, storeType, storeName] = [storeObj.packageType, storeObj.type, storeObj.name];
   const storeUrl = `/api/admin/stores/${pkgType}/${storeType}/${storeName}`;
   const handleRemove = async ()=>{
-    const response = await axios.delete(storeUrl).catch(error =>{
+    const response = await http.delete(storeUrl);
+    if(!response.ok && response.status >= 400){
       // TODO: Some other way to handle errors?
-      Utils.logMessage(error);
-    });
-    if(response && response.status===204){
+      response.text().then(error=>Utils.logMessage(error));
+    }
+    if(response.status===204){
       // TODO: Some other way to show deletion success?
       Utils.logMessage("Store deleted.");
     }

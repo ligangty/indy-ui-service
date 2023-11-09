@@ -104,11 +104,11 @@ export const Utils = {
     return false;
   },
   reConstituents: store => {
-    let oldConstituents = store.constituents;
-    let constituents = [oldConstituents.length];
+    const oldConstituents = store.constituents;
+    const constituents = [oldConstituents.length];
     for(let j=0; j<oldConstituents.length; j++){
-      let key = oldConstituents[j];
-      let c = {
+      const key = oldConstituents[j];
+      const c = {
           key: oldConstituents[j],
           detailHref: Utils.detailHref(key),
           storeHref: Utils.storeHref(key),
@@ -128,7 +128,7 @@ export const Utils = {
   isEmptyObj: obj => Object.keys(obj).length === 0 && obj.constructor === Object,
   cloneObj: src => {
     let target = {};
-    for (let prop in src) {
+    for (const prop in src) {
       if (prop in src) {
         target[prop] = src[prop];
       }

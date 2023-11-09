@@ -18,7 +18,6 @@
 import React, {useState, useEffect} from 'react';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import axios from 'axios';
 import {StoreEditControlPanel as EditControlPanel} from './StoreControlPanels.jsx';
 import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './Hints.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
@@ -26,7 +25,7 @@ import {Utils} from '../CompUtils.js';
 // import Filters from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';
 import {PACKAGE_TYPES} from '../ComponentConstants.js';
-// import jsonGet from '../../RestClient.js';
+import {jsonRest} from '../../RestClient.js';
 
 const init = (pkgType, storeName, setState) => {
   const getUrl = `/api/admin/stores/${pkgType}/remote/${storeName}`;
@@ -34,20 +33,9 @@ const init = (pkgType, storeName, setState) => {
     const fetchStore = async () =>{
       // get Store data
       let isError = false;
-      const response = await axios.get(getUrl).catch(error =>{
-        isError = true;
-        let message = "";
-        if (error.response) {
-          message = JSON.parse(error.response.data).error;
-        }else{
-          message = error;
-        }
-        setState({
-          message
-        });
-      });
-      if (!isError){
-        let raw = response.data;
+      const response = await jsonRest.get(getUrl);
+      if (response.ok){
+        let raw = await response.json();
         let storeView = Utils.cloneObj(raw);
         storeView.disabled = raw.disabled === undefined ? false : raw.disabled;
         storeView.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
@@ -57,19 +45,24 @@ const init = (pkgType, storeName, setState) => {
 
         // get Store disablement data
         const timeoutUrl = `/api/admin/schedule/store/${storeView.packageType}/${storeView.type}/${storeView.name}/disable-timeout`;
-        const timeoutResponse = await axios.get(timeoutUrl).catch(error=>{
-          isError = true;
-          Utils.logMessage(`disable timeout getting failed! Error reason: ${error}`);
-        });
+        const timeoutResponse = await jsonRest.get(timeoutUrl);
         let cloned = Utils.cloneObj(storeView);
-        if (!isError){
-          cloned.disableExpiration = timeoutResponse.data.expiration;
+        if (timeoutResponse.ok){
+          const timeout = await timeoutResponse.json();
+          cloned.disableExpiration = timeout.expiration;
+        }else{
+          response.text().then(error=>Utils.logMessage(`disable timeout getting failed! Error reason: ${error}`));
         }
+
         // Change state and re-rendering
         setState({
           storeView: cloned,
           store: raw
         });
+      }else{
+        response.text().then(error=>setState({
+          message: error
+        }));
       }
     };
 
@@ -82,16 +75,10 @@ const saveStore = store => {
   const postStore = async () =>{
     // get Store data
     let isError = false;
-    const response = await axios.post(getUrl, store).catch(error =>{
-      isError = true;
-      let message = "";
-      if (error.response) {
-        message = JSON.parse(error.response.data).error;
-      }else{
-        message = error;
-      }
-      Utils.logMessage(message);
-    });
+    const response = await jsonRest.post(getUrl, store);
+    if (!response.ok){
+      response.text().then(error=>Utils.logMessage(error));
+    }
     const navigate = useNavigate();
     if(!isError && (response.status >= 200 || response.status < 300)){
       navigate(`/remote/${store.packageType}/view/${store.name}`);

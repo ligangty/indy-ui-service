@@ -24,28 +24,15 @@ import {DisableTimeoutHint, PrefetchHint, Hint, PasswordMask} from './Hints.jsx'
 import {Utils} from '../CompUtils.js';
 import {Filters} from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';
-import axios from 'axios';
+import {jsonRest} from '../../RestClient.js';
 
 const init = (pkgType, storeName, setState) => {
   const storeUrl = `/api/admin/stores/${pkgType}/remote/${storeName}`;
   useEffect(()=>{
-    const fetchStore = async () =>{
-      // get Store data
-      let isError = false;
-      const response = await axios.get(storeUrl).catch(error =>{
-        isError = true;
-        let message = "";
-        if (error.response) {
-          message = JSON.parse(error.response.data).error;
-        }else{
-          message = error;
-        }
-        setState({
-          message
-        });
-      });
-      if (!isError){
-        let raw = response.data;
+    const fetchStore = async () => {
+      const response = await jsonRest.get(storeUrl);
+      if (response.ok){
+        let raw = await response.json();
         let store = Utils.cloneObj(raw);
         store.disabled = raw.disabled === undefined ? false : raw.disabled;
         store.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
@@ -55,17 +42,19 @@ const init = (pkgType, storeName, setState) => {
 
         // get Store disablement data
         const timeoutUrl = `/api/admin/schedule/store/${store.packageType}/${store.type}/${store.name}/disable-timeout`;
-        const timeoutResponse = await axios.get(timeoutUrl).catch(error=>{
-          isError = true;
-          Utils.logMessage(`disable timeout getting failed! Error reason: ${error}`);
-        });
+        const timeoutResponse = await jsonRest.get(timeoutUrl);
         let newStore = Utils.cloneObj(store);
-        if (!isError){
-          newStore.disableExpiration = timeoutResponse.data.expiration;
+        if(timeoutResponse.ok){
+          const timeoutData = await timeoutResponse.json();
+          newStore.disableExpiration = timeoutData.expiration;
         }
         // Change state and re-rendering
         setState({
           store: newStore
+        });
+      }else{
+        response.text().then(data=>{
+          Utils.logMessage(`Failed to get store data. Error reason: ${response.status}->${response.statusText}`);
         });
       }
     };

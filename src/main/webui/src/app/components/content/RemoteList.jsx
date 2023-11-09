@@ -15,42 +15,40 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {ListJsonDebugger} from './Debugger.jsx';
 import ListControl from "./ListControl.jsx";
 import {remoteOptionLegend as options} from "../ComponentConstants.js";
 import {Utils} from '../CompUtils.js';
 import {StoreListingWidget} from './CommonPageWidget.jsx';
+import {jsonRest} from '../../RestClient.js';
+import {DisableTimeoutHint} from './Hints.jsx';
 
 const init = (state, setState) => {
   useEffect(()=>{
     const fetchdData = async ()=>{
-      let isError = false;
-      const response = await axios.get(`/api/admin/stores/_all/remote`).catch(error=>{
-          isError = true;
-          let message = "";
-          if (error.response) {
-            message = JSON.parse(error.response.data).error;
-          }else{
-            message = error;
-          }
-          setState({
-            message
-          });
-      });
-      if (!isError){
-        const timeoutResponse = await axios.get('/api/admin/schedule/store/all/disable-timeout').catch(error=>{
-          isError=true;
-          Utils.logMessage(`disable timeout get failed in remote listing! Error reason: ${error}`);
-        });
+      const response = await jsonRest.get(`/api/admin/stores/_all/remote`);
+      if (response.ok){
+        const timeoutResponse = await jsonRest.get('/api/admin/schedule/store/all/disable-timeout');
         let disabledMap = {};
-        if (!isError){
-          disabledMap = Utils.setDisableMap(timeoutResponse.data, state.listing);
+        Utils.logMessage(timeoutResponse);
+        if (timeoutResponse.ok){
+          const timeoutData = await timeoutResponse.json();
+          Utils.logMessage(timeoutData);
+          disabledMap = Utils.setDisableMap(timeoutData);
+        }else{
+          timeoutResponse.text().then(data=>Utils.logMessage(`disable timeout get failed in remote listing! Error reason: ${data}`));
         }
+        const data = await response.json();
         setState({
-          listing: response.data.items,
-          rawListing: response.data.items,
+          listing: data.items,
+          rawListing: data.items,
           disabledMap
+        });
+      }else{
+        response.text().then(data=>{
+          setState({
+            message: data
+          });
         });
       }
     };
