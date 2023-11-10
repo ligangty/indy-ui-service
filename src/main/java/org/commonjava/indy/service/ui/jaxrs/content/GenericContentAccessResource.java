@@ -15,6 +15,7 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.content;
 
+import io.quarkus.vertx.http.Uncompressed;
 import org.commonjava.indy.service.ui.client.content.GenericContentAccessServiceClient;
 import org.commonjava.indy.service.ui.models.repository.StoreType;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -105,6 +106,7 @@ public class GenericContentAccessResource
                           description = "Header metadata for content (or rendered listing when path ends with '/index.html' or '/'" ), } )
     @HEAD
     @Path( "/{path: (.*)}" )
+    @Uncompressed // We should never compress this because it is often used by cli tools or other non-browser tools
     public Response doHead( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                             final @PathParam( "path" ) String path,
                             @QueryParam( CHECK_CACHE_ONLY ) final Boolean cacheOnly, @Context final UriInfo uriInfo,
@@ -126,6 +128,7 @@ public class GenericContentAccessResource
                           description = "Rendered content listing (when path ends with '/index.html' or '/') or Content stream" ) } )
     @GET
     @Path( "/{path: (.*)}" )
+    @Uncompressed // We should never compress this because it is often used by cli tools or other non-browser tools
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            final @PathParam( "path" ) String path, @Context final UriInfo uriInfo,
                            @Context final HttpServletRequest request )
@@ -154,6 +157,7 @@ public class GenericContentAccessResource
                   description = "Rendered content listing or Content stream" )
     @GET
     @Path( "/" )
+    @Uncompressed // We should never compress this because it is often used by cli tools or other non-browser tools
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            @Context final UriInfo uriInfo, @Context final HttpServletRequest request )
     {
