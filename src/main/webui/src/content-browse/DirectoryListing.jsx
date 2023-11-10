@@ -16,8 +16,8 @@
 
 import React, {useState, useEffect} from 'react';
 import {PropTypes} from 'prop-types';
-import axios from 'axios';
 import {styles} from './style.js';
+import {jsonRest} from '../app/RestClient.js';
 
 const replaceUrl = url =>{
   if (url.includes("api/browse")){
@@ -106,24 +106,18 @@ const init = setState => {
   const url =`/api${document.location.pathname}`;
   useEffect(()=>{
     const fetchData = async () => {
-      const response = await axios.get(url).catch(error=>{
-        if (error.response) {
-          setState({
-            isLoaded: true,
-            error: JSON.parse(error.response.data).error
-          });
-        }else{
-          setState({
-            isLoaded: true,
-            error
-          });
-        }
-      });
-      if(response.status === 200){
+      const response = await jsonRest.get(url);
+      if(response.ok){
+        const data = await response.json();
         setState({
           isLoaded: true,
-          data: response.data
+          data
         });
+      }else{
+        response.text().then(error=>setState({
+          isLoaded: true,
+          error
+        }));
       }
     };
     fetchData();
