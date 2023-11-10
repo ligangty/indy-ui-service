@@ -15,6 +15,7 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.content;
 
+import io.quarkus.vertx.http.Uncompressed;
 import org.commonjava.indy.service.ui.client.content.NPMContentAccessServiceClient;
 import org.commonjava.indy.service.ui.models.repository.StoreType;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -132,6 +133,7 @@ public class NPMContentAccessResource
             @APIResponse( responseCode = "200", description = "Header metadata for package metadata content" ), } )
     @HEAD
     @Path( "/{packageName}" )
+    @Uncompressed // We should never compress this because it is often used by cli tools or other non-browser tools
     public Response doHead( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                             final @PathParam( "packageName" ) String packageName,
                             final @QueryParam( CHECK_CACHE_ONLY ) Boolean cacheOnly, @Context final UriInfo uriInfo,
@@ -153,6 +155,7 @@ public class NPMContentAccessResource
             @APIResponse( responseCode = "200", description = "Header metadata for tarball content" ), } )
     @HEAD
     @Path( "/{packageName}/{versionTarball: (.*)}" )
+    @Uncompressed // We should never compress this because it is often used by cli tools or other non-browser tools
     public Response doHead( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                             final @PathParam( "packageName" ) String packageName,
                             final @PathParam( "versionTarball" ) String versionTarball,
@@ -178,6 +181,7 @@ public class NPMContentAccessResource
                           description = "Rendered content listing or Content stream" ) } )
     @GET
     @Path( "/{packageName}" )
+    @Uncompressed // We should never compress this because it is often used by cli tools or other non-browser tools
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            final @PathParam( "packageName" ) String packageName, @Context final UriInfo uriInfo,
                            @Context final HttpServletRequest request )
@@ -200,6 +204,7 @@ public class NPMContentAccessResource
                           description = "Content stream" ), } )
     @GET
     @Path( "/{packageName}/{versionTarball: (.*)}" )
+    @Uncompressed // We should never compress this because it is often used by cli tools or other non-browser tools
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            final @PathParam( "packageName" ) String packageName,
                            final @PathParam( "versionTarball" ) String versionTarball, @Context final UriInfo uriInfo,
@@ -219,6 +224,7 @@ public class NPMContentAccessResource
                   description = "Rendered content listing or Content stream" )
     @GET
     @Path( "/" )
+    @Uncompressed // We should never compress this because it is often used by cli tools or other non-browser tools
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            @Context final UriInfo uriInfo, @Context final HttpServletRequest request )
     {

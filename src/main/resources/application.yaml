@@ -3,16 +3,12 @@ quarkus:
     name: "Indy"
   package:
     type: uber-jar
-  resteasy:
-    gzip:
-      enabled: true
-      max-input: 64M
   http:
     port: 8080
     read-timeout: 30m
-    enable-compression: true
+#    enable-compression: true
     limits:
-      max-body-size: 500M
+      max-body-size: 1000M
     auth:
       permission:
         authenticated:
@@ -29,7 +25,6 @@ quarkus:
           paths: "/api/*"
           policy: permit
           methods: HEAD,GET
-
   oidc:
     enabled: true
 #    auth-server-url: "http://localhost:8180/realms/test"
