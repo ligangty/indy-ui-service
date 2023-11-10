@@ -15,6 +15,7 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.content;
 
+import io.quarkus.vertx.http.Uncompressed;
 import org.apache.commons.io.IOUtils;
 import org.commonjava.indy.service.ui.client.content.MavenContentAccessServiceClient;
 import org.commonjava.indy.service.ui.models.repository.StoreType;
@@ -111,6 +112,7 @@ public class MavenContentAccessResource
                           description = "Header metadata for content (or rendered listing when path ends with '/index.html' or '/'" ) } )
     @HEAD
     @Path( "/{path: (.*)}" )
+    @Uncompressed // We should never compress this because it is often used by cli tools or other non-browser tools
     public Response doHead( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                             final @PathParam( "path" ) String path,
                             final @QueryParam( CHECK_CACHE_ONLY ) Boolean cacheOnly, final @Context UriInfo uriInfo,
@@ -132,6 +134,7 @@ public class MavenContentAccessResource
                           description = "Rendered content listing (when path ends with '/index.html' or '/') or Content stream" ) } )
     @GET
     @Path( "/{path: (.*)}" )
+    @Uncompressed // We should never compress this because it is often used by cli tools or other non-browser tools
     public Response doGet( final @PathParam( "type" ) String type, final @PathParam( "name" ) String name,
                            final @PathParam( "path" ) String path, @Context final UriInfo uriInfo,
                            @Context final HttpServletRequest request )
