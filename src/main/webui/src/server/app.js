@@ -1,6 +1,5 @@
 import compression from 'compression';
 import express from 'express';
-import bodyParser from 'body-parser';
 import path from 'path';
 import {Config} from './config/AppConfig';
 
@@ -9,8 +8,7 @@ const indexHtml=path.join(projectRoot+'/index.html');
 
 const app = express();
 app.use(compression());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json({extended: true}));
+app.use(express.json());
 const server = app.listen(Config.SERVER_PORT, () => {
   const host = server.address().address;
   const port = server.address().port;
@@ -102,37 +100,47 @@ app.get('/api/admin/stores/maven/group/:name', (req, res) => {
   }
 });
 
-const newFakeRepo = (packageType, type, name)=>{
-  const storeKey = `${packageType}:${type}:${name}`;
-  const repo = {
-    "packageType": `${packageType}`,
-    "type": `${type}`,
-    "name": `${name}`,
-    "key": `${storeKey}`,
-    "description": `This is a fake repo for ${storeKey}`,
-    "disabled": false,
-    "disable_timeout": 0,
-    "path_style": "plain",
-    "authoritative_index": false,
-    "prepend_constituent": false
-  };
-  return repo;
-};
+// const newFakeRepo = (packageType, type, name)=>{
+//   const storeKey = `${packageType}:${type}:${name}`;
+//   const repo = {
+//     "packageType": `${packageType}`,
+//     "type": `${type}`,
+//     "name": `${name}`,
+//     "key": `${storeKey}`,
+//     "description": `This is a fake repo for ${storeKey}`,
+//     "disabled": false,
+//     "disable_timeout": 0,
+//     "path_style": "plain",
+//     "authoritative_index": false,
+//     "prepend_constituent": false
+//   };
+//   return repo;
+// };
 
 app.post('/api/admin/stores/:packageType/:type/:name', (req, res) => {
-  const [packageType, type, name]=[req.params.packageType, req.params.type, req.params.name];
-  console.log(packageType, type, name);
-  const repoBody = req.body;
-  console.log(repoBody);
-  const responseRepo = newFakeRepo(packageType, type, name);
-  if (responseRepo){
-    res.status(204).json(responseRepo);
+  const newRepo = req.body;
+  if(req.headers['content-type']==="application/json"){
+    if (newRepo.packageType&&newRepo.type&&newRepo.name){
+      // res.status(204);
+      res.sendStatus(204);
+    }else{
+      res.status(400).json({error: "Bad repo request: missing packageType or type or name for repo!"});
+    }
   }else{
-    res.status(400).json({error: "Bad repo request"});
+    res.status(400).json({error: "Bad request: wrong header content-type"});
   }
 });
 
 app.put('/api/admin/stores/:packageType/:type/:name', (req, res) => {
-  // TODO: need to implement
+  const updatedRepo = req.body;
+  if(req.headers['content-type']==="application/json"){
+    if (updatedRepo.packageType&&updatedRepo.type&&updatedRepo.name){
+      res.status(200).json(updatedRepo);
+    }else{
+      res.status(400).json({error: "Bad repo request: missing packageType or type or name for repo!"});
+    }
+  }else{
+    res.status(400).json({error: "Bad request: wrong header content-type"});
+  }
 });
 
