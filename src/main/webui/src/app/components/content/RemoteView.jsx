@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable max-lines */
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';

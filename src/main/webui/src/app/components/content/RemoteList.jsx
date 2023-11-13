@@ -21,7 +21,6 @@ import {remoteOptionLegend as options} from "../ComponentConstants.js";
 import {Utils} from '../CompUtils.js';
 import {StoreListingWidget} from './CommonPageWidget.jsx';
 import {jsonRest} from '../../RestClient.js';
-import {DisableTimeoutHint} from './Hints.jsx';
 
 const init = (state, setState) => {
   useEffect(()=>{
