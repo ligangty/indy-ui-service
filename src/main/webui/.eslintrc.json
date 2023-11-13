@@ -114,7 +114,7 @@
       "max-classes-per-file": 2,
       "max-depth": 2,
       "max-len": 0,
-      "max-lines": 1,
+      "max-lines": 0,
       "max-lines-per-function": 0,
       "max-nested-callbacks": 2,
       "max-params": 0,

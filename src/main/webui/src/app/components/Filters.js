@@ -15,7 +15,8 @@
  */
 
 export const Filters = {
-  checkmark(input){
-    return input ? '\u2713' : '\u2718';
+  // Return the checkmark icon based on input
+  checkmark(isChecked){
+    return isChecked ? '\u2713' : '\u2718';
   }
 };

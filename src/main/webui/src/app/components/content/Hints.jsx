@@ -48,7 +48,6 @@ const PasswordMask = ()=> <span className="password-mask">********</span>;
 // timer(..., 0)
 // }]
 // Not sure what this timeout is doing, will check it later
-
 const DisableTimeoutHint = ({children}) =>{
   let suggestion = children ? children:
     'Integer time in seconds which is used for repo automatically re-enable when set disable by errors,' +
