@@ -33,7 +33,7 @@ export default function NavFooter() {
           });
         }else{
           response.text().then(data => {
-            Utils.logMessage(`Failed to version info. Error reason: ${response.status}->${response.statusText}`);
+            Utils.logMessage(`Failed to version info. Error reason: ${response.status}->${data}`);
           });
         }
       };

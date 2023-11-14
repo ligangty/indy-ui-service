@@ -14,24 +14,8 @@
  * limitations under the License.
  */
 
-import React, {useState, useEffect} from 'react';
-import {useLocation, useNavigate, useParams} from 'react-router-dom';
-import {PropTypes} from 'prop-types';
-import {StoreEditControlPanel as EditControlPanel} from './StoreControlPanels.jsx';
-import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './Hints.jsx';
-import {PackageTypeSelect} from './CommonPageWidget.jsx';
-// import ViewJsonDebugger from './Debugger.jsx';
-import {Utils} from '../CompUtils.js';
-// import Filters from '../Filters.js';
-import {TimeUtils} from '../../TimeUtils.js';
-import {jsonRest} from '../../RestClient.js';
-
+import React from 'react';
 
 export default function HostedEdit() {
-  const [state, setState] = useState({
-    store: {},
-    storeView: {}
-  });
-
   return <div>This is not implemented yet!</div>;
 }

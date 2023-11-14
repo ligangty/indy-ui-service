@@ -14,19 +14,8 @@
  * limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
-import {PropTypes} from 'prop-types';
-import {Utils} from '../CompUtils.js';
-import ListControl from "./ListControl.jsx";
-import {ListJsonDebugger} from './Debugger.jsx';
-import {LocalURLSection, StoreNameSection} from './CommonPageWidget.jsx';
+import React from 'react';
 
 export default function GruopList() {
-  const [state, setState] = useState({
-    store: {},
-    raw: {},
-    message: ''
-  });
   return <div>This is not implemented yet!</div>;
 }

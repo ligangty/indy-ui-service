@@ -17,8 +17,8 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {Utils} from '../CompUtils';
-import {http} from '../../RestClient';
+import {Utils} from '../../CompUtils';
+import {http} from '../../../RestClient';
 
 const StoreEditControlPanel = ({handleSave, handleCancel, handleRemove}) => <div className="cp-row">
     <button name="save" onClick={handleSave} className="cp-button">Save</button>{'  '}
@@ -71,9 +71,6 @@ const StoreViewControlPanel = function({enabled, storeObj, handleDisable, handle
 StoreViewControlPanel.propTypes={
   enabled: PropTypes.bool,
   storeObj: PropTypes.object,
-  // storeType: PropTypes.string,
-  // pkgType: PropTypes.string,
-  // storeName: PropTypes.string,
   handleDisable: PropTypes.func,
   handleEnable: PropTypes.func
 };

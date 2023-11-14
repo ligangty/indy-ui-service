@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-/* eslint-disable max-lines */
 import React, {useState, useEffect} from 'react';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {StoreEditControlPanel as EditControlPanel} from './StoreControlPanels.jsx';
-import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './Hints.jsx';
+import {StoreEditControlPanel as EditControlPanel} from './common/StoreControlPanels.jsx';
+import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './common/Hints.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
 import {Utils} from '../CompUtils.js';
 // import Filters from '../Filters.js';

@@ -17,8 +17,8 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {StoreViewControlPanel as ControlPanel} from './StoreControlPanels.jsx';
-import {DisableTimeoutHint, PrefetchHint, Hint, PasswordMask} from './Hints.jsx';
+import {StoreViewControlPanel as ControlPanel} from './common/StoreControlPanels.jsx';
+import {DisableTimeoutHint, PrefetchHint, Hint, PasswordMask} from './common/Hints.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
 import {Utils} from '../CompUtils.js';
 import {Filters} from '../Filters.js';
@@ -52,8 +52,8 @@ const init = (pkgType, storeName, setState) => {
           store: newStore
         });
       }else{
-        response.text().then(data=>{
-          Utils.logMessage(`Failed to get store data. Error reason: ${response.status}->${response.statusText}`);
+        response.text().then(data => {
+          Utils.logMessage(`Failed to get store data. Error reason: ${response.status}->${data}`);
         });
       }
     };
@@ -66,12 +66,6 @@ const handlers = {
     // mock
   },
   handleEnable: () => {
-    // mock
-  },
-  // handleEdit: () => {
-  //   navigate(`/remote/${pkgType}/edit/${storeName}`);
-  // },
-  handleCreate: () => {
     // mock
   },
   handleRemove: () => {
