@@ -35,17 +35,17 @@ const getFullHost = () => {
 };
 
 const URLList = props => {
-  let elems = [];
+  const elems = [];
   if(props.parentUrl){
-    let parentUrl = props.parentUrl.replace("/api/browse", "/browse");
+    const parentUrl = props.parentUrl.replace("/api/browse", "/browse");
     elems.push(<li key="parent"><a href={parentUrl}>..</a></li>);
   }
   if(props.urls){
     props.urls.forEach((urlResult, index)=>{
-      let source = `sources:\n${urlResult.sources.join("\n")}`;
-      let url = replaceUrl(urlResult.listingUrl);
-      let paths = urlResult.path.split('/');
-      let path = urlResult.path.endsWith("/")? paths[paths.length-2] + "/" : paths[paths.length-1];
+      const source = `sources:\n${urlResult.sources.join("\n")}`;
+      const url = replaceUrl(urlResult.listingUrl);
+      const paths = urlResult.path.split('/');
+      const path = urlResult.path.endsWith("/")? paths[paths.length-2] + "/" : paths[paths.length-1];
       elems.push(<li key={"urlList"+index}><a className="item-link" title={source} href={url} path={urlResult.path}>{path}</a></li>);
     });
   }
@@ -63,7 +63,7 @@ URLList.propTypes = {
 
 const Footer = props => {
   const elems = props.sources && props.sources.map((src, index)=>{
-      let url = src.replace(/http(s{0,1}):\/\/.*?\//u, getFullHost()+"/");
+      const url = src.replace(/http(s{0,1}):\/\/.*?\//u, getFullHost()+"/");
       return <li key={"footer"+index}><a className="source-link" title={url} href={url}>{url}</a></li>;
     });
   return(
@@ -81,7 +81,7 @@ Footer.propTypes = {
 };
 
 const getStoreKey = storeKey => {
-  let storeElems = storeKey.split(":");
+  const storeElems = storeKey.split(":");
   return {
     "packageType": storeElems[0],
     "type": storeElems[1],

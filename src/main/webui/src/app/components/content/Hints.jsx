@@ -61,7 +61,7 @@ DisableTimeoutHint.propTypes = {
 };
 
 const PrefetchHint = ({children}) => {
-  let suggestion = children ? children:
+  const suggestion = children ? children:
     'Integer to indicate the pre-fetching priority of the remote, higher means more eager to do the ' +
     'pre-fetching of the content in the repo, 0 or below means disable the pre-fecthing.';
 
@@ -73,7 +73,7 @@ PrefetchHint.propTypes = {
 };
 
 const DurationHint = ({children}) => {
-  let suggestion = children ? children : "24h 36m 00s";
+  const suggestion = children ? children : "24h 36m 00s";
   return <span className="hint">({`eg. ${suggestion}`})</span>;
 };
 

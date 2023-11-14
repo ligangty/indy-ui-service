@@ -28,13 +28,13 @@ export const TimeUtils = {
       return 'never';
     }
 
-    let hours = Math.floor(secs / (60 * 60));
+    const hours = Math.floor(secs / (60 * 60));
 
-    let mdiv = secs % (60 * 60);
-    let minutes = Math.floor(mdiv / 60);
+    const mdiv = secs % (60 * 60);
+    const minutes = Math.floor(mdiv / 60);
 
-    let sdiv = mdiv % 60;
-    let seconds = Math.ceil(sdiv);
+    const sdiv = mdiv % 60;
+    const seconds = Math.ceil(sdiv);
 
     let out = '';
     if (hours > 0){
@@ -66,7 +66,7 @@ export const TimeUtils = {
       return 'never';
     }
 
-    let date = new Date();
+    const date = new Date();
     date.setTime(milliseconds);
     return date.toLocaleString();
   },
@@ -78,9 +78,9 @@ export const TimeUtils = {
     if (secs < 1){
       return 'never';
     }
-    let nextDate = new Date(secs);
-    let toDay = new Date();
-    let total = nextDate.getTime() - toDay.getTime();
+    const nextDate = new Date(secs);
+    const toDay = new Date();
+    const total = nextDate.getTime() - toDay.getTime();
     return TimeUtils.secondsToDuration(total / 1000);
   }
 };
