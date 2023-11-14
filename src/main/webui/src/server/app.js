@@ -22,6 +22,10 @@ app.get([Config.APP_ROOT, `${Config.APP_ROOT}/*`, '/'], (req, res) => {
     res.sendFile(indexHtml);
 });
 
+app.get('/api/stats/package-type/keys', (req, res)=>{
+  res.status(200).json(["generic-http", "maven", "npm"]);
+});
+
 app.get('/api/admin/stores/_all/remote', (req, res) => {
   const remoteList = require('./mock/list/FakeRemoteList.json');
   res.status(200).json(remoteList);

@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// mock data: options
+// TODO: mock data: options. Need to use CompUtils.
 const remoteOptionLegend = [
   {icon: "S", title: "Snapshots allowed"},
   {icon: "R", title: "Releases allowed"}
 ];
 
+// TODO: mock data: options. Need to use CompUtils.
 const hostedOptionLegend = [
   {icon: 'S', title: 'Snapshots allowed'},
   {icon: 'R', title: 'Releases allowed'},
   {icon: 'D', title: 'Deployment allowed'}
 ];
 
-// TODO this should be fetched from backend
+// TODO: this should be fetched from backend
 const PACKAGE_TYPES = ["maven", "generic","npm"];
 
 

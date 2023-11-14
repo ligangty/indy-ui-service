@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import {jsonGet} from '../RestClient.js';
-
 export const Utils = {
   remoteOptions: store => {
     let options = [];
@@ -139,39 +137,5 @@ export const Utils = {
     let allParams = [message];
     params.forEach(p => allParams.push(p));
     Reflect.apply(console.log, undefined, allParams);
-  },
-  // TODO: not used?
-  getDisTimeouts: (state, setState, storeType) => {
-    jsonGet({
-      url: '/api/admin/schedule/store/all/disable-timeout',
-      done: response => {
-        let disabledMap = Utils.setDisableMap(response, state.listing);
-        setState({
-          disabledMap
-        });
-      },
-      fail: () => {
-        Utils.logMessage(`disable timeout get failed in ${storeType} listing.`);
-      }
-    });
-  },
-  // TODO: Not used?
-  getStores: (state, setState, storeType) => {
-    let url = `/api/admin/stores/_all/${storeType}`;
-    jsonGet({
-      url,
-      done: response => {
-        setState({
-          listing: response.items,
-          rawListing: response.items
-        });
-        Utils.getDisTimeouts(state, setState);
-      },
-      fail: errorText => {
-        setState({
-          message: JSON.parse(errorText).error
-        });
-      }
-    });
   }
 };

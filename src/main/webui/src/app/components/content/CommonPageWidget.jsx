@@ -28,6 +28,7 @@ LocalURLSection.propTypes = {
   storeKey: PropTypes.string
 };
 
+// For options, see CompUtils.remoteOptions|hostedOptions
 const CapabilitiesSection = ({options}) => <div className="left-half">
     <label>Capabilities:</label>{' '}
     {
