@@ -18,7 +18,7 @@ import React from 'react';
 
 export default function NavFooter() {
   // TODO: stats will be render based on the backend addons response, this is a mock;
-  let stats = {
+  const stats = {
     version: "1.6.0",
     commitId: "f472176",
     builder: "ligangty",

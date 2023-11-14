@@ -82,9 +82,9 @@ export default function RemoteList() {
 
   init(state, setState);
   // Utils.logMessage(state);
-  let listing = state.listing;
-  let disMap = state.disabledMap;
-  let orderBys = [
+  const listing = state.listing;
+  const disMap = state.disabledMap;
+  const orderBys = [
     {value: 'key', text: 'Name'},
     {value: 'url', text: 'Remote URL'}
   ];

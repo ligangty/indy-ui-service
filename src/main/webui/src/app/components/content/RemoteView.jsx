@@ -31,8 +31,8 @@ const init = (pkgType, storeName, setState) => {
     const fetchStore = async () => {
       const response = await jsonRest.get(storeUrl);
       if (response.ok){
-        let raw = await response.json();
-        let store = Utils.cloneObj(raw);
+        const raw = await response.json();
+        const store = Utils.cloneObj(raw);
         store.disabled = raw.disabled === undefined ? false : raw.disabled;
         store.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
         store.useProxy = raw.proxy_host && true;
@@ -42,7 +42,7 @@ const init = (pkgType, storeName, setState) => {
         // get Store disablement data
         const timeoutUrl = `/api/admin/schedule/store/${store.packageType}/${store.type}/${store.name}/disable-timeout`;
         const timeoutResponse = await jsonRest.get(timeoutUrl);
-        let newStore = Utils.cloneObj(store);
+        const newStore = Utils.cloneObj(store);
         if(timeoutResponse.ok){
           const timeoutData = await timeoutResponse.json();
           newStore.disableExpiration = timeoutData.expiration;
@@ -87,7 +87,7 @@ export default function RemoteView() {
   });
   const {packageType, name} = useParams();
   init(packageType, name, setState);
-  let store = state.store;
+  const store = state.store;
   if(!Utils.isEmptyObj(store)) {
     return (
       <div className="container-fluid">

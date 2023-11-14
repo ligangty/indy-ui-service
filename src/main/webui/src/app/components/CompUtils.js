@@ -16,7 +16,7 @@
 
 export const Utils = {
   remoteOptions: store => {
-    let options = [];
+    const options = [];
 
     if (store.allow_snapshots){
       options.push({icon: 'S', title: 'Snapshots allowed'});
@@ -28,7 +28,7 @@ export const Utils = {
     return options;
   },
   hostedOptions: store => {
-    let options = [];
+    const options = [];
 
     if (store.allow_snapshots){
       options.push({icon: 'S', title: 'Snapshots allowed'});
@@ -45,23 +45,23 @@ export const Utils = {
     return options;
   },
   detailHref: key => {
-    let parts = key.split(':');
+    const parts = key.split(':');
     return `/${parts[1]}/${parts[0]}/view/${parts[2]}`;
   },
   typeFromKey: key=>{
-    let parts = key.split(':');
+    const parts = key.split(':');
     return parts[1];
   },
   packageTypeFromKey: key => {
-    let parts = key.split(':');
+    const parts = key.split(':');
     return parts[0];
   },
   nameFromKey: key => {
-    let parts = key.split(':');
+    const parts = key.split(':');
     return parts[parts.length-1];
   },
   storeHref: key => {
-    let parts = key.split(':');
+    const parts = key.split(':');
 
     let hostAndPort = window.location.hostname;
     if (window.location.port !== '' && window.location.port !== 80 && window.location.port !== 443){
@@ -69,25 +69,25 @@ export const Utils = {
       hostAndPort += window.location.port;
     }
     //
-    // let basepath = window.location.pathname;
+    // const basepath = window.location.pathname;
     // basepath = basepath.replace('/app', '');
     // basepath = basepath.replace(/index.html.*/, '');
 
 
-    let proto = window.location.protocol;
+    const proto = window.location.protocol;
 
     // TODO: In-UI browser that allows simple searching
     return `${proto}//${hostAndPort}/api/content/${parts[0]}/${parts[1]}/${parts[2]}`;
   },
   setDisableMap: listing => {
-    let disabledMap = {};
+    const disabledMap = {};
 
-    let items = listing.items;
+    const items = listing.items;
     if (items) {
       for(let i = 0; i<items.length; i++){
-        let item = items[i];
-        let parts = item.group.split(':');
-        let key = parts[0] + ':' + parts[1] + ':' + parts[2];
+        const item = items[i];
+        const parts = item.group.split(':');
+        const key = parts[0] + ':' + parts[1] + ':' + parts[2];
         // console.log("DISABLED: " + key + " (until: " + item.expiration + ")");
         disabledMap[key] = item.expiration;
       }
@@ -96,7 +96,7 @@ export const Utils = {
   },
   isDisabled: (key, disabledMap) => {
     if(disabledMap && disabledMap.size > 0){
-      let result = key in disabledMap;
+      const result = key in disabledMap;
       return result;
     }
     return false;
@@ -119,13 +119,13 @@ export const Utils = {
     return constituents;
   },
   searchByKeyForNewStores: (searchString, rawStoresList)=>{
-    let newListing=[];
+    const newListing=[];
     rawStoresList.forEach(item=>item.key.toLowerCase().includes(searchString.toLowerCase()) && newListing.push(item));
     return newListing;
   },
   isEmptyObj: obj => Object.keys(obj).length === 0 && obj.constructor === Object,
   cloneObj: src => {
-    let target = {};
+    const target = {};
     for (const prop in src) {
       if (prop in src) {
         target[prop] = src[prop];
@@ -134,7 +134,7 @@ export const Utils = {
     return target;
   },
   logMessage: (message, ...params) => {
-    let allParams = [message];
+    const allParams = [message];
     params.forEach(p => allParams.push(p));
     Reflect.apply(console.log, undefined, allParams);
   }
