@@ -41,9 +41,9 @@ export const Main = () => <div>
     <React.Fragment>
       <Routes>
         <Route path="*" element={<Home />} />
-        <Route exact path="/remote" element={<RemoteList />} />
-        <Route exact path="/hosted" element={<HostedList />} />
-        <Route exact path="/group" element={<GroupList />} />
+        <Route exact path="/remote/:packageType" element={<RemoteList />} />
+        <Route exact path="/hosted/:packageType" element={<HostedList />} />
+        <Route exact path="/group/:packageType" element={<GroupList />} />
 
         <Route path="/remote/:packageType/view/:name" element={<RemoteView />} />
         <Route path="/hosted/:packageType/view/:name" element={<HostedView />} />

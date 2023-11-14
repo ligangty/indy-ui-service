@@ -16,6 +16,9 @@
 
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
+import {LinkContainer} from 'react-router-bootstrap';
 
 // TODO: This is mock user login, need to implement later for real login
 const isUserloggedIn = true;
@@ -26,7 +29,7 @@ export default function IndyNavHeader(){
   const [isOpen, setOpen] = useState(false);
   const toggle = () => setOpen(!isOpen);
   // TODO: addons will be render based on the backend addons response, this is a mock;
-  let addons=[
+  const addons=[
     <Link key="autoproxy-calc" className="dropdown-item" to="/autoprox/calc">AutoProx Calculator</Link>,
     <Link key="autoproxy-rules" className="dropdown-item" to="/autoprox/rules">AutoProx Rules</Link>,
     <Link key="store-changelog" className="dropdown-item" to="/revisions/changelog/stores">Store Changelogs</Link>
@@ -34,45 +37,48 @@ export default function IndyNavHeader(){
   return (
     <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light" role="navigation">
       <Link className="navbar-brand" to="">Indy</Link>
-      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span className="navbar-toggler-icon"></span>
-      </button>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
-          <li key="list-remote" className="nav-item">
-            <Link className="nav-link" to="/remote">Remote Repositories</Link>
-          </li>
-          <li key="list-hosted" className="nav-item">
-            <Link className="nav-link" to="/hosted">Hosted Repositories</Link>
-          </li>
-          <li key="list-group" className="nav-item">
-            <Link className="nav-link" to="/group">Groups</Link>
-          </li>
-          <li key="rest-api" className="nav-item">
-            <a className="nav-link"href="rest-api.html">REST API</a>
-          </li>
-          <li key="list-addons" className="nav-item dropdown">
-            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {
+            [
+              {type: "remote", desc: "Remote Repositories"},
+              {type: "hosted", desc: "Hosted Repositories"},
+              {type: "group", desc: "Groups"}
+            ].map(o =><Dropdown key={`dropdown-${o.type}`} data-bs-theme="dark" className="mx-1">
+                <Dropdown.Toggle id={`dropdown-button-dark-${o.type}`} variant="secondary">
+                  {o.desc}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {
+                    ["maven", "generic-http", "npm"].map(pkgType => <LinkContainer key={`link-${pkgType}`} to={`/${o.type}/${pkgType}`}>
+                        <Dropdown.Item>{pkgType}</Dropdown.Item>
+                      </LinkContainer>)
+                  }
+                </Dropdown.Menu>
+              </Dropdown>)
+          }
+          <Button href="/q/swagger-ui/" variant="secondary" className="mx-1">REST API</Button>
+          <Dropdown data-bs-theme="dark" className="mx-1">
+            <Dropdown.Toggle id={`dropdown-button-dark-addons`} variant="secondary">
               more
-            </a>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a className="dropdown-item" href="/api/diag/bundle">Diagnostic Bundle</a>
-              <a className="dropdown-item" href="/api/diag/repo">Repo Bundle</a>
-              <Link className="dropdown-item" to="/nfc">Not-Found Cache</Link>
-              <Link className="dropdown-item" to="/cache/delete">Delete Cache</Link>
-              <div className="dropdown-divider"></div>
-              {addons}
-            </div>
-          </li>
-          { isUserloggedIn &&
-            <li key="list-logged-in" className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <LinkContainer to="/nfc">
+                <Dropdown.Item>Not-Found Cache</Dropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/cache/delete">
+                <Dropdown.Item>Delete Cache</Dropdown.Item>
+              </LinkContainer>
+            </Dropdown.Menu>
+          </Dropdown>
+          { isUserloggedIn && <Dropdown data-bs-theme="dark" className="mx-1">
+              <Dropdown.Toggle id={`dropdown-button-dark-addons`} variant="link">
                 {username}
-              </a>
-              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <Link className="dropdown-item" to="/logout">Log Out</Link>
-              </div>
-            </li>
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item href="/logout" variant="link">Log Out</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           }
         </ul>
       </div>
