@@ -15,11 +15,11 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import {ListJsonDebugger} from './Debugger.jsx';
-import ListControl from "./ListControl.jsx";
+import {ListJsonDebugger} from './common/Debugger.jsx';
+import ListControl from "./common/ListControl.jsx";
 import {remoteOptionLegend as options} from "../ComponentConstants.js";
 import {Utils} from '../CompUtils.js';
-import {StoreListingWidget} from './CommonPageWidget.jsx';
+import {StoreListingWidget} from './common/StoreListingWidget.jsx';
 import {jsonRest} from '../../RestClient.js';
 
 const init = (state, setState) => {

@@ -15,13 +15,11 @@
  */
 
 import React from "react";
+import {MemoryRouter} from 'react-router-dom';
 import {render, screen, cleanup} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import {LocalURLSection,
-  CapabilitiesSection} from "./CommonPageWidget.jsx";
-import {hostedOptionLegend} from '../ComponentConstants.js';
-
-// const mockData = {};
+import {LocalURLSection, CapabilitiesSection, StoreNameSection} from "./CommonPageWidget.jsx";
+import {hostedOptionLegend} from '../../ComponentConstants.js';
 
 afterEach(() => {
   cleanup();
@@ -42,5 +40,15 @@ describe('CommonPageWidget tests', () => {
     expect(screen.getByText(/\s*S\s*/u)).toBeInTheDocument();
     expect(screen.getByText(/\s*R\s*/u)).toBeInTheDocument();
     expect(screen.getByText(/\s*D\s*/u)).toBeInTheDocument();
+  });
+
+  it("StoreNameSection", ()=>{
+    // As <Link> is in <StoreNameSection>, needs to use a Router to wrap it
+    render(<MemoryRouter>
+      <StoreNameSection
+       store={{packageType: "maven", type: "remote", name: "central"}}
+       storeClass="test-style"/>
+    </MemoryRouter>);
+    expect(screen.getByText(/maven-central/u)).toBeInTheDocument();
   });
 });

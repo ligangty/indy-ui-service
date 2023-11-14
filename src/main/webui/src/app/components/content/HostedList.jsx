@@ -14,23 +14,9 @@
  * limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
-import ListControl from "./ListControl.jsx";
-import {ListJsonDebugger} from './Debugger.jsx';
-import {Utils} from '../CompUtils.js';
-import {hostedOptionLegend as options} from "../ComponentConstants.js";
-import {StoreListingWidget} from './CommonPageWidget.jsx';
-
+import React from 'react';
 
 
 export default function HostedList() {
-  const [state, setState] = useState({
-    listing: [],
-    rawListing: [],
-    disabledMap: {},
-    enableDebug: false,
-    message: ''
-  });
-
   return <div>This is not implemented yet</div>;
 }

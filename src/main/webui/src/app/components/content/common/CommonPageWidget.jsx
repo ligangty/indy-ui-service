@@ -17,7 +17,7 @@
 import React, {Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {Utils} from '../CompUtils.js';
+import {Utils} from '../../CompUtils.js';
 
 const LocalURLSection = ({storeKey}) => <div className="left-half">
     <label>Local URL:</label>{' '}
@@ -54,15 +54,15 @@ StoreNameSection.propTypes = {
 };
 
 const StoreListingWidget = ({StoreList, DisMap, StoreType}) => {
-  let listing = StoreList;
-  let disMap = DisMap;
+  const listing = StoreList;
+  const disMap = DisMap;
   if(listing && listing.length >0){
     return (
       <div className="content-panel">
         <div className="store-listing">
           {
             listing.map(store => {
-              let storeClass = Utils.isDisabled(store.key, disMap)? "disabled-store":"enabled-store";
+              const storeClass = Utils.isDisabled(store.key, disMap)? "disabled-store":"enabled-store";
               return (
                 <div key={store.key} className="store-listing-item">
                   <StoreNameSection store={store} storeClass={storeClass} />
@@ -98,5 +98,7 @@ StoreListingWidget.propTypes = {
   StoreType: PropTypes.string
 };
 
-
-export {LocalURLSection, CapabilitiesSection, StoreNameSection, StoreListingWidget};
+export {LocalURLSection,
+   CapabilitiesSection,
+   StoreNameSection,
+   StoreListingWidget};

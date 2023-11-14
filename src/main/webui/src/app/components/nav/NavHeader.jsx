@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, {useState} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
@@ -26,14 +26,12 @@ const username = "mock";
 
 // eslint-disable-next-line max-lines-per-function
 export default function IndyNavHeader(){
-  const [isOpen, setOpen] = useState(false);
-  const toggle = () => setOpen(!isOpen);
   // TODO: addons will be render based on the backend addons response, this is a mock;
-  const addons=[
-    <Link key="autoproxy-calc" className="dropdown-item" to="/autoprox/calc">AutoProx Calculator</Link>,
-    <Link key="autoproxy-rules" className="dropdown-item" to="/autoprox/rules">AutoProx Rules</Link>,
-    <Link key="store-changelog" className="dropdown-item" to="/revisions/changelog/stores">Store Changelogs</Link>
-  ];
+  // const addons=[
+  //   <Link key="autoproxy-calc" className="dropdown-item" to="/autoprox/calc">AutoProx Calculator</Link>,
+  //   <Link key="autoproxy-rules" className="dropdown-item" to="/autoprox/rules">AutoProx Rules</Link>,
+  //   <Link key="store-changelog" className="dropdown-item" to="/revisions/changelog/stores">Store Changelogs</Link>
+  // ];
   return (
     <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light" role="navigation">
       <Link className="navbar-brand" to="">Indy</Link>
