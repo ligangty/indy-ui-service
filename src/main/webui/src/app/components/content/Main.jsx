@@ -23,6 +23,8 @@ import RemoteView from './RemoteView.jsx';
 import HostedView from './HostedView.jsx';
 import GroupView from './GroupView.jsx';
 import RemoteEdit from './RemoteEdit.jsx';
+import GroupEdit from './GroupEdit.jsx';
+import HostedEdit from './HostedEdit.jsx';
 
 // const browseCompatible=`<!--[if lt IE 7]>
 //     <p className="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -48,11 +50,12 @@ export const Main = () => <div>
         <Route path="/group/:packageType/view/:name" element={<GroupView />} />
 
         <Route exact path="/remote/new" element={<RemoteEdit />} />
+        <Route exact path={"/hosted/new"} element={<HostedEdit />} />
+        <Route exact path={"/group/new"} element={<GroupEdit />} />
         <Route path="/remote/:packageType/edit/:name" element={<RemoteEdit />} />
+        <Route path="/hosted/:packageType/edit/:name" element={<HostedEdit />} />
+        <Route path="/group/:packageType/edit/:name" element={<GroupEdit />} />
         {
-        // <Route exact path={["/hosted/new","/hosted/:packageType/edit/:name"]} element={HostedEdit} />
-        // <Route exact path={["/group/new","/group/:packageType/edit/:name"]} element={GroupEdit} />
-
         // <Route exact path={["/nfc", "/nfc/view/all", "/nfc/view/:packageType/:type/:name"]} element={} />
         //
         // <Route exact path={"/logout"} element={} />
