@@ -14,16 +14,35 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {jsonRest} from '../../RestClient';
+import {Utils} from '../CompUtils';
 
 export default function NavFooter() {
-  // TODO: stats will be render based on the backend addons response, this is a mock;
-  const stats = {
-    version: "1.6.0",
-    commitId: "f472176",
-    builder: "ligangty",
-    timestamp: "2018-10-24 05:54 +0000"
-  };
+  const [state, setState] = useState({stats: {}});
+
+  (function(){
+    const versionUrl = `/api/stats/version-info`;
+    useEffect(()=>{
+      const fetchVersion = async () => {
+        const response = await jsonRest.get(versionUrl);
+        if (response.ok){
+          const raw = await response.json();
+          setState({
+            stats: raw
+          });
+        }else{
+          response.text().then(data => {
+            Utils.logMessage(`Failed to version info. Error reason: ${response.status}->${response.statusText}`);
+          });
+        }
+      };
+
+      fetchVersion();
+    }, []);
+  }());
+
+  const stats = state.stats;
   const gridClass = "col-md-auto border-right border-secondary";
   return (
     <nav className="navbar fixed-bottom navbar-expand-lg navbar-light bg-light" role="navigation">

@@ -29,9 +29,9 @@ const http = {
 };
 
 const jsonRest ={
-  get: (url, payload) => httpCall(url, "GET", {"Content-type": "application/json"}, payload),
-  post: (url, payload) => httpCall(url, "POST", {"Content-type": "application/json"}, payload),
-  put: (url, payload) => httpCall(url, "PUT", {"Content-type": "application/json"}, payload)
+  get: (url, payload) => httpCall(url, "GET", {"Content-type": "application/json"}, JSON.stringify(payload)),
+  post: (url, payload) => httpCall(url, "POST", {"Content-type": "application/json"}, JSON.stringify(payload)),
+  put: (url, payload) => httpCall(url, "PUT", {"Content-type": "application/json"}, JSON.stringify(payload))
 };
 
 export {http, jsonRest};
