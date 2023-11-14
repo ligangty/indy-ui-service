@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {StoreViewControlPanel as ControlPanel} from './StoreControlPanels.jsx';
-import {DisableTimeoutHint} from './Hints.jsx';
+import {StoreEditControlPanel as EditControlPanel} from './StoreControlPanels.jsx';
+import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './Hints.jsx';
+import {PackageTypeSelect} from './CommonPageWidget.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
 import {Utils} from '../CompUtils.js';
-import {Filters} from '../Filters.js';
+// import Filters from '../Filters.js';
 import {TimeUtils} from '../../TimeUtils.js';
-import {jsonGet} from '../../RestClient.js';
+import {jsonRest} from '../../RestClient.js';
 
-export default function HostedView() {
+
+export default function GroupEdit() {
   const [state, setState] = useState({
     store: {},
-    raw: {},
-    message: ''
+    storeView: {}
   });
+
   return <div>This is not implemented yet!</div>;
 }
