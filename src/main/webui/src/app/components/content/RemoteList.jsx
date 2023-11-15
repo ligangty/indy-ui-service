@@ -98,7 +98,7 @@ export default function RemoteList() {
         handleCreateNew={handlers.createNew} />
       {
       listing?
-      <StoreListingWidget StoreList={listing} DisMap={disMap} StoreType="remote" />:
+      <StoreListingWidget storeList={listing} disableMap={disMap} storeType="remote" />:
       <div className="container-fluid">
         No content fetched!
       </div>

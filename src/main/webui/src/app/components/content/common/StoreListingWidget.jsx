@@ -15,13 +15,47 @@
  */
 
 import React, {Fragment} from 'react';
+import {Link} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import {Utils} from '../../../utils/AppUtils.js';
-import {LocalURLSection,StoreNameSection,CapabilitiesSection} from './CommonPageWidget.jsx';
 
-export const StoreListingWidget = ({StoreList, DisMap, StoreType}) => {
-  const listing = StoreList;
-  const disMap = DisMap;
+const LocalURLSection = ({storeKey}) => <div className="left-half">
+    <label>Local URL:</label>{' '}
+    <a href={Utils.storeHref(storeKey)} target="_new">{Utils.storeHref(storeKey)}</a>
+  </div>;
+
+LocalURLSection.propTypes = {
+  storeKey: PropTypes.string
+};
+
+// For options, see AppUtils.remoteOptions|hostedOptions
+const CapabilitiesSection = ({options}) => <div className="left-half">
+    <label>Capabilities:</label>{' '}
+    {
+      options.map(option => <div key={option.title} className="options">
+          <span className="key">{option.icon} </span>
+        </div>)
+    }
+  </div>;
+
+CapabilitiesSection.propTypes = {
+  options: PropTypes.array
+};
+
+const StoreNameSection = ({store, storeClass}) => <div className="fieldset-caption">
+    <Link to={`/${store.type}/${store.packageType}/view/${store.name}`}>
+      <span className={storeClass}>{store.packageType}-{store.name}</span>
+    </Link>
+  </div>;
+
+StoreNameSection.propTypes = {
+  store: PropTypes.object,
+  storeClass: PropTypes.string
+};
+
+const StoreListingWidget = ({storeList, disableMap, storeType}) => {
+  const listing = storeList;
+  const disMap = disableMap;
   if(listing && listing.length >0){
     return (
       <div className="content-panel">
@@ -36,7 +70,7 @@ export const StoreListingWidget = ({StoreList, DisMap, StoreType}) => {
                     <div>
                       <LocalURLSection storeKey={store.key} />
                       {
-                        StoreType === "remote" && <div className="right-half">
+                        storeType === "remote" && <div className="right-half">
                           <label>Remote URL:</label>
                           <a href={store.url} target="_new">{store.url}</a>
                         </div>
@@ -59,7 +93,12 @@ export const StoreListingWidget = ({StoreList, DisMap, StoreType}) => {
 };
 
 StoreListingWidget.propTypes = {
-  StoreList: PropTypes.array,
-  DisMap: PropTypes.object,
-  StoreType: PropTypes.string
+  storeList: PropTypes.array,
+  disableMap: PropTypes.object,
+  storeType: PropTypes.string
 };
+
+export {LocalURLSection,
+   CapabilitiesSection,
+   StoreNameSection,
+   StoreListingWidget};
