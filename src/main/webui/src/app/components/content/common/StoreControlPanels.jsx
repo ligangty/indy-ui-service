@@ -17,8 +17,8 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {Utils} from '../../CompUtils';
-import {http} from '../../../RestClient';
+import {Utils} from '../../../utils/AppUtils';
+import {http} from '../../../utils/RestClient';
 
 const StoreEditControlPanel = ({handleSave, handleCancel, handleRemove}) => <div className="cp-row">
     <button name="save" onClick={handleSave} className="cp-button">Save</button>{'  '}

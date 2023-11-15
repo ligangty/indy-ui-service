@@ -17,7 +17,7 @@
 import React, {Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {Utils} from '../../CompUtils.js';
+import {Utils} from '../../../utils/AppUtils.js';
 
 const LocalURLSection = ({storeKey}) => <div className="left-half">
     <label>Local URL:</label>{' '}
@@ -28,7 +28,7 @@ LocalURLSection.propTypes = {
   storeKey: PropTypes.string
 };
 
-// For options, see CompUtils.remoteOptions|hostedOptions
+// For options, see AppUtils.remoteOptions|hostedOptions
 const CapabilitiesSection = ({options}) => <div className="left-half">
     <label>Capabilities:</label>{' '}
     {

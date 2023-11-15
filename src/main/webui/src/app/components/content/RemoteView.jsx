@@ -20,10 +20,10 @@ import {PropTypes} from 'prop-types';
 import {StoreViewControlPanel as ControlPanel} from './common/StoreControlPanels.jsx';
 import {DisableTimeoutHint, PrefetchHint, Hint, PasswordMask} from './common/Hints.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
-import {Utils} from '../CompUtils.js';
-import {Filters} from '../Filters.js';
-import {TimeUtils} from '../../TimeUtils.js';
-import {jsonRest} from '../../RestClient.js';
+import {Filters} from '../../utils/Filters.js';
+import {Utils} from '../../utils/AppUtils.js';
+import {TimeUtils} from '../../utils/TimeUtils.js';
+import {jsonRest} from '../../utils/RestClient.js';
 
 const init = (pkgType, storeName, setState) => {
   const storeUrl = `/api/admin/stores/${pkgType}/remote/${storeName}`;

@@ -20,11 +20,9 @@ import {PropTypes} from 'prop-types';
 import {StoreEditControlPanel as EditControlPanel} from './common/StoreControlPanels.jsx';
 import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './common/Hints.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
-import {Utils} from '../CompUtils.js';
-// import Filters from '../Filters.js';
-import {TimeUtils} from '../../TimeUtils.js';
-import {PACKAGE_TYPES} from '../ComponentConstants.js';
-import {jsonRest} from '../../RestClient.js';
+import {Utils} from '../../utils/AppUtils.js';
+import {TimeUtils} from '../../utils/TimeUtils.js';
+import {jsonRest} from '../../utils/RestClient.js';
 
 const init = (pkgType, storeName, setState) => {
   const getUrl = `/api/admin/stores/${pkgType}/remote/${storeName}`;
@@ -121,8 +119,8 @@ export default function RemoteEdit() {
   // Utils.logMessage(mode);
   let storeView = state.storeView;
   // let store = state.store;
-  // TODO this package types should be fetched from backend
-  let pkgTypes = PACKAGE_TYPES;
+  // TODO: this package types should be fetched from backend
+  let pkgTypes = ["maven", "generic-http", "npm"];
 
   const handleCheckChange = (event, field) => {
     if (event.target.checked) {

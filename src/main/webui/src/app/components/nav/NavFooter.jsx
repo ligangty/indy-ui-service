@@ -15,8 +15,8 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import {jsonRest} from '../../RestClient';
-import {Utils} from '../CompUtils';
+import {jsonRest} from '../../utils/RestClient';
+import {Utils} from '../../utils/AppUtils';
 
 export default function NavFooter() {
   const [state, setState] = useState({stats: {}});

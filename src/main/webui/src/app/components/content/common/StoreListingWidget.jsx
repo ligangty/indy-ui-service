@@ -16,7 +16,7 @@
 
 import React, {Fragment} from 'react';
 import {PropTypes} from 'prop-types';
-import {Utils} from '../../CompUtils.js';
+import {Utils} from '../../../utils/AppUtils.js';
 import {LocalURLSection,StoreNameSection,CapabilitiesSection} from './CommonPageWidget.jsx';
 
 export const StoreListingWidget = ({StoreList, DisMap, StoreType}) => {
