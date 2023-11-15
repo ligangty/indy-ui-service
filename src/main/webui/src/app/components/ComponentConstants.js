@@ -26,8 +26,5 @@ const hostedOptionLegend = [
   {icon: 'D', title: 'Deployment allowed'}
 ];
 
-// TODO: this should be fetched from backend
-const PACKAGE_TYPES = ["maven", "generic","npm"];
 
-
-export {remoteOptionLegend, hostedOptionLegend, PACKAGE_TYPES};
+export {remoteOptionLegend, hostedOptionLegend};

@@ -18,9 +18,9 @@ import React, {useEffect, useState} from 'react';
 import {ListJsonDebugger} from './common/Debugger.jsx';
 import ListControl from "./common/ListControl.jsx";
 import {remoteOptionLegend as options} from "../ComponentConstants.js";
-import {Utils} from '../CompUtils.js';
 import {StoreListingWidget} from './common/StoreListingWidget.jsx';
-import {jsonRest} from '../../RestClient.js';
+import {Utils} from '../../utils/AppUtils.js';
+import {jsonRest} from '../../utils/RestClient.js';
 
 const init = (state, setState) => {
   useEffect(()=>{
