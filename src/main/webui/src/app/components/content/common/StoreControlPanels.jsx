@@ -84,11 +84,17 @@ StoreEditControlPanel.propTypes={
   store: PropTypes.object
 };
 
-const StoreViewControlPanel = function({enabled, storeObj, handleDisable, handleEnable}){
-  const [enableText, enableHandler] = enabled?["Disable",handleDisable]:["Enable",handleEnable];
+const StoreViewControlPanel = function({store}){
+  const handleEnable = () =>{
+    // TODO: need to implement
+  };
+  const handleDisable = () =>{
+    // TODO: need to implement
+  };
+  const [enableText, enableHandler] = store.disabled?["Enable",handleEnable]:["Disable",handleDisable];
   const navigate = useNavigate();
 
-  const [pkgType, storeType, storeName] = [storeObj.packageType, storeObj.type, storeObj.name];
+  const [pkgType, storeType, storeName] = [store.packageType, store.type, store.name];
   const storeUrl = `/api/admin/stores/${pkgType}/${storeType}/${storeName}`;
   const handleRemove = async ()=>{
     const response = await http.delete(storeUrl);
@@ -100,7 +106,7 @@ const StoreViewControlPanel = function({enabled, storeObj, handleDisable, handle
       // TODO: Some other way to show deletion success?
       Utils.logMessage("Store deleted.");
     }
-    navigate(`/${storeObj.type}`);
+    navigate(`/${store.type}`);
   };
 
   return(
@@ -120,10 +126,7 @@ const StoreViewControlPanel = function({enabled, storeObj, handleDisable, handle
 };
 
 StoreViewControlPanel.propTypes={
-  enabled: PropTypes.bool,
-  storeObj: PropTypes.object,
-  handleDisable: PropTypes.func,
-  handleEnable: PropTypes.func
+  store: PropTypes.object
 };
 
 export {StoreEditControlPanel, StoreViewControlPanel};

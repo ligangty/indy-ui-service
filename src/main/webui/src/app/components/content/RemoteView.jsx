@@ -86,18 +86,7 @@ export default function RemoteView() {
     return (
       <div className="container-fluid">
         <div className="control-panel">
-          <ControlPanel
-            enabled={!store.disabled}
-            storeObj={store}
-            // storeType="remote"
-            // pkgType={packageType}
-            // storeName={name}
-            // handleEnable={handlers.handleEnable}
-            // handleDisable={handlers.handleDisable}
-            // handleEdit={()=>navigate(`/remote/${pkgType}/edit/${storeName}`)}
-            // handleCreate={handlers.handleCreate}
-            // handleRemove={handlers.handleRemove}
-          />
+          <ControlPanel store={store} />
         </div>
 
         <div className="content-panel">
