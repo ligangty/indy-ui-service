@@ -16,9 +16,9 @@
 
 import React, {useState, useEffect} from 'react';
 import {PropTypes} from 'prop-types';
-import {jsonRest} from '../../RestClient.js';
+import {jsonRest} from '../../../RestClient.js';
 
-const PackageTypeSelect = ({pkgType,vauleChangeHandler}) =>{
+export const PackageTypeSelect = ({pkgType,vauleChangeHandler}) =>{
   const [state, setState] = useState({
     pkgTypes: []
   });
