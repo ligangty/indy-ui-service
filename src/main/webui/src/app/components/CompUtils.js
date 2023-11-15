@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
+/**
+ * All functions in this Utils are migrated from old indy UI 1.0, which
+ * are used for dedicated purpose in old code. Will check if they are still
+ * useful in new UI and and decide if removing some of them.
+ */
 export const Utils = {
   remoteOptions: store => {
     const options = [];
