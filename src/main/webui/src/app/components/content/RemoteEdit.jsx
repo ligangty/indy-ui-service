@@ -15,10 +15,11 @@
  */
 
 import React, {useState, useEffect} from 'react';
-import {useLocation, useNavigate, useParams} from 'react-router-dom';
+import {useLocation, useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import {StoreEditControlPanel as EditControlPanel} from './common/StoreControlPanels.jsx';
 import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './common/Hints.jsx';
+import {PackageTypeSelect} from './common/PackageTypeSelect.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
 import {Utils} from '../../utils/AppUtils.js';
 import {TimeUtils} from '../../utils/TimeUtils.js';
@@ -29,11 +30,10 @@ const init = (pkgType, storeName, setState) => {
   useEffect(()=>{
     const fetchStore = async () =>{
       // get Store data
-      let isError = false;
       const response = await jsonRest.get(getUrl);
       if (response.ok){
-        let raw = await response.json();
-        let storeView = Utils.cloneObj(raw);
+        const raw = await response.json();
+        const storeView = Utils.cloneObj(raw);
         storeView.disabled = raw.disabled === undefined ? false : raw.disabled;
         storeView.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
         storeView.useProxy = raw.proxy_host && true;
@@ -43,7 +43,7 @@ const init = (pkgType, storeName, setState) => {
         // get Store disablement data
         const timeoutUrl = `/api/admin/schedule/store/${storeView.packageType}/${storeView.type}/${storeView.name}/disable-timeout`;
         const timeoutResponse = await jsonRest.get(timeoutUrl);
-        let cloned = Utils.cloneObj(storeView);
+        const cloned = Utils.cloneObj(storeView);
         if (timeoutResponse.ok){
           const timeout = await timeoutResponse.json();
           cloned.disableExpiration = timeout.expiration;
@@ -57,6 +57,7 @@ const init = (pkgType, storeName, setState) => {
           store: raw
         });
       }else{
+        // TODO: find another way to do error handling
         response.text().then(error=>setState({
           message: error
         }));
@@ -67,35 +68,42 @@ const init = (pkgType, storeName, setState) => {
   }, []);
 };
 
-const saveStore = store => {
-  const getUrl = `/api/admin/stores/${store.packageType}/remote/${store.name}`;
-  const postStore = async () =>{
-    // get Store data
-    let isError = false;
-    const response = await jsonRest.post(getUrl, store);
-    if (!response.ok){
-      response.text().then(error=>Utils.logMessage(error));
-    }
-    const navigate = useNavigate();
-    if(!isError && (response.status >= 200 || response.status < 300)){
-      navigate(`/remote/${store.packageType}/view/${store.name}`);
-    }
-  };
-  postStore();
-};
+const CertificateSection = ({store, handleValueChange}) => <div className="sub-fields">
+  {
+    store.useAuth &&
+    <div className="detail-field">
+      <label>Client Key Password:</label>
+      <input type="password" value={store.key_password} onChange={e => handleValueChange(e, "key_password")}/><Hint hintKey="client_key" />
+    </div>
+  }
+    <div className="fieldset two-col">
+      {
+        store.useAuth &&
+        <div className="left-col">
+          <div className="textarea-label">
+            <label>Client Key</label><span className="hint">(PEM Format)</span>
+          </div>
+          {
+            // 64 columns is the original PEM line-length spec
+          }
+          <textarea className="cert" cols="68" value={store.key_certificate_pem} onChange={e=>handleValueChange(e, "key_certificate_pem")}></textarea>
+        </div>
+      }
+      <div className="right-col">
+        <div className="textarea-label">
+          <label>Server Certificate</label><span className="hint">(PEM Format)</span>
+        </div>
+        {
+          // 64 columns is the original PEM line-length spec
+        }
+        <textarea className="cert" cols="68" value={store.server_certificate_pem} onChange={e=>handleValueChange(e, "server_certificate_pem")}></textarea>
+      </div>
+    </div>
+</div>;
 
-const handlers = {
-  handleSave: () => {
-    // TODO need to implement save logic
-  },
-
-  handleCancel: () => {
-    // TODO need to implement cancel logic
-  },
-
-  handleRemove: () => {
-    // TODO need to implement remove logic
-  },
+CertificateSection.propTypes = {
+  store: PropTypes.object.isRequired,
+  handleValueChange: PropTypes.func
 };
 
 export default function RemoteEdit() {
@@ -105,22 +113,16 @@ export default function RemoteEdit() {
   });
   const location = useLocation();
   const path = location.pathname;
-  let mode = path.endsWith('remote/new')? 'new':'edit';
+  const mode = path.match(/.*\/new$/u)? 'new':'edit';
   let [pkgType, storeName] = ["",""];
-  let store = {};
+  // Give a default packageType
+  let store = {"packageType": "maven", "type": "remote"};
   if(mode === 'edit'){
     const {packageType, name} = useParams();
     [pkgType, storeName] = [packageType, name];
     init(pkgType, storeName, setState);
     store = state.store;
   }
-
-  mode = state.mode;
-  // Utils.logMessage(mode);
-  let storeView = state.storeView;
-  // let store = state.store;
-  // TODO: this package types should be fetched from backend
-  let pkgTypes = ["maven", "generic-http", "npm"];
 
   const handleCheckChange = (event, field) => {
     if (event.target.checked) {
@@ -146,51 +148,11 @@ export default function RemoteEdit() {
     // TODO: need to implement
   };
 
-  const CertificateSection = function(){
-    return (
-      <div className="sub-fields">
-      {
-        storeView.useAuth &&
-        <div className="detail-field">
-          <label>Client Key Password:</label>
-          <input type="password" value={storeView.key_password} onChange={e=>handleValueChange(e, "key_password")}/><Hint hintKey="client_key" />
-        </div>
-      }
-        <div className="fieldset two-col">
-          {
-            storeView.useAuth &&
-            <div className="left-col">
-              <div className="textarea-label">
-                <label>Client Key</label><span className="hint">(PEM Format)</span>
-              </div>
-              {
-                // 64 columns is the original PEM line-length spec
-              }
-              <textarea className="cert" cols="68" value={storeView.key_certificate_pem} onChange={e=>handleValueChange(e, "key_certificate_pem")}></textarea>
-            </div>
-          }
-          <div className="right-col">
-            <div className="textarea-label">
-              <label>Server Certificate</label><span className="hint">(PEM Format)</span>
-            </div>
-            {
-              // 64 columns is the original PEM line-length spec
-            }
-            <textarea className="cert" cols="68" value={storeView.server_certificate_pem} onChange={e=>handleValueChange(e, "server_certificate_pem")}></textarea>
-          </div>
-        </div>
-    </div>
-    );
-  };
-
   return (
     <div className="container-fluid">
 
       <div className="control-panel">
-        <EditControlPanel
-          handleSave={handlers.handleSave}
-          handleCancel={handlers.handleCancel}
-          handleRemove={handlers.handleRemove} />
+        <EditControlPanel mode={mode} store={store} />
       </div>
 
       <div className="content-panel">
@@ -200,32 +162,30 @@ export default function RemoteEdit() {
           <div className="detail-field">
             <label>Package Type:</label>
             {
-              mode==='new'?
-              <span>
-                <select>
-                  {
-                    pkgTypes.map(type => <option key={`pkgType:${type}`} value={type}>{type}</option>)
-                  }
-                </select>
-              </span>:
-              <span className="key">{storeView.packageType}</span>
+              mode==='new'||mode==='edit'?
+              <React.Fragment>
+                <PackageTypeSelect
+                  pkgType={store.packageType}
+                  handler={e => handleValueChange(e, "packageType")} />
+              </React.Fragment>:
+              <span className="key">{store.packageType}</span>
             }
           </div>
           <div className="detail-field">
             <label>Name:</label>
             {
               mode==='new'?
-              <span><input type="text" size="25" /></span>:
-              <span className="key">{storeView.name}</span>
+              <span><input type="text" size="25" onChange={e => handleValueChange(e, "name")} /></span>:
+              <span className="key">{store.name}</span>
             }
           </div>
 
           <div className="detail-field">
-            <input type="checkbox" checked={!storeView.disabled} onChange={e => handleCheckChange(e, "disabled")} />{' '}
+            <input type="checkbox" checked={!store.disabled} onChange={e => handleCheckChange(e, "disabled")} />{' '}
             <label>Enabled?</label>
             {
-              storeView.disabled && store.disableExpiration &&
-              <span className="hint">Set to automatically re-enable at {TimeUtils.timestampToDateFormat(storeView.disableExpiration)}</span>
+              store.disabled && store.disableExpiration &&
+              <span className="hint">Set to automatically re-enable at {TimeUtils.timestampToDateFormat(store.disableExpiration)}</span>
             }
           </div>
           <div className="detail-field">
@@ -271,17 +231,17 @@ export default function RemoteEdit() {
           <div className="sub-fields">
             <div className="detail-field">
               <label>Pre-fetching Priority:</label>
-              <input type="text" value={storeView.prefetch_priority} onChange={e=>handleValueChange(e,"prefetch_priority")} size="5"/>
+              <input type="text" value={store.prefetch_priority} onChange={e=>handleValueChange(e,"prefetch_priority")} size="5"/>
               <PrefetchHint />
             </div>
             <div className="detail-field">
-              <span><input type="checkbox" checked={storeView.prefetch_rescan} onChange={e=>handleCheckChange(e,"prefetch_rescan")} /></span>{' '}
+              <span><input type="checkbox" checked={store.prefetch_rescan} onChange={e=>handleCheckChange(e,"prefetch_rescan")} /></span>{' '}
               <label>Allow Pre-fetching Rescan?</label>
             </div>
             <div className="detail-field">
               <label>Pre-fetching Listing Type:</label>
-              <input type="radio" checked={storeView.prefetch_listing_type==="html"} onChange={e=>handleRadioChange(e, "prefetch_listing_type")} value="html"/> <span>html</span>{' '}
-              <input type="radio" checked={storeView.prefetch_listing_type==="koji"} onChange={e=>handleRadioChange(e, "prefetch_listing_type")} value="koji"/> <span>koji</span>
+              <input type="radio" checked={store.prefetch_listing_type==="html"} onChange={e=>handleRadioChange(e, "prefetch_listing_type")} value="html"/> <span>html</span>{' '}
+              <input type="radio" checked={store.prefetch_listing_type==="koji"} onChange={e=>handleRadioChange(e, "prefetch_listing_type")} value="koji"/> <span>koji</span>
             </div>
           </div>
         </div>
@@ -289,17 +249,17 @@ export default function RemoteEdit() {
 
         <div className="fieldset-caption">Description</div>
         <div className="fieldset">
-          <textarea rows="3" className="text-description" onChange={e=>handleValueChange(e,"description")}>{storeView.description}</textarea>
+          <textarea rows="3" className="text-description" onChange={e=>handleValueChange(e,"description")}>{store.description}</textarea>
         </div>
 
         <div className="fieldset-caption">Capabilities</div>
         <div className="fieldset">
           <div className="detail-field">
-            <span><input type="checkbox" checked={storeView.allow_releases} onChange={e=>handleCheckChange(e, "allow_releases")}/></span>{' '}
+            <span><input type="checkbox" checked={store.allow_releases} onChange={e=>handleCheckChange(e, "allow_releases")}/></span>{' '}
             <label>Allow Releases</label>
           </div>
           <div className="detail-field">
-            <span><input type="checkbox" checked={storeView.allow_snapshots} onChange={e=>handleCheckChange(e, "allow_snapshots")}/></span>{' '}
+            <span><input type="checkbox" checked={store.allow_snapshots} onChange={e=>handleCheckChange(e, "allow_snapshots")}/></span>{' '}
             <label>Allow Snapshots</label>
           </div>
         </div>
@@ -308,7 +268,7 @@ export default function RemoteEdit() {
         <div className="fieldset">
           <div className="detail-field">
             <label>Request Timeout:</label>
-            <input type="text" value={storeView.timeout_seconds} onChange={e=>handleValueChange(e, "timeout_seconds")}/>
+            <input type="text" value={store.timeout_seconds} onChange={e=>handleValueChange(e, "timeout_seconds")}/>
             <DurationHint />
           </div>
           <div className="detail-hint">
@@ -319,11 +279,11 @@ export default function RemoteEdit() {
             // HTTP Proxy
           }
           <div className="detail-field">
-            <input type="checkbox" checked={storeView.use_proxy} onChange={e=>handleUseProxy(e)} />{' '}
+            <input type="checkbox" checked={store.use_proxy} onChange={e=>handleUseProxy(e)} />{' '}
             <label>Use Proxy?</label>
           </div>
           {
-            storeView.useProxy&&
+            store.useProxy&&
             <div className="sub-fields">
               <div className="detail-field">
                 <label>Proxy Host:</label>
@@ -339,40 +299,40 @@ export default function RemoteEdit() {
             // X.509 / auth
           }
           <div className="detail-field">
-            <input type="checkbox" checked={storeView.useAuth} onChange={e=>handleUseAuth(e)} />{' '}
+            <input type="checkbox" checked={store.useAuth} onChange={e=>handleUseAuth(e)} />{' '}
             <label>Use Authentication?</label>
           </div>
           {
-            storeView.useAuth &&
+            store.useAuth &&
             <div className="sub-fields">
               <div className="detail-field">
                 <label>Username:</label>
-                <input type="text" value={storeView.user} onChange={e=>handleValueChange(e, "user")} size="25"/>
+                <input type="text" value={store.user} onChange={e=>handleValueChange(e, "user")} size="25"/>
               </div>
               <div className="detail-field">
                 <label>Password:</label>
-                <input type="password" value={storeView.password} onChange={e=>handleValueChange(e, "password")} size="25"/>
+                <input type="password" value={store.password} onChange={e=>handleValueChange(e, "password")} size="25"/>
               </div>
               {
-                storeView.use_proxy && <React.Fragment>
+                store.use_proxy && <React.Fragment>
                 <div className="detail-field">
                   <label>Proxy Username:</label>
-                  <input type="text" value={storeView.proxy_user} onChange={e=>handleValueChange(e, "proxy_user")} size="20"/>
+                  <input type="text" value={store.proxy_user} onChange={e=>handleValueChange(e, "proxy_user")} size="20"/>
                 </div>
                 <div className="detail-field">
                   <label>Proxy Password:</label>
-                  <input type="password" value={storeView.proxy_password} onChange={e=>handleValueChange(e, "proxy_password")} size="20"/>
+                  <input type="password" value={store.proxy_password} onChange={e=>handleValueChange(e, "proxy_password")} size="20"/>
                 </div>
               </React.Fragment>
               }
             </div>
           }
           <div className="detail-field">
-            <input type="checkbox" checked={storeView.useX509} onChange={e=>handleUseX509(e)} />{' '}
+            <input type="checkbox" checked={store.useX509} onChange={e=>handleUseX509(e)} />{' '}
             <label>{`Use Custom X.509 Configuration?`}</label>
           </div>
           {
-            storeView.useX509 && <CertificateSection />
+            store.useX509 && <CertificateSection store={store} handleValueChange={handleValueChange} />
           }
         </div>
       </div>
