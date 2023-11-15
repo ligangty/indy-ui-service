@@ -18,19 +18,70 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import {Utils} from '../../../utils/AppUtils';
-import {http} from '../../../utils/RestClient';
+import {jsonRest,http} from '../../../utils/RestClient';
 
-const StoreEditControlPanel = ({handleSave, handleCancel, handleRemove}) => <div className="cp-row">
+const StoreEditControlPanel = ({mode, store}) =>{
+  const navigate = useNavigate();
+  const handleSave = () => {
+    const saveUrl = `/api/admin/stores/${store.packageType}/${store.type}/${store.name}`;
+    const saveStore = async () => {
+      let response = {};
+      if(mode==="new"){
+        response = await jsonRest.post(saveUrl, store);
+      }else if(mode ==="edit"){
+        response = await jsonRest.put(saveUrl, store);
+      }
+      if (!response.ok){
+        // TODO: find another way to do error handling
+        response.text().then(error=>Utils.logMessage(error));
+      }
+      if(response.status >= 200 || response.status < 300){
+        navigate(`/${store.type}/${store.packageType}/view/${store.name}`);
+      }
+    };
+    saveStore();
+  };
+
+  const handleCancel = () => {
+    if(mode === 'edit'){
+      navigate(`/${store.type}/${store.packageType}/view/${store.name}`);
+    }
+    if(mode==='new'){
+      navigate(`/${store.type}/${store.packageType}`);
+    }
+  };
+
+  const handleRemove = () => {
+    // Only edit page should handle delete logic
+    if(mode==="edit"){
+      const deleteUrl = `/api/admin/stores/${store.packageType}/${store.type}/${store.name}`;
+      const deleteStore = async () => {
+        const response = await http.delete(deleteUrl);
+        if (!response.ok){
+          // TODO: find another way to do error handling
+          response.text().then(error=>Utils.logMessage(error));
+        }
+        if(response.status >= 200 || response.status < 300){
+          navigate(`/${store.type}/${store.packageType}`);
+        }
+      };
+      deleteStore();
+    }
+  };
+
+  return <div className="cp-row">
     <button name="save" onClick={handleSave} className="cp-button">Save</button>{'  '}
     <button name="cancel" onClick={handleCancel} className="cp-button">Cancel</button>{'  '}
-    <button name="del" onClick={handleRemove} className="del-button cp-button">
-      Delete
-    </button>
+    {
+      mode==="edit" && <button name="del" onClick={handleRemove} className="del-button cp-button">
+        Delete
+      </button>
+    }
   </div>;
+};
 StoreEditControlPanel.propTypes={
-  handleSave: PropTypes.func,
-  handleCancel: PropTypes.func,
-  handleRemove: PropTypes.func
+  mode: PropTypes.string,
+  store: PropTypes.object
 };
 
 const StoreViewControlPanel = function({enabled, storeObj, handleDisable, handleEnable}){
