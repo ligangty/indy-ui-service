@@ -20,6 +20,7 @@ import {PropTypes} from 'prop-types';
 import {StoreViewControlPanel as ControlPanel} from '../common/StoreControlPanels.jsx';
 import {Hint, PasswordMask} from '../common/Hints.jsx';
 import {StoreViewBasicSection as BasicSection} from '../common/StoreBasicSections.jsx';
+import {StoreViewCapabilitiesSection} from '../common/StoreCapabilitiesSections.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
 import {Filters} from '../../../utils/Filters.js';
 import {Utils} from '../../../utils/AppUtils.js';
@@ -211,24 +212,7 @@ export default function RemoteView() {
             </div>
           </div>
 
-          <div className="fieldset-caption">Capabilities</div>
-          <div className="fieldset">
-            {
-              (store.allow_releases || store.allow_snapshots) &&
-
-                <div>
-                  <div className="detail-field">
-                    <span>{Filters.checkmark(store.allow_releases)}</span>
-                    <label>Allow Releases</label>
-                  </div>
-                  <div className="detail-field">
-                    <span>{Filters.checkmark(store.allow_snapshots)}</span>
-                    <label>Snapshots Allowed?</label>
-                  </div>
-                </div>
-
-            }
-          </div>
+          <StoreViewCapabilitiesSection store={store} />
 
           <div className="fieldset-caption">Remote Access</div>
           <RemoteAccessSection store={store} />
