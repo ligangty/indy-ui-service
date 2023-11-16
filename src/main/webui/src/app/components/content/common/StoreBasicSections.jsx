@@ -60,17 +60,15 @@ export const StoreViewBasicSection = ({store})=>{
     </div>
     <div className="detail-field">
       <label>Local URL:</label>
-      {
-        // TODO: is this store.demo still available now?
-        store.demo ?
-        <span>{Utils.storeHref(store.key)}</span> :
-        <span><a href={Utils.storeHref(store.key)} target="_new">{Utils.storeHref(store.key)}</a></span>
-      }
+      <span><a href={Utils.storeHref(store.key)} target="_new">{Utils.storeHref(store.key)}</a></span>
     </div>
-    <div className="detail-field">
-      <label>Remote URL:</label>
-      <span><a href={store.url} target="_new">{store.url}</a></span>
-    </div>
+    {
+      store.type==="remote" &&
+      <div className="detail-field">
+        <label>Remote URL:</label>
+        <span><a href={store.url} target="_new">{store.url}</a></span>
+      </div>
+    }
     <div className="sub-fields">
       <div className="detail-field">
         <span>{Filters.checkmark(!store.is_passthrough)}</span>
@@ -79,7 +77,6 @@ export const StoreViewBasicSection = ({store})=>{
       </div>
       {
         !store.is_passthrough &&
-
           <div>
             <div className="detail-field">
               <label>Content Cache Timeout:</label>
@@ -90,25 +87,26 @@ export const StoreViewBasicSection = ({store})=>{
               <span>{TimeUtils.secondsToDuration(store.metadata_timeout_seconds, true)}</span>
             </div>
           </div>
-
       }
     </div>
-
-    <div className="sub-fields">
-      <div className="detail-field">
-        <label>Pre-fetching Priority:</label>
-        <span>{store.prefetch_priority}</span>
-        <PrefetchHint />
+    {
+      store.type==="remote" &&
+      <div className="sub-fields">
+        <div className="detail-field">
+          <label>Pre-fetching Priority:</label>
+          <span>{store.prefetch_priority}</span>
+          <PrefetchHint />
+        </div>
+        <div className="detail-field">
+          <span>{Filters.checkmark(store.prefetch_rescan)}</span>
+          <label>Allow Pre-fetching Rescan?</label>
+        </div>
+        <div className="detail-field">
+          <label>Pre-fetching Listing Type:</label>
+          <span>{store.prefetch_listing_type}</span>
+        </div>
       </div>
-      <div className="detail-field">
-        <span>{Filters.checkmark(store.prefetch_rescan)}</span>
-        <label>Allow Pre-fetching Rescan?</label>
-      </div>
-      <div className="detail-field">
-        <label>Pre-fetching Listing Type:</label>
-        <span>{store.prefetch_listing_type}</span>
-      </div>
-    </div>
+    }
   </div>;
 };
 
