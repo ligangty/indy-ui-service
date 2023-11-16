@@ -69,26 +69,26 @@ export const StoreViewBasicSection = ({store})=>{
         <span><a href={store.url} target="_new">{store.url}</a></span>
       </div>
     }
-    <div className="sub-fields">
-      <div className="detail-field">
-        <span>{Filters.checkmark(!store.is_passthrough)}</span>
-        <label>Allow Content Caching</label>
-        <span><Hint hintKey="passthrough" /></span>
-      </div>
-      {
-        !store.is_passthrough &&
-          <div>
-            <div className="detail-field">
-              <label>Content Cache Timeout:</label>
-              <span>{TimeUtils.secondsToDuration(store.cache_timeout_seconds)}</span>
-            </div>
-            <div className="detail-field">
-              <label>Metadata Cache Timeout:</label>
-              <span>{TimeUtils.secondsToDuration(store.metadata_timeout_seconds, true)}</span>
-            </div>
+    {
+      store.type==="remote" && !store.is_passthrough &&
+      <div className="sub-fields">
+        <div className="detail-field">
+          <span>{Filters.checkmark(!store.is_passthrough)}</span>
+          <label>Allow Content Caching</label>
+          <span><Hint hintKey="passthrough" /></span>
+        </div>
+        <div>
+          <div className="detail-field">
+            <label>Content Cache Timeout:</label>
+            <span>{TimeUtils.secondsToDuration(store.cache_timeout_seconds)}</span>
           </div>
-      }
-    </div>
+          <div className="detail-field">
+            <label>Metadata Cache Timeout:</label>
+            <span>{TimeUtils.secondsToDuration(store.metadata_timeout_seconds, true)}</span>
+          </div>
+        </div>
+      </div>
+    }
     {
       store.type==="remote" &&
       <div className="sub-fields">

@@ -18,7 +18,8 @@ import React from 'react';
 import {PropTypes} from 'prop-types';
 import {Filters} from '../../../utils/Filters.js';
 
-export const StoreViewCapabilitiesSection = ({store}) => <React.Fragment>
+export const StoreViewCapabilitiesSection = ({store}) => (store.type==="remote"|| store.type==="hosted") &&
+<React.Fragment>
   <div className="fieldset-caption">Capabilities</div>
   <div className="fieldset">
     {
