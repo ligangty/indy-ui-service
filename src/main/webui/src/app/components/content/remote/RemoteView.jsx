@@ -17,13 +17,14 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {StoreViewControlPanel as ControlPanel} from './common/StoreControlPanels.jsx';
-import {DisableTimeoutHint, PrefetchHint, Hint, PasswordMask} from './common/Hints.jsx';
+import {StoreViewControlPanel as ControlPanel} from '../common/StoreControlPanels.jsx';
+import {Hint, PasswordMask} from '../common/Hints.jsx';
+import {StoreViewBasicSection as BasicSection} from '../common/StoreBasicSections.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
-import {Filters} from '../../utils/Filters.js';
-import {Utils} from '../../utils/AppUtils.js';
-import {TimeUtils} from '../../utils/TimeUtils.js';
-import {jsonRest} from '../../utils/RestClient.js';
+import {Filters} from '../../../utils/Filters.js';
+import {Utils} from '../../../utils/AppUtils.js';
+import {TimeUtils} from '../../../utils/TimeUtils.js';
+import {jsonRest} from '../../../utils/RestClient.js';
 
 const init = (pkgType, storeName, setState) => {
   const storeUrl = `/api/admin/stores/${pkgType}/remote/${storeName}`;
@@ -60,165 +61,6 @@ const init = (pkgType, storeName, setState) => {
 
     fetchStore();
   }, []);
-};
-const handlers = {
-  handleDisable: () => {
-    // mock
-  },
-  handleEnable: () => {
-    // mock
-  },
-  handleRemove: () => {
-    // mock
-  }
-};
-
-export default function RemoteView() {
-  const [state, setState] = useState({
-    store: {},
-    raw: {},
-    message: ''
-  });
-  const {packageType, name} = useParams();
-  init(packageType, name, setState);
-  const store = state.store;
-  if(!Utils.isEmptyObj(store)) {
-    return (
-      <div className="container-fluid">
-        <div className="control-panel">
-          <ControlPanel store={store} />
-        </div>
-
-        <div className="content-panel">
-          <div className="fieldset-caption">Basics</div>
-          <BasicSection store={store} />
-
-          <div className="fieldset-caption">Description</div>
-          <div className="fieldset">
-            <div className="text-field">
-              <textarea readOnly className="text-description" value={store.description} />
-            </div>
-          </div>
-
-          <div className="fieldset-caption">Capabilities</div>
-          <div className="fieldset">
-            {
-              (store.allow_releases || store.allow_snapshots) &&
-
-                <div>
-                  <div className="detail-field">
-                    <span>{Filters.checkmark(store.allow_releases)}</span>
-                    <label>Allow Releases</label>
-                  </div>
-                  <div className="detail-field">
-                    <span>{Filters.checkmark(store.allow_snapshots)}</span>
-                    <label>Snapshots Allowed?</label>
-                  </div>
-                </div>
-
-            }
-          </div>
-
-          <div className="fieldset-caption">Remote Access</div>
-          <RemoteAccessSection store={store} />
-        </div>
-        {
-          // <ViewJsonDebugger enableDebug={false} storeJson={store} rawJson={raw} />
-        }
-      </div>
-    );
-  }
-  return null;
-}
-
-// eslint-disable-next-line max-lines-per-function
-const BasicSection = ({store})=> <div className="fieldset">
-    <div className="detail-field">
-        <label>Package Type:</label>
-        <span className="key">{store.packageType}</span>
-    </div>
-    <div className="detail-field">
-        <label>Name:</label>
-        <span className="key">{store.name}</span>
-    </div>
-    <div className="detail-field">
-        <span>{Filters.checkmark(!store.disabled)}</span>
-        <label>Enabled?</label>
-        {
-          store.disabled && store.disableExpiration &&
-          <span className="hint">Set to automatically re-enable at {TimeUtils.timestampToDateFormat(store.disableExpiration)}</span>
-        }
-    </div>
-    <div className="detail-field">
-      <span>{Filters.checkmark(store.authoritative_index)}</span>
-      <label>Authoritative index enabled?</label>
-      {
-        !store.authoritative_index &&
-        <span className="hint">Make the content index authoritative to this repository</span>
-      }
-    </div>
-    <div className="sub-fields">
-      <div className="detail-field">
-        <label>Disable Timeout:</label>
-        <span>{store.disable_timeout}</span>
-        <DisableTimeoutHint />
-      </div>
-    </div>
-    <div className="detail-field">
-      <label>Local URL:</label>
-      {
-        // TODO: is this store.demo still available now?
-        store.demo ?
-        <span>{Utils.storeHref(store.key)}</span> :
-        <span><a href={Utils.storeHref(store.key)} target="_new">{Utils.storeHref(store.key)}</a></span>
-      }
-    </div>
-    <div className="detail-field">
-      <label>Remote URL:</label>
-      <span><a href={store.url} target="_new">{store.url}</a></span>
-    </div>
-    <div className="sub-fields">
-      <div className="detail-field">
-        <span>{Filters.checkmark(!store.is_passthrough)}</span>
-        <label>Allow Content Caching</label>
-        <span><Hint hintKey="passthrough" /></span>
-      </div>
-      {
-        !store.is_passthrough &&
-
-          <div>
-            <div className="detail-field">
-              <label>Content Cache Timeout:</label>
-              <span>{TimeUtils.secondsToDuration(store.cache_timeout_seconds)}</span>
-            </div>
-            <div className="detail-field">
-              <label>Metadata Cache Timeout:</label>
-              <span>{TimeUtils.secondsToDuration(store.metadata_timeout_seconds, true)}</span>
-            </div>
-          </div>
-
-      }
-    </div>
-
-    <div className="sub-fields">
-      <div className="detail-field">
-        <label>Pre-fetching Priority:</label>
-        <span>{store.prefetch_priority}</span>
-        <PrefetchHint />
-      </div>
-      <div className="detail-field">
-        <span>{Filters.checkmark(store.prefetch_rescan)}</span>
-        <label>Allow Pre-fetching Rescan?</label>
-      </div>
-      <div className="detail-field">
-        <label>Pre-fetching Listing Type:</label>
-        <span>{store.prefetch_listing_type}</span>
-      </div>
-    </div>
-  </div>;
-
-BasicSection.propTypes = {
-  store: PropTypes.object.isRequired
 };
 
 const RemoteAccessSection = ({store})=> <div className="fieldset">
@@ -341,3 +183,61 @@ const RemoteAccessSection = ({store})=> <div className="fieldset">
 RemoteAccessSection.propTypes={
   store: PropTypes.object.isRequired
 };
+
+export default function RemoteView() {
+  const [state, setState] = useState({
+    store: {},
+    raw: {},
+    message: ''
+  });
+  const {packageType, name} = useParams();
+  init(packageType, name, setState);
+  const store = state.store;
+  if(!Utils.isEmptyObj(store)) {
+    return (
+      <div className="container-fluid">
+        <div className="control-panel">
+          <ControlPanel store={store} />
+        </div>
+
+        <div className="content-panel">
+          <div className="fieldset-caption">Basics</div>
+          <BasicSection store={store} />
+
+          <div className="fieldset-caption">Description</div>
+          <div className="fieldset">
+            <div className="text-field">
+              <textarea readOnly className="text-description" value={store.description} />
+            </div>
+          </div>
+
+          <div className="fieldset-caption">Capabilities</div>
+          <div className="fieldset">
+            {
+              (store.allow_releases || store.allow_snapshots) &&
+
+                <div>
+                  <div className="detail-field">
+                    <span>{Filters.checkmark(store.allow_releases)}</span>
+                    <label>Allow Releases</label>
+                  </div>
+                  <div className="detail-field">
+                    <span>{Filters.checkmark(store.allow_snapshots)}</span>
+                    <label>Snapshots Allowed?</label>
+                  </div>
+                </div>
+
+            }
+          </div>
+
+          <div className="fieldset-caption">Remote Access</div>
+          <RemoteAccessSection store={store} />
+        </div>
+        {
+          // <ViewJsonDebugger enableDebug={false} storeJson={store} rawJson={raw} />
+        }
+      </div>
+    );
+  }
+  return null;
+}

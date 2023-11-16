@@ -17,13 +17,13 @@
 import React, {useState, useEffect} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {StoreEditControlPanel as EditControlPanel} from './common/StoreControlPanels.jsx';
-import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from './common/Hints.jsx';
-import {PackageTypeSelect} from './common/PackageTypeSelect.jsx';
+import {StoreEditControlPanel as EditControlPanel} from '../common/StoreControlPanels.jsx';
+import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from '../common/Hints.jsx';
+import {PackageTypeSelect} from '../common/PackageTypeSelect.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
-import {Utils} from '../../utils/AppUtils.js';
-import {TimeUtils} from '../../utils/TimeUtils.js';
-import {jsonRest} from '../../utils/RestClient.js';
+import {Utils} from '../../../utils/AppUtils.js';
+import {TimeUtils} from '../../../utils/TimeUtils.js';
+import {jsonRest} from '../../../utils/RestClient.js';
 
 const init = (pkgType, storeName, setState) => {
   const getUrl = `/api/admin/stores/${pkgType}/remote/${storeName}`;

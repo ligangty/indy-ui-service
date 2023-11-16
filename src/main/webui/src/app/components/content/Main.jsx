@@ -16,15 +16,15 @@
 
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import RemoteList from './RemoteList.jsx';
-import HostedList from './HostedList.jsx';
-import GroupList from './GroupList.jsx';
-import RemoteView from './RemoteView.jsx';
-import HostedView from './HostedView.jsx';
-import GroupView from './GroupView.jsx';
-import RemoteEdit from './RemoteEdit.jsx';
-import GroupEdit from './GroupEdit.jsx';
-import HostedEdit from './HostedEdit.jsx';
+import RemoteList from './remote/RemoteList.jsx';
+import HostedList from './hosted/HostedList.jsx';
+import GroupList from './group/GroupList.jsx';
+import RemoteView from './remote/RemoteView.jsx';
+import HostedView from './hosted/HostedView.jsx';
+import GroupView from './group/GroupView.jsx';
+import RemoteEdit from './remote/RemoteEdit.jsx';
+import GroupEdit from './group/GroupEdit.jsx';
+import HostedEdit from './hosted/HostedEdit.jsx';
 
 // const browseCompatible=`<!--[if lt IE 7]>
 //     <p className="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
