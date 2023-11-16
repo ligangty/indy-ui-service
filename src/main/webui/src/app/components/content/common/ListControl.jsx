@@ -57,11 +57,11 @@ export default function ListControl({handleCreateNew, useHideAll, handleHideAll,
               <ul>
                 {
                   legends.map(option => <li key={option.title}>
-                          <div>
-                            <span className="key">{option.icon} </span>
-                            <span>{option.title}</span>
-                          </div>
-                        </li>)
+                    <div>
+                      <span className="key">{option.icon} </span>
+                      <span>{option.title}</span>
+                    </div>
+                  </li>)
                 }
               </ul>
             </div>

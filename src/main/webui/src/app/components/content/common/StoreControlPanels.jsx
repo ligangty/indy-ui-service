@@ -20,6 +20,51 @@ import {PropTypes} from 'prop-types';
 import {Utils} from '../../../utils/AppUtils';
 import {jsonRest,http} from '../../../utils/RestClient';
 
+const StoreViewControlPanel = function({store}){
+  const handleEnable = () =>{
+    // TODO: need to implement
+  };
+  const handleDisable = () =>{
+    // TODO: need to implement
+  };
+  const [enableText, enableHandler] = store.disabled?["Enable",handleEnable]:["Disable",handleDisable];
+  const navigate = useNavigate();
+
+  const [pkgType, storeType, storeName] = [store.packageType, store.type, store.name];
+  const storeUrl = `/api/admin/stores/${pkgType}/${storeType}/${storeName}`;
+  const handleRemove = async ()=>{
+    const response = await http.delete(storeUrl);
+    if(!response.ok && response.status >= 400){
+      // TODO: Some other way to handle errors?
+      response.text().then(error=>Utils.logMessage(error));
+    }
+    if(response.status===204){
+      // TODO: Some other way to show deletion success?
+      Utils.logMessage("Store deleted.");
+    }
+    navigate(`/${store.type}`);
+  };
+
+  return(
+    <div className="cp-row-group">
+      <div className="cp-row">
+        <button onClick={enableHandler}>{enableText}</button>
+      </div>
+      <div className="cp-row">
+        <button onClick={()=>navigate(`/${storeType}/${pkgType}/edit/${storeName}`)}>Edit</button>{'  '}
+        <button onClick={()=>navigate(`/${storeType}/new`)}>New...</button>{'  '}
+        <button name="del" onClick={handleRemove} className="del-button cp-button">
+          Delete
+        </button>
+      </div>
+    </div>
+  );
+};
+
+StoreViewControlPanel.propTypes={
+  store: PropTypes.object
+};
+
 const StoreEditControlPanel = ({mode, store}) =>{
   const navigate = useNavigate();
   const handleSave = () => {
@@ -84,49 +129,4 @@ StoreEditControlPanel.propTypes={
   store: PropTypes.object
 };
 
-const StoreViewControlPanel = function({store}){
-  const handleEnable = () =>{
-    // TODO: need to implement
-  };
-  const handleDisable = () =>{
-    // TODO: need to implement
-  };
-  const [enableText, enableHandler] = store.disabled?["Enable",handleEnable]:["Disable",handleDisable];
-  const navigate = useNavigate();
-
-  const [pkgType, storeType, storeName] = [store.packageType, store.type, store.name];
-  const storeUrl = `/api/admin/stores/${pkgType}/${storeType}/${storeName}`;
-  const handleRemove = async ()=>{
-    const response = await http.delete(storeUrl);
-    if(!response.ok && response.status >= 400){
-      // TODO: Some other way to handle errors?
-      response.text().then(error=>Utils.logMessage(error));
-    }
-    if(response.status===204){
-      // TODO: Some other way to show deletion success?
-      Utils.logMessage("Store deleted.");
-    }
-    navigate(`/${store.type}`);
-  };
-
-  return(
-    <div className="cp-row-group">
-      <div className="cp-row">
-        <button onClick={enableHandler}>{enableText}</button>
-      </div>
-      <div className="cp-row">
-        <button onClick={()=>navigate(`/${storeType}/${pkgType}/edit/${storeName}`)}>Edit</button>{'  '}
-        <button onClick={()=>navigate(`/${storeType}/new`)}>New...</button>{'  '}
-        <button name="del" onClick={handleRemove} className="del-button cp-button">
-          Delete
-        </button>
-      </div>
-    </div>
-  );
-};
-
-StoreViewControlPanel.propTypes={
-  store: PropTypes.object
-};
-
-export {StoreEditControlPanel, StoreViewControlPanel};
+export {StoreViewControlPanel, StoreEditControlPanel};
