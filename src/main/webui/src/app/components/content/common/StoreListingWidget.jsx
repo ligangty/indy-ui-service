@@ -98,7 +98,4 @@ StoreListingWidget.propTypes = {
   storeType: PropTypes.string
 };
 
-export {LocalURLSection,
-   CapabilitiesSection,
-   StoreNameSection,
-   StoreListingWidget};
+export {StoreListingWidget};
