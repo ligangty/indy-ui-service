@@ -18,7 +18,7 @@ import React from "react";
 import {render, screen, cleanup, within} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import {StoreViewCapabilitiesSection} from "./StoreCapabilitiesSections.jsx";
-import {Filters} from "../../../utils/Filters.js";
+import {Filters} from "#utils/Filters.js";
 
 afterEach(() => {
   cleanup();

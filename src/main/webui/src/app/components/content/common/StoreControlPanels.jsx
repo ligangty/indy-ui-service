@@ -17,8 +17,8 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {Utils} from '../../../utils/AppUtils';
-import {jsonRest,http} from '../../../utils/RestClient';
+import {Utils} from '#utils/AppUtils';
+import {jsonRest,http} from '#utils/RestClient';
 
 const StoreViewControlPanel = function({store}){
   const handleEnable = () =>{

@@ -17,7 +17,7 @@
 import React, {Fragment} from 'react';
 import {Link} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
-import {Utils} from '../../../utils/AppUtils.js';
+import {Utils} from '#utils/AppUtils.js';
 
 const LocalURLSection = ({storeKey}) => <div className="left-half">
     <label>Local URL:</label>{' '}

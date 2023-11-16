@@ -19,7 +19,7 @@ import {MemoryRouter} from 'react-router-dom';
 import {render, screen, cleanup} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import {StoreListingWidget} from "./StoreListingWidget.jsx";
-import {Utils} from "../../../utils/AppUtils.js";
+import {Utils} from "#utils/AppUtils.js";
 
 afterEach(() => {
   cleanup();
