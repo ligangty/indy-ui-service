@@ -16,7 +16,7 @@
 
 import React from 'react';
 import {PropTypes} from 'prop-types';
-import {Filters} from '../../../utils/Filters.js';
+import {Filters} from '#utils/Filters.js';
 
 export const StoreViewCapabilitiesSection = ({store}) => (store.type==="remote"|| store.type==="hosted") &&
 <React.Fragment>

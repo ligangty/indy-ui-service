@@ -17,9 +17,9 @@
 import React from 'react';
 import {PropTypes} from 'prop-types';
 import {DisableTimeoutHint, PrefetchHint, Hint} from './Hints.jsx';
-import {Filters} from '../../../utils/Filters.js';
-import {Utils} from '../../../utils/AppUtils.js';
-import {TimeUtils} from '../../../utils/TimeUtils.js';
+import {Filters} from '#utils/Filters.js';
+import {Utils} from '#utils/AppUtils.js';
+import {TimeUtils} from '#utils/TimeUtils.js';
 
 export const StoreViewBasicSection = ({store})=>{
   let authoritativeIndexHints = "Make the content index authoritative to this repository";

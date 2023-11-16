@@ -17,7 +17,7 @@
 import React, {useState, useEffect} from 'react';
 import {PropTypes} from 'prop-types';
 import {styles} from './style.js';
-import {jsonRest} from '../app/utils/RestClient.js';
+import {jsonRest} from '#utils/RestClient.js';
 
 const replaceUrl = url =>{
   if (url.includes("api/browse")){

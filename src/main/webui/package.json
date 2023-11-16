@@ -5,6 +5,9 @@
   "description": "Indy Repository Manager UI",
   "repository": "https://github.com/Commonjava/indy-ui-service",
   "license": "ASLv2",
+  "imports": {
+    "#utils/*": "./src/app/utils/*"
+  },
   "dependencies": {
     "bootstrap": "^5.3.2",
     "prop-types": "^15.8.1",

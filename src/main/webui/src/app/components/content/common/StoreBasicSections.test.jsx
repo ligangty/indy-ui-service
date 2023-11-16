@@ -18,7 +18,7 @@ import React from "react";
 import {render, screen, cleanup} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import {StoreViewBasicSection} from "./StoreBasicSections.jsx";
-import {Utils} from "../../../utils/AppUtils.js";
+import {Utils} from "#utils/AppUtils.js";
 
 afterEach(() => {
   cleanup();
