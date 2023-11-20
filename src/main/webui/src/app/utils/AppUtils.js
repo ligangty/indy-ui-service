@@ -22,31 +22,29 @@
 export const Utils = {
   remoteOptions: store => {
     const options = [];
-
-    if (store.allow_snapshots){
-      options.push({icon: 'S', title: 'Snapshots allowed'});
-    }
-
-    if (store.allow_releases){
-      options.push({icon: 'R', title: 'Releases allowed'});
+    if (store.type==="remote"){
+      if (store.allow_snapshots){
+        options.push({icon: 'S', title: 'Snapshots allowed'});
+      }
+      if (store.allow_releases){
+        options.push({icon: 'R', title: 'Releases allowed'});
+      }
     }
     return options;
   },
   hostedOptions: store => {
     const options = [];
-
-    if (store.allow_snapshots){
-      options.push({icon: 'S', title: 'Snapshots allowed'});
+    if(store.type === "hosted"){
+      if (store.allow_snapshots){
+        options.push({icon: 'S', title: 'Snapshots allowed'});
+      }
+      if (store.allow_releases){
+        options.push({icon: 'R', title: 'Releases allowed'});
+      }
+      if (store.allow_snapshots || store.allow_releases){
+        options.push({icon: 'D', title: 'Deployment allowed'});
+      }
     }
-
-    if (store.allow_releases){
-      options.push({icon: 'R', title: 'Releases allowed'});
-    }
-
-    if (store.allow_snapshots || store.allow_releases){
-      options.push({icon: 'D', title: 'Deployment allowed'});
-    }
-
     return options;
   },
   detailHref: key => {
@@ -73,31 +71,26 @@ export const Utils = {
       hostAndPort += ':';
       hostAndPort += window.location.port;
     }
-    //
-    // const basepath = window.location.pathname;
-    // basepath = basepath.replace('/app', '');
-    // basepath = basepath.replace(/index.html.*/, '');
-
-
     const proto = window.location.protocol;
 
     // TODO: In-UI browser that allows simple searching
     return `${proto}//${hostAndPort}/api/content/${parts[0]}/${parts[1]}/${parts[2]}`;
   },
   setDisableMap: listing => {
-    const disabledMap = {};
-
+    const disableMap = {};
     const items = listing.items;
     if (items) {
       for(let i = 0; i<items.length; i++){
         const item = items[i];
-        const parts = item.group.split(':');
-        const key = parts[0] + ':' + parts[1] + ':' + parts[2];
-        // console.log("DISABLED: " + key + " (until: " + item.expiration + ")");
-        disabledMap[key] = item.expiration;
+        if(item.expiration){
+          const parts = item.group.split('#');
+          const key = parts[0];
+          // console.log("DISABLED: " + key + " (until: " + item.expiration + ")");
+          disableMap[key] = item.expiration;
+        }
       }
     }
-    return disabledMap;
+    return disableMap;
   },
   isDisabled: (key, disabledMap) => {
     if(disabledMap && disabledMap.size > 0){
