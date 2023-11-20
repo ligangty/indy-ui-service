@@ -17,8 +17,9 @@
 import React, {useState, useEffect} from 'react';
 import {PropTypes} from 'prop-types';
 import {jsonRest} from '#utils/RestClient.js';
+import {Utils} from '#utils/AppUtils';
 
-export const PackageTypeSelect = ({pkgType,vauleChangeHandler}) =>{
+export const PackageTypeSelect = ({packageType,vauleChangeHandler}) =>{
   const [state, setState] = useState({
     pkgTypes: []
   });
@@ -31,27 +32,28 @@ export const PackageTypeSelect = ({pkgType,vauleChangeHandler}) =>{
         if (response.ok){
           const pkgTypes = await response.json();
           setState({pkgTypes});
+        }else{
+          Utils.logMessage(response);
         }
       };
       fetchPkgTypes();
     }, []);
   }());
 
+  const selectedValue = packageType || "maven";
+  const onChangeHandler = vauleChangeHandler || (e => {
+    // do nothing
+  });
   return <span>
-    <select onChange={vauleChangeHandler}>
+    <select value={selectedValue} onChange={onChangeHandler}>
       {
-        state.pkgTypes.map(type => {
-          if (pkgType === type){
-            return <option key={`pkgType:${type}`} value={type} selected="true">{type}</option>;
-          }
-          return <option key={`pkgType:${type}`} value={type}>{type}</option>;
-        })
+        state.pkgTypes.map(type => <option key={`pkgType:${type}`} value={type}>{type}</option>)
       }
     </select>
   </span>;
 };
 
 PackageTypeSelect.propTypes = {
-  pkgType: PropTypes.strings,
+  packageType: PropTypes.string,
   vauleChangeHandler: PropTypes.func
 };

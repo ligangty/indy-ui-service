@@ -165,8 +165,8 @@ export default function RemoteEdit() {
               mode==='new'||mode==='edit'?
               <React.Fragment>
                 <PackageTypeSelect
-                  pkgType={store.packageType}
-                  handler={e => handleValueChange(e, "packageType")} />
+                  packageType={store.packageType}
+                  vauleChangeHandler={e => handleValueChange(e, "packageType")} />
               </React.Fragment>:
               <span className="key">{store.packageType}</span>
             }

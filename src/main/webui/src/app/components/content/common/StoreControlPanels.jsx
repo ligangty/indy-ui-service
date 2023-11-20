@@ -89,7 +89,7 @@ const StoreEditControlPanel = ({mode, store}) =>{
 
   const handleCancel = () => {
     if(mode === 'edit'){
-      navigate(`/${store.type}/${store.packageType}/view/${store.name}`);
+      navigate(`${Utils.detailHref(store.key)}`);
     }
     if(mode==='new'){
       navigate(`/${store.type}/${store.packageType}`);
