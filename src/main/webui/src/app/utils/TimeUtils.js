@@ -70,7 +70,7 @@ export const TimeUtils = {
     date.setTime(milliseconds);
     return date.toLocaleString();
   },
-  timestampToDuration: secs=>{
+  timestampToCurrentAsDuration: secs=>{
     if (secs === undefined){
       return 'never';
     }
