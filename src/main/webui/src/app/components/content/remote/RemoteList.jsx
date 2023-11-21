@@ -84,18 +84,14 @@ export default function RemoteList() {
   // Utils.logMessage(state);
   const listing = state.listing;
   const disMap = state.disabledMap;
-  const orderBys = [
-    {value: 'key', text: 'Name'},
-    {value: 'url', text: 'Remote URL'}
-  ];
   return (
     <div className="container-fluid">
       <ListControl
-        useSearch={true} handleSearch={event => handlers.handleSearch(event, state.rawListing, setState)}
-        useOrderBy={true} orderBys={orderBys}
-        useLegend={true} legends={options}
-        useDebug={true} handleDebug={event => handlers.handleDebug(event, setState)}
-        handleCreateNew={handlers.createNew} />
+        type="remote"
+        legends={options}
+        handleSearch={event => handlers.handleSearch(event, state.rawListing, setState)}
+        handleDebug={event => handlers.handleDebug(event, setState)}
+      />
       {
       listing?
       <StoreListingWidget storeList={listing} disableMap={disMap} storeType="remote" />:
