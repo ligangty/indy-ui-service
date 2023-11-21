@@ -16,40 +16,40 @@
 
 /* eslint-disable max-lines-per-function */
 import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 
-export default function ListControl({handleCreateNew, useHideAll, handleHideAll,
-  useSearch, handleSearch, useOrderBy, orderBys, useLegend, legends,
-  useDebug, handleDebug}) {
+export default function ListControl({type, legends, handleHideAll, handleSearch, handleDebug}) {
   const [debug, setDebug] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className="control-panel">
       <div className="cp-row">
-        <button onClick={handleCreateNew}>New...</button>{' '}
+        <button onClick={() => navigate(`/${type}/new`)}>New...</button>{' '}
         {
-          useHideAll &&
+          type==="group" &&
             <button onClick={handleHideAll}>Hide All</button>
         }
       </div>
+      <div className="cp-row">
+        Search:{' '}<input name="query" onChange={handleSearch}/>
+      </div>
       {
-        useSearch &&
-          <div className="cp-row">
-            Search:{' '}<input name="query" onChange={handleSearch}/>
-          </div>
-      }
-      {
-        useOrderBy && orderBys &&
+        type==="remote" &&
           <div className="cp-row">
             Sort by:{' '}
             <select name="orderProp">
               {
-                orderBys.map(orderBy=><option key={`legend-${orderBy.value}`} value={orderBy.value}>{orderBy.text}</option>)
+                [
+                  {value: 'key', text: 'Name'},
+                  {value: 'url', text: 'Remote URL'}
+                ].map(orderBy=><option key={`legend-${orderBy.value}`} value={orderBy.value}>{orderBy.text}</option>)
               }
             </select>
           </div>
       }
       {
-        useLegend && legends &&
+         legends && legends.length > 0 &&
           <div className="cp-row">
             <div className="legend">
               <div className="label" style={{fontSize: "75%",
@@ -69,7 +69,7 @@ export default function ListControl({handleCreateNew, useHideAll, handleHideAll,
 
       }
       {
-        useDebug &&
+        handleDebug &&
           <div className="cp-row cp-debug">
             <input type="checkbox" name="enableDebug" checked={debug} onChange={handleDebug} /> Debug Data
           </div>
@@ -79,15 +79,9 @@ export default function ListControl({handleCreateNew, useHideAll, handleHideAll,
 }
 
 ListControl.propTypes={
-  handleCreateNew: PropTypes.func,
-  useHideAll: PropTypes.bool,
-  handleHideAll: PropTypes.func,
-  useSearch: PropTypes.bool,
-  handleSearch: PropTypes.func,
-  useOrderBy: PropTypes.bool,
-  orderBys: PropTypes.array,
-  useLegend: PropTypes.bool,
+  type: PropTypes.string,
   legends: PropTypes.array,
-  useDebug: PropTypes.bool,
+  handleHideAll: PropTypes.func,
+  handleSearch: PropTypes.func.reqired,
   handleDebug: PropTypes.func
 };
