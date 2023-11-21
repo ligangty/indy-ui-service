@@ -41,9 +41,7 @@ export const PackageTypeSelect = ({packageType,vauleChangeHandler}) =>{
   }());
 
   const selectedValue = packageType || "maven";
-  const onChangeHandler = vauleChangeHandler || (e => {
-    // do nothing
-  });
+  const onChangeHandler = vauleChangeHandler || (()=>{});
   return <span>
     <select value={selectedValue} onChange={onChangeHandler}>
       {

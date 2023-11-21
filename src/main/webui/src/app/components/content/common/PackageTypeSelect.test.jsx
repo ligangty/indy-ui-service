@@ -16,6 +16,7 @@
 
 import React from "react";
 import {render, screen, cleanup, waitFor} from '@testing-library/react';
+import userEvent from "@testing-library/user-event";
 import '@testing-library/jest-dom';
 import {PackageTypeSelect} from "./PackageTypeSelect.jsx";
 
@@ -36,6 +37,7 @@ describe('PackageTypeSelect tests', () => {
       expect(screen.getByRole("option", {name: "generic-http"})).toBeInTheDocument();
 
       expect(screen.getByRole("option", {name: "maven"}).selected).toBe(true);
+      expect(screen.getByRole("combobox")).toHaveValue("maven");
     });
   });
 
@@ -50,7 +52,28 @@ describe('PackageTypeSelect tests', () => {
       expect(screen.getByRole("option", {name: "npm"})).toBeInTheDocument();
       expect(screen.getByRole("option", {name: "generic-http"})).toBeInTheDocument();
 
+      expect(screen.getByRole("combobox")).toHaveValue("npm");
       expect(screen.getByRole("option", {name: "npm"}).selected).toBe(true);
+    });
+  });
+
+  it("Verify PackageTypeSelect for value change", async ()=>{
+    global.fetch = jest.fn(() => Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(["maven", "npm", "generic-http"]),
+    }));
+    const {selectOptions} = userEvent.setup();
+    let value = "";
+    const vauleChangeHandler = e => {
+      value = e.target.value;
+    };
+    render(<PackageTypeSelect vauleChangeHandler={vauleChangeHandler}/>);
+    expect(value).toBe("");
+    await waitFor(() => {
+      expect(screen.getByRole("option", {name: "maven"}).selected).toBe(true);
+      expect(screen.getByRole("option", {name: "npm"})).toBeInTheDocument();
+      selectOptions(screen.getByRole("combobox"), "npm");
+      expect(value).toBe("npm");
     });
   });
 
