@@ -82,6 +82,6 @@ ListControl.propTypes={
   type: PropTypes.string,
   legends: PropTypes.array,
   handleHideAll: PropTypes.func,
-  handleSearch: PropTypes.func.reqired,
+  handleSearch: PropTypes.func.isRequired,
   handleDebug: PropTypes.func
 };
