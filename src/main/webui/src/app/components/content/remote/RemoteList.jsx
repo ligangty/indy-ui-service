@@ -15,6 +15,8 @@
  */
 
 import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router';
+import {PropTypes} from 'prop-types';
 import {ListJsonDebugger} from '../common/Debugger.jsx';
 import ListControl from "../common/ListControl.jsx";
 import {remoteOptionLegend as options, STORE_API_BASE_URL} from "../../ComponentConstants.js";
@@ -22,10 +24,11 @@ import {StoreListingWidget} from '../common/StoreListingWidget.jsx';
 import {Utils} from '#utils/AppUtils.js';
 import {jsonRest} from '#utils/RestClient.js';
 
-const init = (state, setState) => {
+
+const init = (packageType, setState) => {
   useEffect(()=>{
     const fetchdData = async ()=>{
-      const response = await jsonRest.get(`${STORE_API_BASE_URL}/_all/remote`);
+      const response = await jsonRest.get(`${STORE_API_BASE_URL}/${packageType}/remote`);
       if (response.ok){
         const timeoutResponse = await jsonRest.get('/api/admin/schedule/store/all/disable-timeout');
         let disabledMap = {};
@@ -40,7 +43,6 @@ const init = (state, setState) => {
         const data = await response.json();
         setState({
           listing: data.items,
-          rawListing: data.items,
           disabledMap
         });
       }else{
@@ -52,13 +54,10 @@ const init = (state, setState) => {
       }
     };
     fetchdData();
-  }, []);
+  }, [packageType]);
 };
 
 const handlers = {
-  createNew: () => {
-    // mock
-  },
   handleDebug: (event, setState) => {
     setState({
       enableDebug: event.target.checked
@@ -72,16 +71,15 @@ const handlers = {
 };
 
 export default function RemoteList() {
+  const {packageType} = useParams();
   const [state, setState] = useState({
     listing: [],
-    rawListing: [],
     disabledMap: {},
     enableDebug: false,
     message: ''
   });
 
-  init(state, setState);
-  // Utils.logMessage(state);
+  init(packageType,setState);
   const listing = state.listing;
   const disMap = state.disabledMap;
   return (
@@ -89,7 +87,7 @@ export default function RemoteList() {
       <ListControl
         type="remote"
         legends={options}
-        handleSearch={event => handlers.handleSearch(event, state.rawListing, setState)}
+        handleSearch={event => handlers.handleSearch(event, state.listing, setState)}
         handleDebug={event => handlers.handleDebug(event, setState)}
       />
       {

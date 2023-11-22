@@ -36,19 +36,18 @@ app.get('/api/stats/version-info', (req, res) => {
     });
 });
 
-app.get(`${STORE_API_BASE}/_all/remote`, (req, res) => {
-  const remoteList = require('./mock/list/FakeRemoteList.json');
-  res.status(200).json(remoteList);
-});
-
-app.get(`${STORE_API_BASE}/_all/hosted`, (req, res) => {
-  const hostedList = require('./mock/list/FakeHostedList.json');
-  res.status(200).json(hostedList);
-});
-
-app.get(`${STORE_API_BASE}/_all/group`, (req, res) => {
-  const groupList = require('./mock/list/FakeGroupList.json');
-  res.status(200).json(groupList);
+// For store listing
+app.get(`${STORE_API_BASE}/:packageType/:type`, (req, res) => {
+  const [pkgType, type] = [req.params.packageType, req.params.type];
+  const pkgToFileMapping = {"maven": "Maven", "npm": "NPM"};
+  const typeToFileMapping = {"remote": "Remote", "hosted": "Hosted", "group": "Group"};
+  let list = [];
+  if(pkgType==="_all"){
+    // TODO: do all packageType for type handling here
+  }
+  const mockFile = `./mock/list/Fake${pkgToFileMapping[pkgType]}${typeToFileMapping[type]}List.json`;
+  list = require(mockFile);
+  res.status(200).json(list);
 });
 
 app.get('/api/admin/schedule/store/all/disable-timeout', (req, res) => {
@@ -72,7 +71,7 @@ app.get('/api/admin/schedule/store/:packageType/:type/:name/disable-timeout', (r
 app.get(`${STORE_API_BASE}/maven/remote/:name`, (req, res) => {
   const name = req.params.name;
   if(name){
-    const remoteList = require('./mock/list/FakeRemoteList.json');
+    const remoteList = require('./mock/list/FakeMavenRemoteList.json');
     const result = remoteList.items.find(item=>item.name===name);
     if(result){
       res.status(200).json(result);
@@ -87,7 +86,7 @@ app.get(`${STORE_API_BASE}/maven/remote/:name`, (req, res) => {
 app.get(`${STORE_API_BASE}/maven/hosted/:name`, (req, res) => {
   const name=req.params.name;
   if(name){
-    const remoteList = require('./mock/list/FakeHostedList.json');
+    const remoteList = require('./mock/list/FakeMavenHostedList.json');
     const result = remoteList.items.find(item=>item.name===name);
     if(result){
       res.status(200).json(result);
@@ -102,7 +101,7 @@ app.get(`${STORE_API_BASE}/maven/hosted/:name`, (req, res) => {
 app.get(`${STORE_API_BASE}/maven/group/:name`, (req, res) => {
   const name=req.params.name;
   if(name){
-    const remoteList = require('./mock/list/FakeGroupList.json');
+    const remoteList = require('./mock/list/FakeMavenGroupList.json');
     const result = remoteList.items.find(item=>item.name===name);
     if(result){
       res.status(200).json(result);
@@ -135,7 +134,7 @@ app.post(`${STORE_API_BASE}/:packageType/:type/:name`, (req, res) => {
   const newRepo = req.body;
   if(req.headers['content-type']==="application/json"){
     if (newRepo.packageType&&newRepo.type&&newRepo.name){
-      // res.status(204);
+      console.log(`${req.method} ${req.path}\n ${JSON.stringify(newRepo)}`);
       res.sendStatus(204);
     }else{
       res.status(400).json({error: "Bad repo request: missing packageType or type or name for repo!"});
@@ -149,6 +148,7 @@ app.put(`${STORE_API_BASE}/:packageType/:type/:name`, (req, res) => {
   const updatedRepo = req.body;
   if(req.headers['content-type']==="application/json"){
     if (updatedRepo.packageType&&updatedRepo.type&&updatedRepo.name){
+      console.log(`${req.method} ${req.path}\n ${JSON.stringify(updatedRepo)}`);
       res.status(200).json(updatedRepo);
     }else{
       res.status(400).json({error: "Bad repo request: missing packageType or type or name for repo!"});
