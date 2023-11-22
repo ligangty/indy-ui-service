@@ -21,12 +21,13 @@ import {StoreEditControlPanel as EditControlPanel} from '../common/StoreControlP
 import {DisableTimeoutHint, DurationHint, PrefetchHint, Hint} from '../common/Hints.jsx';
 import {PackageTypeSelect} from '../common/PackageTypeSelect.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
-import {Utils} from '../../../utils/AppUtils.js';
-import {TimeUtils} from '../../../utils/TimeUtils.js';
-import {jsonRest} from '../../../utils/RestClient.js';
+import {Utils} from '#utils/AppUtils.js';
+import {TimeUtils} from '#utils/TimeUtils.js';
+import {jsonRest} from '#utils/RestClient.js';
+import {STORE_API_BASE_URL} from "../../ComponentConstants.js";
 
 const init = (pkgType, storeName, setState) => {
-  const getUrl = `/api/admin/stores/${pkgType}/remote/${storeName}`;
+  const getUrl = `${STORE_API_BASE_URL}/${pkgType}/remote/${storeName}`;
   useEffect(()=>{
     const fetchStore = async () =>{
       // get Store data

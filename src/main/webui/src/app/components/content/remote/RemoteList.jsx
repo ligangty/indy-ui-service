@@ -17,7 +17,7 @@
 import React, {useEffect, useState} from 'react';
 import {ListJsonDebugger} from '../common/Debugger.jsx';
 import ListControl from "../common/ListControl.jsx";
-import {remoteOptionLegend as options} from "../../ComponentConstants.js";
+import {remoteOptionLegend as options, STORE_API_BASE_URL} from "../../ComponentConstants.js";
 import {StoreListingWidget} from '../common/StoreListingWidget.jsx';
 import {Utils} from '#utils/AppUtils.js';
 import {jsonRest} from '#utils/RestClient.js';
@@ -25,7 +25,7 @@ import {jsonRest} from '#utils/RestClient.js';
 const init = (state, setState) => {
   useEffect(()=>{
     const fetchdData = async ()=>{
-      const response = await jsonRest.get(`/api/admin/stores/_all/remote`);
+      const response = await jsonRest.get(`${STORE_API_BASE_URL}/_all/remote`);
       if (response.ok){
         const timeoutResponse = await jsonRest.get('/api/admin/schedule/store/all/disable-timeout');
         let disabledMap = {};

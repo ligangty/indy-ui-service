@@ -5,6 +5,7 @@ import {Config} from './config/AppConfig';
 
 const projectRoot = path.resolve(__dirname, '../../dist');
 const indexHtml=path.join(projectRoot+'/index.html');
+const STORE_API_BASE = "/api/admin/stores";
 
 const app = express();
 app.use(compression());
@@ -35,17 +36,17 @@ app.get('/api/stats/version-info', (req, res) => {
     });
 });
 
-app.get('/api/admin/stores/_all/remote', (req, res) => {
+app.get(`${STORE_API_BASE}/_all/remote`, (req, res) => {
   const remoteList = require('./mock/list/FakeRemoteList.json');
   res.status(200).json(remoteList);
 });
 
-app.get('/api/admin/stores/_all/hosted', (req, res) => {
+app.get(`${STORE_API_BASE}/_all/hosted`, (req, res) => {
   const hostedList = require('./mock/list/FakeHostedList.json');
   res.status(200).json(hostedList);
 });
 
-app.get('/api/admin/stores/_all/group', (req, res) => {
+app.get(`${STORE_API_BASE}/_all/group`, (req, res) => {
   const groupList = require('./mock/list/FakeGroupList.json');
   res.status(200).json(groupList);
 });
@@ -68,7 +69,7 @@ app.get('/api/admin/schedule/store/:packageType/:type/:name/disable-timeout', (r
   }
 });
 
-app.get('/api/admin/stores/maven/remote/:name', (req, res) => {
+app.get(`${STORE_API_BASE}/maven/remote/:name`, (req, res) => {
   const name = req.params.name;
   if(name){
     const remoteList = require('./mock/list/FakeRemoteList.json');
@@ -83,7 +84,7 @@ app.get('/api/admin/stores/maven/remote/:name', (req, res) => {
   }
 });
 
-app.get('/api/admin/stores/maven/hosted/:name', (req, res) => {
+app.get(`${STORE_API_BASE}/maven/hosted/:name`, (req, res) => {
   const name=req.params.name;
   if(name){
     const remoteList = require('./mock/list/FakeHostedList.json');
@@ -98,7 +99,7 @@ app.get('/api/admin/stores/maven/hosted/:name', (req, res) => {
   }
 });
 
-app.get('/api/admin/stores/maven/group/:name', (req, res) => {
+app.get(`${STORE_API_BASE}/maven/group/:name`, (req, res) => {
   const name=req.params.name;
   if(name){
     const remoteList = require('./mock/list/FakeGroupList.json');
@@ -130,7 +131,7 @@ app.get('/api/admin/stores/maven/group/:name', (req, res) => {
 //   return repo;
 // };
 
-app.post('/api/admin/stores/:packageType/:type/:name', (req, res) => {
+app.post(`${STORE_API_BASE}/:packageType/:type/:name`, (req, res) => {
   const newRepo = req.body;
   if(req.headers['content-type']==="application/json"){
     if (newRepo.packageType&&newRepo.type&&newRepo.name){
@@ -144,7 +145,7 @@ app.post('/api/admin/stores/:packageType/:type/:name', (req, res) => {
   }
 });
 
-app.put('/api/admin/stores/:packageType/:type/:name', (req, res) => {
+app.put(`${STORE_API_BASE}/:packageType/:type/:name`, (req, res) => {
   const updatedRepo = req.body;
   if(req.headers['content-type']==="application/json"){
     if (updatedRepo.packageType&&updatedRepo.type&&updatedRepo.name){
