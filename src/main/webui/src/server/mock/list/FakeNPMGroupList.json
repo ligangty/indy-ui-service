@@ -1,0 +1,287 @@
+{
+  "items" : [ {
+    "type" : "group",
+    "key" : "npm:group:DA-temporary-builds",
+    "metadata" : {
+      "changelog" : "Initial setup"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:group:temporary-builds", "npm:group:DA" ],
+    "name" : "DA-temporary-builds",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-03-25 08:14:58 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:build-172077677927211008",
+    "description" : "Aggregation group for PNC build #172077677927211008",
+    "metadata" : {
+      "changelog" : "Creating repository group for resolving artifacts in build: 172077677927211008 (repo: build-172077677927211008)",
+      "koji-pull" : "false"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:build-172077677927211008", "npm:group:builds-untested+shared-imports+public" ],
+    "name" : "build-172077677927211008",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-06-02 01:27:31 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:DA",
+    "metadata" : {
+      "changelog" : "Initial setup"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:pnc-builds" ],
+    "name" : "DA",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-03-25 08:14:58 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:builds-untested+shared-imports",
+    "metadata" : {
+      "changelog" : "Initial setup"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:group:builds-untested", "npm:hosted:shared-imports" ],
+    "name" : "builds-untested+shared-imports",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-03-25 08:14:56 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:builds-untested+shared-imports+public",
+    "metadata" : {
+      "changelog" : "Initial setup"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:group:builds-untested+shared-imports", "npm:group:public" ],
+    "name" : "builds-untested+shared-imports+public",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-03-25 08:14:57 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:DApublic",
+    "metadata" : {
+      "changelog" : "Initial setup"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:group:DA", "npm:group:public" ],
+    "name" : "DApublic",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-03-25 08:14:59 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:build-A4RWJFXAWIAAA",
+    "description" : "Aggregation group for PNC  build #build-A4RWJFXAWIAAA",
+    "metadata" : {
+      "changelog" : "Creating repository group for resolving artifacts (repo: build-A4RWJFXAWIAAA), with tempBuild: false and brewPullAcitve: false.",
+      "koji-pull" : "false"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:build-A4RWJFXAWIAAA", "npm:group:builds-untested+shared-imports+public" ],
+    "name" : "build-A4RWJFXAWIAAA",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2023-11-20 09:04:29 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:public",
+    "metadata" : {
+      "changelog" : "Initial setup"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:remote:npmjs" ],
+    "name" : "public",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-03-15 18:02:06 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:shared-imports+public",
+    "metadata" : {
+      "changelog" : "add consituents"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:shared-imports", "npm:group:public" ],
+    "name" : "shared-imports+public",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-09-28 18:44:01 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:build-A4SLH57TGIAAA",
+    "description" : "Aggregation group for PNC  build #build-A4SLH57TGIAAA",
+    "metadata" : {
+      "changelog" : "Creating repository group for resolving artifacts (repo: build-A4SLH57TGIAAA), with tempBuild: false and brewPullAcitve: false.",
+      "koji-pull" : "false"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:build-A4SLH57TGIAAA", "npm:group:builds-untested+shared-imports+public" ],
+    "name" : "build-A4SLH57TGIAAA",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2023-11-21 09:29:49 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:temporary-builds",
+    "metadata" : {
+      "changelog" : "update npm group temporary-builds"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:temporary-builds" ],
+    "name" : "temporary-builds",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-06-02 01:27:31 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:build-175689795468152832",
+    "description" : "Aggregation group for PNC temporary build #175689795468152832",
+    "metadata" : {
+      "changelog" : "Creating repository group for resolving artifacts in build: 175689795468152832 (repo: build-175689795468152832)",
+      "koji-pull" : "false"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:build-175689795468152832", "npm:hosted:temporary-builds", "npm:group:builds-untested+shared-imports+public" ],
+    "name" : "build-175689795468152832",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-06-02 01:27:31 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:build-175645950118350848",
+    "description" : "Aggregation group for PNC temporary build #175645950118350848",
+    "metadata" : {
+      "changelog" : "Creating repository group for resolving artifacts in build: 175645950118350848 (repo: build-175645950118350848)",
+      "koji-pull" : "false"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:build-175645950118350848", "npm:hosted:temporary-builds", "npm:group:builds-untested+shared-imports+public" ],
+    "name" : "build-175645950118350848",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-06-02 01:27:31 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:build-A4SLDYLJGIAAA",
+    "description" : "Aggregation group for PNC  build #build-A4SLDYLJGIAAA",
+    "metadata" : {
+      "changelog" : "Creating repository group for resolving artifacts (repo: build-A4SLDYLJGIAAA), with tempBuild: false and brewPullAcitve: false.",
+      "koji-pull" : "false"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:build-A4SLDYLJGIAAA", "npm:group:builds-untested+shared-imports+public" ],
+    "name" : "build-A4SLDYLJGIAAA",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2023-11-21 09:20:39 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:shared-imports+yarn-public",
+    "metadata" : {
+      "changelog" : "add consituents"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:shared-imports", "npm:group:yarn-public" ],
+    "name" : "shared-imports+yarn-public",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-10-04 19:31:44 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:build-172056280052015104",
+    "description" : "Aggregation group for PNC build #172056280052015104",
+    "metadata" : {
+      "changelog" : "Creating repository group for resolving artifacts in build: 172056280052015104 (repo: build-172056280052015104)",
+      "koji-pull" : "false"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:build-172056280052015104", "npm:group:builds-untested+shared-imports+public" ],
+    "name" : "build-172056280052015104",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-06-02 01:27:31 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:builds-untested",
+    "metadata" : {
+      "changelog" : "Initial setup"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:hosted:pnc-builds" ],
+    "name" : "builds-untested",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-03-25 08:14:56 +0000",
+    "prepend_constituent" : false
+  }, {
+    "type" : "group",
+    "key" : "npm:group:yarn-public",
+    "metadata" : {
+      "changelog" : "add yarn remote to yarn-public"
+    },
+    "disabled" : false,
+    "constituents" : [ "npm:remote:yarnpkg" ],
+    "name" : "yarn-public",
+    "packageType" : "npm",
+    "disable_timeout" : 0,
+    "path_style" : "plain",
+    "authoritative_index" : false,
+    "create_time" : "2021-10-04 19:31:37 +0000",
+    "prepend_constituent" : false
+  } ]
+}
