@@ -36,18 +36,38 @@ app.get('/api/stats/version-info', (req, res) => {
     });
 });
 
+const decideMockListFile = (packgeType, type) => {
+  const pkgToFileMapping = {"maven": "Maven", "npm": "NPM"};
+  const typeToFileMapping = {"remote": "Remote", "hosted": "Hosted", "group": "Group"};
+  return `./mock/list/Fake${pkgToFileMapping[packgeType]}${typeToFileMapping[type]}List.json`;
+};
+
 // For store listing
 app.get(`${STORE_API_BASE}/:packageType/:type`, (req, res) => {
   const [pkgType, type] = [req.params.packageType, req.params.type];
-  const pkgToFileMapping = {"maven": "Maven", "npm": "NPM"};
-  const typeToFileMapping = {"remote": "Remote", "hosted": "Hosted", "group": "Group"};
-  let list = [];
   if(pkgType==="_all"){
     // TODO: do all packageType for type handling here
   }
-  const mockFile = `./mock/list/Fake${pkgToFileMapping[pkgType]}${typeToFileMapping[type]}List.json`;
-  list = require(mockFile);
+  const mockFile = decideMockListFile(pkgType, type);
+  const list = require(mockFile);
   res.status(200).json(list);
+});
+
+// For single store get
+app.get(`${STORE_API_BASE}/:packageType/:type/:name`, (req, res) => {
+  const [pkgType, type, name] = [req.params.packageType, req.params.type, req.params.name];
+  if(pkgType && type && name){
+    const mockListFile = decideMockListFile(pkgType, type);
+    const repoList = require(mockListFile);
+    const result = repoList.items.find(item=>item.name===name);
+    if(result){
+      res.status(200).json(result);
+    }else{
+      res.status(404).json({error: "No such store!"});
+    }
+  }else{
+    res.status(400).json({error: "Missing store name"});
+  }
 });
 
 app.get('/api/admin/schedule/store/all/disable-timeout', (req, res) => {
@@ -65,51 +85,6 @@ app.get('/api/admin/schedule/store/:packageType/:type/:name/disable-timeout', (r
     }else{
       res.status(404).json({error: "No such store!"});
     }
-  }
-});
-
-app.get(`${STORE_API_BASE}/maven/remote/:name`, (req, res) => {
-  const name = req.params.name;
-  if(name){
-    const remoteList = require('./mock/list/FakeMavenRemoteList.json');
-    const result = remoteList.items.find(item=>item.name===name);
-    if(result){
-      res.status(200).json(result);
-    }else{
-      res.status(404).json({error: "No such store!"});
-    }
-  }else{
-    res.status(400).json({error: "Missing store name"});
-  }
-});
-
-app.get(`${STORE_API_BASE}/maven/hosted/:name`, (req, res) => {
-  const name=req.params.name;
-  if(name){
-    const remoteList = require('./mock/list/FakeMavenHostedList.json');
-    const result = remoteList.items.find(item=>item.name===name);
-    if(result){
-      res.status(200).json(result);
-    }else{
-      res.status(404).json({error: "No such store!"});
-    }
-  }else{
-    res.status(400).json({error: "Missing store name"});
-  }
-});
-
-app.get(`${STORE_API_BASE}/maven/group/:name`, (req, res) => {
-  const name=req.params.name;
-  if(name){
-    const remoteList = require('./mock/list/FakeMavenGroupList.json');
-    const result = remoteList.items.find(item=>item.name===name);
-    if(result){
-      res.status(200).json(result);
-    }else{
-      res.status(404).json({error: "No such store!"});
-    }
-  }else{
-    res.status(400).json({error: "Missing store name"});
   }
 });
 
