@@ -26,9 +26,10 @@ import {Filters} from '#utils/Filters.js';
 import {Utils} from '#utils/AppUtils.js';
 import {TimeUtils} from '#utils/TimeUtils.js';
 import {jsonRest} from '#utils/RestClient.js';
+import {STORE_API_BASE_URL} from '../../ComponentConstants.js';
 
 const init = (pkgType, storeName, setState) => {
-  const storeUrl = `/api/admin/stores/${pkgType}/remote/${storeName}`;
+  const storeUrl = `${STORE_API_BASE_URL}/${pkgType}/remote/${storeName}`;
   useEffect(()=>{
     const fetchStore = async () => {
       const response = await jsonRest.get(storeUrl);

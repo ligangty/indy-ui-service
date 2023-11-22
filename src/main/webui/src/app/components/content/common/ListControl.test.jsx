@@ -15,9 +15,8 @@
  */
 
 import React from "react";
-import {render, screen, cleanup, waitFor} from '@testing-library/react';
+import {render, screen, cleanup} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
-import userEvent from "@testing-library/user-event";
 import '@testing-library/jest-dom';
 import ListControl from "./ListControl.jsx";
 import {remoteOptionLegend as remoteOptions} from "../../ComponentConstants.js";
@@ -36,14 +35,10 @@ describe('ListControl tests', () => {
       />
     </MemoryRouter>);
     expect(screen.getByRole("button", {Name: "New..."})).toBeInTheDocument();
-
     expect(screen.getByText(/Search:/u)).toBeInTheDocument();
-
     expect(screen.getByText(/Sort by:/u)).toBeInTheDocument();
     expect(screen.getByRole("option", {name: "Remote URL"})).toBeInTheDocument();
-
     expect(screen.getByText(/Capability Legend:/u)).toBeInTheDocument();
-
     expect(screen.queryByRole("checkbox", {Name: "enableDebug"})).not.toBeInTheDocument();
   });
 
@@ -57,11 +52,8 @@ describe('ListControl tests', () => {
     </MemoryRouter>);
 
     expect(screen.getByRole("button", {name: "Hide All"})).toBeInTheDocument();
-
     expect(screen.queryByText(/Sort by:/u)).not.toBeInTheDocument();
-
     expect(screen.queryByText(/Capability Legend:/u)).not.toBeInTheDocument();
-
     expect(screen.getByRole("checkbox", {Name: "enableDebug"})).toBeInTheDocument();
   });
 });

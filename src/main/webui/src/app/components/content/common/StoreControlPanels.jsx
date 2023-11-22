@@ -19,6 +19,7 @@ import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import {Utils} from '#utils/AppUtils';
 import {jsonRest,http} from '#utils/RestClient';
+import {STORE_API_BASE_URL} from '../../ComponentConstants';
 
 const StoreViewControlPanel = function({store}){
   const handleEnable = () =>{
@@ -31,7 +32,7 @@ const StoreViewControlPanel = function({store}){
   const navigate = useNavigate();
 
   const [pkgType, storeType, storeName] = [store.packageType, store.type, store.name];
-  const storeUrl = `/api/admin/stores/${pkgType}/${storeType}/${storeName}`;
+  const storeUrl = `${STORE_API_BASE_URL}/${pkgType}/${storeType}/${storeName}`;
   const handleRemove = async ()=>{
     const response = await http.delete(storeUrl);
     if(!response.ok && response.status >= 400){
@@ -68,7 +69,7 @@ StoreViewControlPanel.propTypes={
 const StoreEditControlPanel = ({mode, store}) =>{
   const navigate = useNavigate();
   const handleSave = () => {
-    const saveUrl = `/api/admin/stores/${store.packageType}/${store.type}/${store.name}`;
+    const saveUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
     const saveStore = async () => {
       let response = {};
       if(mode==="new"){
@@ -99,7 +100,7 @@ const StoreEditControlPanel = ({mode, store}) =>{
   const handleRemove = () => {
     // Only edit page should handle delete logic
     if(mode==="edit"){
-      const deleteUrl = `/api/admin/stores/${store.packageType}/${store.type}/${store.name}`;
+      const deleteUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
       const deleteStore = async () => {
         const response = await http.delete(deleteUrl);
         if (!response.ok){

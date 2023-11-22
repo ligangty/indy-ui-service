@@ -26,5 +26,7 @@ const hostedOptionLegend = [
   {icon: 'D', title: 'Deployment allowed'}
 ];
 
+const STORE_API_BASE_URL = "/api/admin/stores";
 
-export {remoteOptionLegend, hostedOptionLegend};
+
+export {remoteOptionLegend, hostedOptionLegend, STORE_API_BASE_URL};
