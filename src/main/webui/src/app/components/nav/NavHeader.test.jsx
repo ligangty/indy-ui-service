@@ -37,7 +37,7 @@ describe('Header tests', () => {
     const groupsButton = screen.getByRole("button", {name: "Groups"});
     expect(groupsButton).toBeInTheDocument();
     expect(screen.getByRole("button", {name: "REST API"})).toBeInTheDocument();
-    const addonsButton = screen.getByRole("button", {name: "more"});
+    const addonsButton = screen.getByRole("button", {name: "More"});
     expect(addonsButton).toBeInTheDocument();
     // TODO: test the user login elements later when implemented
 
