@@ -30,7 +30,7 @@ export default function NavHeader(){
     <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light" role="navigation">
       <Link className="navbar-brand" to="">Indy</Link>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav mr-auto">
+        <ul className="navbar-nav me-auto">
           {
             [
               {type: "remote", desc: "Remote Repositories"},
@@ -52,7 +52,7 @@ export default function NavHeader(){
           <Button href="/q/swagger-ui/" variant="secondary" className="mx-1">REST API</Button>
           <Dropdown data-bs-theme="dark" className="mx-1">
             <Dropdown.Toggle id={`dropdown-button-dark-addons`} variant="secondary">
-              more
+              More
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <LinkContainer to="/nfc">
@@ -63,16 +63,18 @@ export default function NavHeader(){
               </LinkContainer>
             </Dropdown.Menu>
           </Dropdown>
-          { isUserloggedIn && <Dropdown data-bs-theme="dark" className="mx-1">
-              <Dropdown.Toggle id={`dropdown-button-dark-addons`} variant="link">
-                {username}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item href="/logout" variant="link">Log Out</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+          </ul>
+          { isUserloggedIn && <ul className="navbar-nav ms-auto">
+              <Dropdown data-bs-theme="dark" className="mx-1">
+                <Dropdown.Toggle id={`dropdown-button-dark-addons`} variant="link">
+                  {username}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item href="/logout" variant="link">Log Out</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </ul>
           }
-        </ul>
       </div>
     </nav>
   );
