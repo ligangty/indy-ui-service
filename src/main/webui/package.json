@@ -8,6 +8,13 @@
   "imports": {
     "#utils/*": "./src/app/utils/*"
   },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "verbose": true,
+    "automock": false,
+    "resetMocks": false,
+    "setupFiles": ["<rootDir>/setupTests.js"]
+  },
   "dependencies": {
     "bootstrap": "^5.3.2",
     "prop-types": "^15.8.1",
@@ -40,6 +47,7 @@
     "express": "^4.18.2",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jest-fetch-mock": "^3.0.3",
     "nodemon": "^3.0.1",
     "style-loader": "^3.3.3",
     "url-loader": "^4.1.1",

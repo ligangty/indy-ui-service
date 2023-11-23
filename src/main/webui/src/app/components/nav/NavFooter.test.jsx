@@ -17,7 +17,12 @@
 import React from "react";
 import {render, screen, cleanup, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
+import fetchMock from "jest-fetch-mock";
 import NavFooter from "./NavFooter.jsx";
+
+beforeEach(() => {
+  fetchMock.resetMocks();
+});
 
 afterEach(() => {
   cleanup();
@@ -31,10 +36,8 @@ describe('Footer tests', () => {
       builder: "test-builder",
       timestamp: "2023-10-24 05:54 +0000"
     };
-    global.fetch = jest.fn(() => Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve(mockStats),
-    }));
+    fetchMock.mockResponseOnce(JSON.stringify(mockStats));
+
     render(<NavFooter />);
     expect(screen.getByRole("link", {name: "Docs"})).toHaveAttribute("href", "http://commonjava.github.io/indy/");
     expect(screen.getByRole("link", {name: "Issues"})).toHaveAttribute("href", "http://github.com/commonjava/indy/issues");

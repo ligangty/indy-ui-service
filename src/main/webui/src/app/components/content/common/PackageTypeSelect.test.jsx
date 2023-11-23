@@ -16,9 +16,15 @@
 
 import React from "react";
 import {render, screen, cleanup, waitFor} from '@testing-library/react';
+import fetchMock from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import '@testing-library/jest-dom';
 import {PackageTypeSelect} from "./PackageTypeSelect.jsx";
+
+beforeEach(() => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponseOnce(JSON.stringify(["maven", "npm", "generic-http"]));
+});
 
 afterEach(() => {
   cleanup();
@@ -26,10 +32,6 @@ afterEach(() => {
 
 describe('PackageTypeSelect tests', () => {
   it("Verify PackageTypeSelect by default", async ()=>{
-    global.fetch = jest.fn(() => Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(["maven", "npm", "generic-http"]),
-    }));
     render(<PackageTypeSelect />);
     await waitFor(()=>{
       expect(screen.getByRole("option", {name: "maven"})).toBeInTheDocument();
@@ -42,10 +44,6 @@ describe('PackageTypeSelect tests', () => {
   });
 
   it("Verify PackageTypeSelect for npm selected", async ()=>{
-    global.fetch = jest.fn(() => Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(["maven", "npm", "generic-http"]),
-    }));
     render(<PackageTypeSelect packageType="npm" />);
     await waitFor(()=>{
       expect(screen.getByRole("option", {name: "maven"})).toBeInTheDocument();
@@ -58,10 +56,6 @@ describe('PackageTypeSelect tests', () => {
   });
 
   it("Verify PackageTypeSelect for value change", async ()=>{
-    global.fetch = jest.fn(() => Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve(["maven", "npm", "generic-http"]),
-    }));
     const {selectOptions} = userEvent.setup();
     let value = "";
     const vauleChangeHandler = e => {
