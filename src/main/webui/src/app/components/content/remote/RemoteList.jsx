@@ -15,8 +15,7 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router';
-import {PropTypes} from 'prop-types';
+import {useParams} from 'react-router-dom';
 import {ListJsonDebugger} from '../common/Debugger.jsx';
 import ListControl from "../common/ListControl.jsx";
 import {remoteOptionLegend as options, STORE_API_BASE_URL} from "../../ComponentConstants.js";
@@ -32,15 +31,16 @@ const init = (packageType, setState) => {
       if (response.ok){
         const timeoutResponse = await jsonRest.get('/api/admin/schedule/store/all/disable-timeout');
         let disabledMap = {};
-        Utils.logMessage(timeoutResponse);
         if (timeoutResponse.ok){
           const timeoutData = await timeoutResponse.json();
-          Utils.logMessage(timeoutData);
           disabledMap = Utils.setDisableMap(timeoutData);
         }else{
           timeoutResponse.text().then(data=>Utils.logMessage(`disable timeout get failed in remote listing! Error reason: ${data}`));
         }
-        const data = await response.json();
+        let data = await response.json();
+        if(typeof data === 'string'){
+          data = JSON.parse(data);
+        }
         setState({
           listing: data.items,
           disabledMap
