@@ -16,14 +16,17 @@
 
 import React from "react";
 import {render, screen, cleanup, waitFor} from '@testing-library/react';
-import fetchMock from "jest-fetch-mock";
+import fetchMock from "fetch-mock";
 import userEvent from "@testing-library/user-event";
 import '@testing-library/jest-dom';
 import {PackageTypeSelect} from "./PackageTypeSelect.jsx";
 
 beforeEach(() => {
-  fetchMock.resetMocks();
-  fetchMock.mockResponseOnce(JSON.stringify(["maven", "npm", "generic-http"]));
+  fetchMock.restore();
+  fetchMock.mock(
+   "/api/stats/package-type/keys",
+   {status: 200, body: JSON.stringify(["maven", "npm", "generic-http"])}
+  );
 });
 
 afterEach(() => {
