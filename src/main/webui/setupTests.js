@@ -1,3 +1,3 @@
-import fetchMock, {FetchMock as fetch} from "jest-fetch-mock";
+import fetchMock from "fetch-mock";
 
-fetchMock.enableMocks();
+fetchMock.restore();

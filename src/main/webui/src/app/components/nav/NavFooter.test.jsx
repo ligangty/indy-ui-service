@@ -17,11 +17,11 @@
 import React from "react";
 import {render, screen, cleanup, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import fetchMock from "jest-fetch-mock";
+import fetchMock from "fetch-mock";
 import NavFooter from "./NavFooter.jsx";
 
 beforeEach(() => {
-  fetchMock.resetMocks();
+  fetchMock.restore();
 });
 
 afterEach(() => {
@@ -36,7 +36,7 @@ describe('Footer tests', () => {
       builder: "test-builder",
       timestamp: "2023-10-24 05:54 +0000"
     };
-    fetchMock.mockResponseOnce(JSON.stringify(mockStats));
+    fetchMock.mock("/api/stats/version-info", {status: 200, body: JSON.stringify(mockStats)});
 
     render(<NavFooter />);
     expect(screen.getByRole("link", {name: "Docs"})).toHaveAttribute("href", "http://commonjava.github.io/indy/");
