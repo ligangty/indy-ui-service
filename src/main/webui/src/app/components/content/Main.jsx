@@ -25,6 +25,8 @@ import GroupView from './group/GroupView.jsx';
 import RemoteEdit from './remote/RemoteEdit.jsx';
 import GroupEdit from './group/GroupEdit.jsx';
 import HostedEdit from './hosted/HostedEdit.jsx';
+import NFC from './addons/NFC.jsx';
+import CacheDelete from './addons/CacheDelete.jsx';
 
 // const browseCompatible=`<!--[if lt IE 7]>
 //     <p className="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -54,8 +56,12 @@ export const Main = () => <div className="container-fluid">
       <Route path="/remote/:packageType/edit/:name" element={<RemoteEdit />} />
       <Route path="/hosted/:packageType/edit/:name" element={<HostedEdit />} />
       <Route path="/group/:packageType/edit/:name" element={<GroupEdit />} />
+
+      <Route path="/nfc" element={<NFC />} />
+      <Route path="/nfc/view/all" element={<NFC />} />
+      <Route path="/cache/delete" element={<CacheDelete />} />
       {
-      // <Route exact path={["/nfc", "/nfc/view/all", "/nfc/view/:packageType/:type/:name"]} element={} />
+      // <Route exact path={["/nfc/view/:packageType/:type/:name"]} element={} />
       //
       // <Route exact path={"/logout"} element={} />
       }
