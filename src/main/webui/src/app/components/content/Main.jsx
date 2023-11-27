@@ -34,32 +34,30 @@ import HostedEdit from './hosted/HostedEdit.jsx';
 
 const Home = () => <React.Fragment>Welcome! Make a selection from the menu above to proceed.</React.Fragment>;
 
-export const Main = () => <div>
+export const Main = () => <div className="container-fluid">
     {
      // browseCompatible
     }
-    <React.Fragment>
-      <Routes>
-        <Route path="*" element={<Home />} />
-        <Route exact path="/remote/:packageType" element={<RemoteList />} />
-        <Route exact path="/hosted/:packageType" element={<HostedList />} />
-        <Route exact path="/group/:packageType" element={<GroupList />} />
+    <Routes>
+      <Route path="*" element={<Home />} />
+      <Route exact path="/remote/:packageType" element={<RemoteList />} />
+      <Route exact path="/hosted/:packageType" element={<HostedList />} />
+      <Route exact path="/group/:packageType" element={<GroupList />} />
 
-        <Route path="/remote/:packageType/view/:name" element={<RemoteView />} />
-        <Route path="/hosted/:packageType/view/:name" element={<HostedView />} />
-        <Route path="/group/:packageType/view/:name" element={<GroupView />} />
+      <Route path="/remote/:packageType/view/:name" element={<RemoteView />} />
+      <Route path="/hosted/:packageType/view/:name" element={<HostedView />} />
+      <Route path="/group/:packageType/view/:name" element={<GroupView />} />
 
-        <Route exact path="/remote/new" element={<RemoteEdit />} />
-        <Route exact path={"/hosted/new"} element={<HostedEdit />} />
-        <Route exact path={"/group/new"} element={<GroupEdit />} />
-        <Route path="/remote/:packageType/edit/:name" element={<RemoteEdit />} />
-        <Route path="/hosted/:packageType/edit/:name" element={<HostedEdit />} />
-        <Route path="/group/:packageType/edit/:name" element={<GroupEdit />} />
-        {
-        // <Route exact path={["/nfc", "/nfc/view/all", "/nfc/view/:packageType/:type/:name"]} element={} />
-        //
-        // <Route exact path={"/logout"} element={} />
-        }
-      </Routes>
-    </React.Fragment>
+      <Route exact path="/remote/new" element={<RemoteEdit />} />
+      <Route exact path={"/hosted/new"} element={<HostedEdit />} />
+      <Route exact path={"/group/new"} element={<GroupEdit />} />
+      <Route path="/remote/:packageType/edit/:name" element={<RemoteEdit />} />
+      <Route path="/hosted/:packageType/edit/:name" element={<HostedEdit />} />
+      <Route path="/group/:packageType/edit/:name" element={<GroupEdit />} />
+      {
+      // <Route exact path={["/nfc", "/nfc/view/all", "/nfc/view/:packageType/:type/:name"]} element={} />
+      //
+      // <Route exact path={"/logout"} element={} />
+      }
+    </Routes>
   </div>;
