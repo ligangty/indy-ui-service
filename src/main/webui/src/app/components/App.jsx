@@ -20,6 +20,7 @@ import NavHeader from './nav/NavHeader.jsx';
 import NavFooter from './nav/NavFooter.jsx';
 import {Main} from './content/Main.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 import './styles/indy.css';
 
 const Root = () => <React.Fragment>
