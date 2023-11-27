@@ -16,9 +16,6 @@
 
 import React from 'react';
 import {Link} from 'react-router-dom';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Button from 'react-bootstrap/Button';
-import {LinkContainer} from 'react-router-bootstrap';
 
 // TODO: This is mock user login, need to implement later for real login
 const isUserloggedIn = true;
@@ -28,51 +25,72 @@ const username = "mock";
 export default function NavHeader(){
   return (
     <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light" role="navigation">
+      <div className="container-fluid collapse navbar-collapse">
       <Link className="navbar-brand" to="">Indy</Link>
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav me-auto">
           {
             [
               {type: "remote", desc: "Remote Repositories"},
               {type: "hosted", desc: "Hosted Repositories"},
               {type: "group", desc: "Groups"}
-            ].map(o =><Dropdown key={`dropdown-${o.type}`} data-bs-theme="dark" className="mx-1">
-                <Dropdown.Toggle id={`dropdown-button-dark-${o.type}`} variant="secondary">
-                  {o.desc}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {
-                    ["maven", "generic-http", "npm"].map(pkgType => <LinkContainer key={`link-${pkgType}`} to={`/${o.type}/${pkgType}`}>
-                        <Dropdown.Item>{pkgType}</Dropdown.Item>
-                      </LinkContainer>)
-                  }
-                </Dropdown.Menu>
-              </Dropdown>)
+            ].map(o =><React.Fragment key={`frag-${o.type}`}>
+              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target={`navbarSupport-${o.type}`} aria-controls={`navbarSupport-${o.type}`} aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <div id={`navbarSupport-${o.type}`}>
+                <li key={`li-${o.type}`} className="nav-item dropdown">
+                  <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {o.desc}
+                  </a>
+                  <ul className="dropdown-menu">
+                    {
+                      ["maven", "generic-http", "npm"].map(pkgType =><li key={`li-${o.type}-${pkgType}`}>
+                        <Link className="dropdown-item" key={`link-${pkgType}`} to={`/${o.type}/${pkgType}`}>{pkgType}</Link>
+                      </li>)
+                    }
+                  </ul>
+                </li>
+              </div>
+            </React.Fragment>)
           }
-          <Button href="/q/swagger-ui/" variant="secondary" className="mx-1">REST API</Button>
-          <Dropdown data-bs-theme="dark" className="mx-1">
-            <Dropdown.Toggle id={`dropdown-button-dark-addons`} variant="secondary">
+          <li className="nav-item">
+            <a className="nav-link" href="/q/swagger-ui/">REST API</a>
+          </li>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="navbarSupport-addons" aria-controls="navbarSupport-addons" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div id="navbarSupport-addons">
+            <li className="nav-item dropdown">
+              <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               More
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <LinkContainer to="/nfc">
-                <Dropdown.Item>Not-Found Cache</Dropdown.Item>
-              </LinkContainer>
-              <LinkContainer to="/cache/delete">
-                <Dropdown.Item>Delete Cache</Dropdown.Item>
-              </LinkContainer>
-            </Dropdown.Menu>
-          </Dropdown>
+              </a>
+              <ul className="dropdown-menu">
+                <li>
+                  <Link className="dropdown-item" to="/nfc">Not-Found Cache</Link>
+                </li>
+                <li>
+                  <Link className="dropdown-item" to="/cache/delete">Delete Cache</Link>
+                </li>
+              </ul>
+            </li>
+          </div>
           </ul>
           { isUserloggedIn && <ul className="navbar-nav ms-auto">
-              <Dropdown data-bs-theme="dark" className="mx-1">
-                <Dropdown.Toggle id={`dropdown-button-dark-addons`} variant="link">
-                  {username}
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item href="/logout" variant="link">Log Out</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="navbarSupport-login" aria-controls="navbarSupport-login" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <div id="navbarSupport-login">
+                <li className="nav-item dropdown">
+                  <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {username}
+                  </a>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <a className="dropdown-item" href="/logout">Log Out</a>
+                    </li>
+                  </ul>
+                </li>
+              </div>
             </ul>
           }
       </div>
