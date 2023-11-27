@@ -150,14 +150,12 @@ export default function RemoteEdit() {
   };
 
   return (
-    <div className="container-fluid">
-
+    <React.Fragment>
       <div className="control-panel">
         <EditControlPanel mode={mode} store={store} />
       </div>
 
       <div className="content-panel">
-
         <div className="fieldset-caption">Basics</div>
         <div className="fieldset">
           <div className="detail-field">
@@ -340,7 +338,7 @@ export default function RemoteEdit() {
       {
         // <ViewJsonDebugger enableDebug={enableDebug} storeJson={storeJson} rawJson={rawJson}
       }
-    </div>
+    </React.Fragment>
   );
 }
 

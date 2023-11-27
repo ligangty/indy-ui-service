@@ -83,7 +83,7 @@ export default function RemoteList() {
   const listing = state.listing;
   const disMap = state.disabledMap;
   return (
-    <div className="container-fluid">
+    <React.Fragment>
       <ListControl
         type="remote"
         legends={options}
@@ -98,6 +98,6 @@ export default function RemoteList() {
       </div>
       }
       <ListJsonDebugger enableDebug={state.enableDebug} jsonObj={state.listing} />
-    </div>
+    </React.Fragment>
   );
 }

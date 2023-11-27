@@ -197,7 +197,7 @@ export default function RemoteView() {
   const store = state.store;
   if(!Utils.isEmptyObj(store)) {
     return (
-      <div className="container-fluid">
+      <React.Fragment>
         <div className="control-panel">
           <ControlPanel store={store} />
         </div>
@@ -221,7 +221,7 @@ export default function RemoteView() {
         {
           // <ViewJsonDebugger enableDebug={false} storeJson={store} rawJson={raw} />
         }
-      </div>
+      </React.Fragment>
     );
   }
   return null;
