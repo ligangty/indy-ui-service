@@ -96,8 +96,8 @@
               <li><a class="fa" href="#/nfc">Not-Found Cache</a></li>
               <li><a class="fa" href="#/cache/delete">Delete Metadata</a></li>
               <li class="divider"></li>
-              <li ng-repeat="addon in addon_navs"><a class="fa" href="#{{addon.route}}">{{addon.name}}</a>
-              </li>
+              <li><a class="fa" href="/api/diag/bundle">Diagnostic Bundle</a></li>
+              <li ng-repeat="addon in addon_navs"><a class="fa" href="#{{addon.route}}">{{addon.name}}</a></li>
             </ul>
           </li>
           <li class="dropdown" ng-if="username">

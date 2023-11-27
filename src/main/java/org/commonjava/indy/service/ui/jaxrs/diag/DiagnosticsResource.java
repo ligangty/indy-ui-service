@@ -15,6 +15,7 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.diag;
 
+import org.apache.commons.io.IOUtils;
 import org.commonjava.indy.service.ui.client.diag.DiagnosticsServiceClient;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
@@ -27,6 +28,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
+
+import java.io.InputStream;
 
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 
@@ -60,7 +64,7 @@ public class DiagnosticsResource
     @Produces( "application/zip" )
     public Response getBundle()
     {
-        return client.getBundle();
+        return streamBinContent( client.getBundle() );
     }
 
     @Operation( description = "Retrieve a ZIP-compressed file containing all repository definitions." )
@@ -71,7 +75,14 @@ public class DiagnosticsResource
     @Produces( "application/zip" )
     public Response getRepoBundle()
     {
-        return client.getRepoBundle();
+        return streamBinContent( client.getRepoBundle() );
+    }
+
+    private Response streamBinContent( final Response response )
+    {
+        final InputStream clientIn = response.readEntity( InputStream.class );
+        StreamingOutput out = output -> IOUtils.copy( clientIn, output );
+        return Response.status( response.getStatus() ).entity( out ).replaceAll( response.getHeaders() ).build();
     }
 
 }
