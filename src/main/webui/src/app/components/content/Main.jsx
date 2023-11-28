@@ -16,6 +16,7 @@
 
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
+import {Container} from 'react-bootstrap';
 import RemoteList from './remote/RemoteList.jsx';
 import HostedList from './hosted/HostedList.jsx';
 import GroupList from './group/GroupList.jsx';
@@ -36,7 +37,7 @@ import CacheDelete from './addons/CacheDelete.jsx';
 
 const Home = () => <React.Fragment>Welcome! Make a selection from the menu above to proceed.</React.Fragment>;
 
-export const Main = () => <div className="container-fluid">
+export const Main = () => <Container fluid>
     {
      // browseCompatible
     }
@@ -66,4 +67,4 @@ export const Main = () => <div className="container-fluid">
       // <Route exact path={"/logout"} element={} />
       }
     </Routes>
-  </div>;
+  </Container>;
