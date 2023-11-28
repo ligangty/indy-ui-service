@@ -48,7 +48,7 @@ export default function NavFooter() {
   const stats = state.stats;
   const gridClass = "col-md-auto border-right border-secondary";
   return (
-    <Navbar expand="lg" className="bg-body-tertiary fixed-bottom">
+    <Navbar expand="lg" bg="body-tertiary" fixed="bottom">
       <Container>
         <Row>
           <Col className={gridClass}>

@@ -161,7 +161,7 @@ export default function RemoteEdit() {
           <div className="detail-field">
             <label>Package Type:</label>
             {
-              mode==='new'||mode==='edit'?
+              mode==='new'?
               <React.Fragment>
                 <PackageTypeSelect
                   packageType={store.packageType}

@@ -28,7 +28,7 @@ const username = "mock";
 // eslint-disable-next-line max-lines-per-function
 export default function NavHeader(){
   return (
-    <Navbar expand="lg" className="bg-body-tertiary fixed-top">
+    <Navbar expand="lg" bg="body-tertiary" fixed="top">
       <Container fluid>
         <LinkContainer to=""><Navbar.Brand>Indy</Navbar.Brand></LinkContainer>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
