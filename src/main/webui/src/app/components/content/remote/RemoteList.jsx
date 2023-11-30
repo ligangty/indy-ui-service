@@ -34,6 +34,12 @@ const handlers = {
       rawList,
       listing: Utils.searchByKeyForNewStores(event.target.value, rawList)
     });
+  },
+  handleSortBy: (event, rawList, setState) => {
+    setState({
+      rawList,
+      listing: Utils.sortByPropForStores(event.target.value, rawList)
+    });
   }
 };
 
@@ -86,6 +92,7 @@ export default function RemoteList() {
         legends={options}
         handleSearch={event => handlers.handleSearch(event, state.rawList, setState)}
         handleDebug={event => handlers.handleDebug(event, setState)}
+        handleSortBy={event => handlers.handleSortBy(event, state.rawList, setState)}
       />
       {
       state.listing?

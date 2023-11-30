@@ -133,6 +133,41 @@ describe('AppUtils tests', () => {
     ]);
   });
 
+  it("Check sortByPropForStores", ()=>{
+    const mockData = [
+      {
+      "name": "central",
+      "type": "remote",
+      "packageType": "maven",
+      "key": "maven:remote:central",
+      "url": "https://repo.maven.apache.org/maven2"
+      },
+      {
+      "name": "mrrc",
+      "type": "remote",
+      "packageType": "maven",
+      "key": "maven:remote:mrrc",
+      "url": "https://maven.repository.redhat.com/ga/"
+      },
+      {
+      "name": "jboss.org",
+      "type": "remote",
+      "packageType": "maven",
+      "key": "maven:remote:jboss.org",
+      "url": "https://repository.jboss.org/nexus/content/repositories/"
+      }
+    ];
+    const sortByName = Utils.sortByPropForStores("name", mockData);
+    expect(sortByName).toHaveLength(3);
+    expect(sortByName[0].name).toBe("central");
+    expect(sortByName[2].name).toBe("mrrc");
+
+    const sortByUrl = Utils.sortByPropForStores("url", mockData);
+    expect(sortByUrl).toHaveLength(3);
+    expect(sortByUrl[0].name).toBe("mrrc");
+    expect(sortByUrl[2].name).toBe("jboss.org");
+  });
+
   it("Check Object utils", () => {
     expect(Utils.isEmptyObj({})).toBeTruthy();
     expect(Utils.isEmptyObj({a: 1})).toBeFalsy();

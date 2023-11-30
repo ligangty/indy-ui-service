@@ -121,6 +121,15 @@ export const Utils = {
     rawStoresList.forEach(item=>item.key.toLowerCase().includes(searchString.toLowerCase()) && newListing.push(item));
     return newListing;
   },
+  sortByPropForStores: (prop, rawStoresList) => {
+    const newListing = rawStoresList.sort((a, b) => {
+      if (a[prop] < b[prop]) {
+        return -1;
+      }
+      return 1;
+    });
+    return newListing;
+  },
   isEmptyObj: obj => Object.keys(obj).length === 0 && obj.constructor === Object,
   cloneObj: src => {
     const target = {};
