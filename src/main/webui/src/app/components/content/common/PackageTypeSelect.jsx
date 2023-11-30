@@ -24,21 +24,18 @@ export const PackageTypeSelect = ({packageType,vauleChangeHandler}) =>{
     pkgTypes: []
   });
 
-  (function() {
-    const typeUrl = '/api/stats/package-type/keys';
-    useEffect(()=>{
-      const fetchPkgTypes = async () =>{
-        const response = await jsonRest.get(typeUrl);
-        if (response.ok){
-          const pkgTypes = await response.json();
-          setState({pkgTypes});
-        }else{
-          Utils.logMessage(response);
-        }
-      };
-      fetchPkgTypes();
-    }, []);
-  }());
+  useEffect(()=>{
+    const fetchPkgTypes = async () =>{
+      const response = await jsonRest.get('/api/stats/package-type/keys');
+      if (response.ok){
+        const pkgTypes = await response.json();
+        setState({pkgTypes});
+      }else{
+        Utils.logMessage(response);
+      }
+    };
+    fetchPkgTypes();
+  }, []);
 
   const selectedValue = packageType || "maven";
   const onChangeHandler = vauleChangeHandler || (()=>{});

@@ -26,49 +26,6 @@ import {TimeUtils} from '#utils/TimeUtils.js';
 import {jsonRest} from '#utils/RestClient.js';
 import {STORE_API_BASE_URL} from "../../ComponentConstants.js";
 
-const init = (pkgType, storeName, setState) => {
-  const getUrl = `${STORE_API_BASE_URL}/${pkgType}/remote/${storeName}`;
-  useEffect(()=>{
-    const fetchStore = async () =>{
-      // get Store data
-      const response = await jsonRest.get(getUrl);
-      if (response.ok){
-        const raw = await response.json();
-        const storeView = Utils.cloneObj(raw);
-        storeView.disabled = raw.disabled === undefined ? false : raw.disabled;
-        storeView.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
-        storeView.useProxy = raw.proxy_host && true;
-        // eslint-disable-next-line no-extra-parens
-        storeView.useAuth = (storeView.useProxy && storeView.proxy_user) || storeView.user;
-
-        // get Store disablement data
-        const timeoutUrl = `/api/admin/schedule/store/${storeView.packageType}/${storeView.type}/${storeView.name}/disable-timeout`;
-        const timeoutResponse = await jsonRest.get(timeoutUrl);
-        const cloned = Utils.cloneObj(storeView);
-        if (timeoutResponse.ok){
-          const timeout = await timeoutResponse.json();
-          cloned.disableExpiration = timeout.expiration;
-        }else{
-          response.text().then(error=>Utils.logMessage(`disable timeout getting failed! Error reason: ${error}`));
-        }
-
-        // Change state and re-rendering
-        setState({
-          storeView: cloned,
-          store: raw
-        });
-      }else{
-        // TODO: find another way to do error handling
-        response.text().then(error=>setState({
-          message: error
-        }));
-      }
-    };
-
-    fetchStore();
-  }, []);
-};
-
 const CertificateSection = ({store, handleValueChange}) => <div className="sub-fields">
   {
     store.useAuth &&
@@ -113,17 +70,54 @@ export default function RemoteEdit() {
     storeView: {}
   });
   const location = useLocation();
+  const {packageType, name} = useParams();
   const path = location.pathname;
   const mode = path.match(/.*\/new$/u)? 'new':'edit';
   let [pkgType, storeName] = ["",""];
   // Give a default packageType
   let store = {"packageType": "maven", "type": "remote"};
-  if(mode === 'edit'){
-    const {packageType, name} = useParams();
-    [pkgType, storeName] = [packageType, name];
-    init(pkgType, storeName, setState);
-    store = state.store;
-  }
+  [pkgType, storeName] = [packageType, name];
+  useEffect(()=>{
+    if(mode === 'edit'){
+      const fetchStore = async () =>{
+        // get Store data
+        const response = await jsonRest.get(`${STORE_API_BASE_URL}/${pkgType}/remote/${storeName}`);
+        if (response.ok){
+          const raw = await response.json();
+          const storeView = Utils.cloneObj(raw);
+          storeView.disabled = raw.disabled === undefined ? false : raw.disabled;
+          storeView.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
+          storeView.useProxy = raw.proxy_host && true;
+          // eslint-disable-next-line no-extra-parens
+          storeView.useAuth = (storeView.useProxy && storeView.proxy_user) || storeView.user;
+          // get Store disablement data
+          const timeoutUrl = `/api/admin/schedule/store/${storeView.packageType}/${storeView.type}/${storeView.name}/disable-timeout`;
+          const timeoutResponse = await jsonRest.get(timeoutUrl);
+          const cloned = Utils.cloneObj(storeView);
+          if (timeoutResponse.ok){
+            const timeout = await timeoutResponse.json();
+            cloned.disableExpiration = timeout.expiration;
+          }else{
+            response.text().then(error=>Utils.logMessage(`disable timeout getting failed! Error reason: ${error}`));
+          }
+          // Change state and re-rendering
+          setState({
+            storeView: cloned,
+            store: raw
+          });
+        }else{
+          // TODO: find another way to do error handling
+          response.text().then(error=>setState({
+            message: error
+          }));
+        }
+      };
+
+      fetchStore();
+    }
+  }, [pkgType, storeName, mode]);
+
+  store = state.store;
 
   const handleCheckChange = (event, field) => {
     if (event.target.checked) {

@@ -17,7 +17,8 @@
     },
     "plugins": [
         "react",
-        "jest"
+        "jest",
+        "react-hooks"
     ],
     "settings": {
       "react": {
@@ -295,6 +296,8 @@
       "yoda": [
           2,
           "never"
-      ]
+      ],
+      "react-hooks/rules-of-hooks": 1,
+      "react-hooks/exhaustive-deps": 1
     }
 }

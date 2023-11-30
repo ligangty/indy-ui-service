@@ -24,26 +24,23 @@ import {Col, Row} from 'react-bootstrap';
 export default function NavFooter() {
   const [state, setState] = useState({stats: {}});
 
-  (function(){
-    const versionUrl = `/api/stats/version-info`;
-    useEffect(()=>{
-      const fetchVersion = async () => {
-        const response = await jsonRest.get(versionUrl);
-        if (response.ok){
-          const raw = await response.json();
-          setState({
-            stats: raw
-          });
-        }else{
-          response.text().then(data => {
-            Utils.logMessage(`Failed to version info. Error reason: ${response.status}->${data}`);
-          });
-        }
-      };
+  useEffect(()=>{
+    const fetchVersion = async () => {
+      const response = await jsonRest.get(`/api/stats/version-info`);
+      if (response.ok){
+        const raw = await response.json();
+        setState({
+          stats: raw
+        });
+      }else{
+        response.text().then(data => {
+          Utils.logMessage(`Failed to version info. Error reason: ${response.status}->${data}`);
+        });
+      }
+    };
 
-      fetchVersion();
-    }, []);
-  }());
+    fetchVersion();
+  }, []);
 
   const stats = state.stats;
   const gridClass = "col-md-auto border-right border-secondary";
