@@ -23,8 +23,30 @@ import {StoreListingWidget} from '../common/StoreListingWidget.jsx';
 import {Utils} from '#utils/AppUtils.js';
 import {jsonRest} from '#utils/RestClient.js';
 
+const handlers = {
+  handleDebug: (event, setState) => {
+    setState({
+      enableDebug: event.target.checked
+    });
+  },
+  handleSearch: (event, rawList, setState) => {
+    setState({
+      rawList,
+      listing: Utils.searchByKeyForNewStores(event.target.value, rawList)
+    });
+  }
+};
 
-const init = (packageType, setState) => {
+export default function RemoteList() {
+  const {packageType} = useParams();
+  const [state, setState] = useState({
+    rawList: [],
+    listing: [],
+    disabledMap: {},
+    enableDebug: false,
+    message: ''
+  });
+
   useEffect(()=>{
     const fetchdData = async ()=>{
       const response = await jsonRest.get(`${STORE_API_BASE_URL}/${packageType}/remote`);
@@ -42,6 +64,7 @@ const init = (packageType, setState) => {
           data = JSON.parse(data);
         }
         setState({
+          rawList: data.items,
           listing: data.items,
           disabledMap
         });
@@ -55,44 +78,18 @@ const init = (packageType, setState) => {
     };
     fetchdData();
   }, [packageType]);
-};
 
-const handlers = {
-  handleDebug: (event, setState) => {
-    setState({
-      enableDebug: event.target.checked
-    });
-  },
-  handleSearch: (event, rawList, setState) => {
-    setState({
-      listing: Utils.searchByKeyForNewStores(event.target.value, rawList)
-    });
-  }
-};
-
-export default function RemoteList() {
-  const {packageType} = useParams();
-  const [state, setState] = useState({
-    listing: [],
-    disabledMap: {},
-    enableDebug: false,
-    message: ''
-  });
-
-  init(packageType,setState);
-  const listing = state.listing;
-  const disMap = state.disabledMap;
   return (
     <React.Fragment>
       <ListControl
         type="remote"
         legends={options}
-        handleSearch={event => handlers.handleSearch(event, state.listing, setState)}
+        handleSearch={event => handlers.handleSearch(event, state.rawList, setState)}
         handleDebug={event => handlers.handleDebug(event, setState)}
       />
       {
-      listing?
-      <StoreListingWidget storeList={listing} disableMap={disMap} storeType="remote" />:
+      state.listing?
+      <StoreListingWidget storeList={state.listing} disableMap={state.disabledMap} storeType="remote" />:
       <div className="container-fluid">
         No content fetched!
       </div>

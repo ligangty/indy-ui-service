@@ -102,11 +102,16 @@ URLPage.propTypes = {
   listingData: PropTypes.object.isRequired
 };
 
-const init = setState => {
-  const url =`/api${document.location.pathname}`;
+export default function DirectoryListing () {
+  const [state, setState] = useState({
+      error: null,
+      isLoaded: false,
+      data: {}
+  });
+
   useEffect(()=>{
     const fetchData = async () => {
-      const response = await jsonRest.get(url);
+      const response = await jsonRest.get(`/api${document.location.pathname}`);
       if(response.ok){
         const data = await response.json();
         setState({
@@ -122,16 +127,6 @@ const init = setState => {
     };
     fetchData();
   }, []);
-};
-
-export default function DirectoryListing () {
-  const [state, setState] = useState({
-      error: null,
-      isLoaded: false,
-      data: {}
-  });
-
-  init(setState);
 
   const {error, isLoaded, data} = state;
   if (error) {

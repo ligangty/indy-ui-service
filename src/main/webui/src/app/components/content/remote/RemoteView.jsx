@@ -28,43 +28,6 @@ import {TimeUtils} from '#utils/TimeUtils.js';
 import {jsonRest} from '#utils/RestClient.js';
 import {STORE_API_BASE_URL} from '../../ComponentConstants.js';
 
-const init = (pkgType, storeName, setState) => {
-  const storeUrl = `${STORE_API_BASE_URL}/${pkgType}/remote/${storeName}`;
-  useEffect(()=>{
-    const fetchStore = async () => {
-      const response = await jsonRest.get(storeUrl);
-      if (response.ok){
-        const raw = await response.json();
-        const store = Utils.cloneObj(raw);
-        store.disabled = raw.disabled === undefined ? false : raw.disabled;
-        store.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
-        store.useProxy = raw.proxy_host && true;
-        store.useAuth = store.useProxy && store.proxy_user;
-        store.useAuth = store.useAuth || store.user;
-
-        // get Store disablement data
-        const timeoutUrl = `/api/admin/schedule/store/${store.packageType}/${store.type}/${store.name}/disable-timeout`;
-        const timeoutResponse = await jsonRest.get(timeoutUrl);
-        const newStore = Utils.cloneObj(store);
-        if(timeoutResponse.ok){
-          const timeoutData = await timeoutResponse.json();
-          newStore.disableExpiration = timeoutData.expiration;
-        }
-        // Change state and re-rendering
-        setState({
-          store: newStore
-        });
-      }else{
-        response.text().then(data => {
-          Utils.logMessage(`Failed to get store data. Error reason: ${response.status}->${data}`);
-        });
-      }
-    };
-
-    fetchStore();
-  }, []);
-};
-
 const RemoteAccessSection = ({store})=> <div className="fieldset">
   <div className="detail-field">
     <label>Request Timeout:</label>
@@ -193,7 +156,41 @@ export default function RemoteView() {
     message: ''
   });
   const {packageType, name} = useParams();
-  init(packageType, name, setState);
+
+  useEffect(()=>{
+    const fetchStore = async () => {
+      const response = await jsonRest.get(`${STORE_API_BASE_URL}/${packageType}/remote/${name}`);
+      if (response.ok){
+        const raw = await response.json();
+        const store = Utils.cloneObj(raw);
+        store.disabled = raw.disabled === undefined ? false : raw.disabled;
+        store.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
+        store.useProxy = raw.proxy_host && true;
+        store.useAuth = store.useProxy && store.proxy_user;
+        store.useAuth = store.useAuth || store.user;
+
+        // get Store disablement data
+        const timeoutUrl = `/api/admin/schedule/store/${store.packageType}/${store.type}/${store.name}/disable-timeout`;
+        const timeoutResponse = await jsonRest.get(timeoutUrl);
+        const newStore = Utils.cloneObj(store);
+        if(timeoutResponse.ok){
+          const timeoutData = await timeoutResponse.json();
+          newStore.disableExpiration = timeoutData.expiration;
+        }
+        // Change state and re-rendering
+        setState({
+          store: newStore
+        });
+      }else{
+        response.text().then(data => {
+          Utils.logMessage(`Failed to get store data. Error reason: ${response.status}->${data}`);
+        });
+      }
+    };
+
+    fetchStore();
+  }, [packageType, name]);
+
   const store = state.store;
   if(!Utils.isEmptyObj(store)) {
     return (
