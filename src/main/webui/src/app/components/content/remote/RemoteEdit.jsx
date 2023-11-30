@@ -117,7 +117,9 @@ export default function RemoteEdit() {
     }
   }, [pkgType, storeName, mode]);
 
-  store = state.store;
+  if (mode === 'edit'){
+    store = state.store;
+  }
 
   const handleCheckChange = (event, field) => {
     if (event.target.checked) {
