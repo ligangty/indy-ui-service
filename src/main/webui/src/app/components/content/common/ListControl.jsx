@@ -19,7 +19,7 @@ import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 
-export default function ListControl({type, legends, handleHideAll, handleSearch, handleDebug}) {
+export default function ListControl({type, legends, handleHideAll, handleSearch, handleDebug, handleSortBy}) {
   const [debug, setDebug] = useState(false);
   const navigate = useNavigate();
   return (
@@ -38,7 +38,7 @@ export default function ListControl({type, legends, handleHideAll, handleSearch,
         type==="remote" &&
           <div className="cp-row">
             Sort by:{' '}
-            <select name="orderProp">
+            <select name="orderProp" onChange={handleSortBy}>
               {
                 [
                   {value: 'key', text: 'Name'},
@@ -83,5 +83,6 @@ ListControl.propTypes={
   legends: PropTypes.array,
   handleHideAll: PropTypes.func,
   handleSearch: PropTypes.func.isRequired,
-  handleDebug: PropTypes.func
+  handleDebug: PropTypes.func,
+  handleSortBy: PropTypes.func
 };
