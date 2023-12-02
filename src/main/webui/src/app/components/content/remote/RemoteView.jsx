@@ -21,6 +21,7 @@ import {StoreViewControlPanel as ControlPanel} from '../common/StoreControlPanel
 import {Hint, PasswordMask} from '../common/Hints.jsx';
 import {StoreViewBasicSection as BasicSection} from '../common/StoreBasicSections.jsx';
 import {StoreViewCapabilitiesSection} from '../common/StoreCapabilitiesSections.jsx';
+import {LoadingSpiner} from '../common/LoadingSpiner.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
 import {Filters} from '#utils/Filters.js';
 import {Utils} from '#utils/AppUtils.js';
@@ -155,9 +156,11 @@ export default function RemoteView() {
     raw: {},
     message: ''
   });
+  const [loading, setLoading] = useState(true);
   const {packageType, name} = useParams();
 
   useEffect(()=>{
+    setLoading(true);
     const fetchStore = async () => {
       const response = await jsonRest.get(`${STORE_API_BASE_URL}/${packageType}/remote/${name}`);
       if (response.ok){
@@ -186,10 +189,15 @@ export default function RemoteView() {
           Utils.logMessage(`Failed to get store data. Error reason: ${response.status}->${data}`);
         });
       }
+      setLoading(false);
     };
 
     fetchStore();
   }, [packageType, name]);
+
+  if (loading) {
+    return <LoadingSpiner />;
+  }
 
   const store = state.store;
   if(!Utils.isEmptyObj(store)) {

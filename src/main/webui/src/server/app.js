@@ -3,6 +3,7 @@ import compression from 'compression';
 import express from 'express';
 import path from 'path';
 import {Config} from './config/AppConfig';
+import {existsSync} from 'fs';
 
 const projectRoot = path.resolve(__dirname, '../../dist');
 const indexHtml=path.join(projectRoot+'/index.html');
@@ -38,33 +39,47 @@ app.get('/api/stats/version-info', (req, res) => {
 });
 
 const decideMockListFile = (packgeType, type) => {
-  const pkgToFileMapping = {"maven": "Maven", "npm": "NPM"};
+  const pkgToFileMapping = {"maven": "Maven", "generic-http": "Generic", "npm": "NPM"};
   const typeToFileMapping = {"remote": "Remote", "hosted": "Hosted", "group": "Group"};
-  return `./mock/list/Fake${pkgToFileMapping[packgeType]}${typeToFileMapping[type]}List.json`;
+  path.resolve(__dirname, './file-location');
+  return path.resolve(__dirname, `./mock/list/Fake${pkgToFileMapping[packgeType]}${typeToFileMapping[type]}List.json`);
 };
 
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 // For store listing
-app.get(`${STORE_API_BASE}/:packageType/:type`, (req, res) => {
+app.get(`${STORE_API_BASE}/:packageType/:type`, async (req, res) => {
+  await sleep(2000);
   const [pkgType, type] = [req.params.packageType, req.params.type];
   if(pkgType==="_all"){
     // TODO: do all packageType for type handling here
   }
   const mockFile = decideMockListFile(pkgType, type);
-  const list = require(mockFile);
-  res.status(200).json(list);
+  if(existsSync(mockFile)){
+    const list = require(mockFile);
+    res.status(200).json(list);
+  }else{
+    res.status(404).json({error: "No such stores!"});
+  }
 });
 
 // For single store get
-app.get(`${STORE_API_BASE}/:packageType/:type/:name`, (req, res) => {
+app.get(`${STORE_API_BASE}/:packageType/:type/:name`, async (req, res) => {
+  await sleep(1000);
   const [pkgType, type, name] = [req.params.packageType, req.params.type, req.params.name];
   if(pkgType && type && name){
     const mockListFile = decideMockListFile(pkgType, type);
-    const repoList = require(mockListFile);
-    const result = repoList.items.find(item=>item.name===name);
-    if(result){
-      res.status(200).json(result);
+    if(existsSync(mockListFile)){
+      const repoList = require(mockListFile);
+      const result = repoList.items.find(item=>item.name===name);
+      if(result){
+        res.status(200).json(result);
+      }else{
+        res.status(404).json({error: "No such store!"});
+      }
     }else{
-      res.status(404).json({error: "No such store!"});
+      res.status(404).json({error: "No such stores!"});
     }
   }else{
     res.status(400).json({error: "Missing store name"});

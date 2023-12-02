@@ -20,6 +20,7 @@ import {ListJsonDebugger} from '../common/Debugger.jsx';
 import ListControl from "../common/ListControl.jsx";
 import {remoteOptionLegend as options, STORE_API_BASE_URL} from "../../ComponentConstants.js";
 import {StoreListingWidget} from '../common/StoreListingWidget.jsx';
+import {LoadingSpiner} from "../common/LoadingSpiner.jsx";
 import {Utils} from '#utils/AppUtils.js';
 import {jsonRest} from '#utils/RestClient.js';
 
@@ -52,8 +53,10 @@ export default function RemoteList() {
     enableDebug: false,
     message: ''
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(()=>{
+    setLoading(true);
     const fetchdData = async ()=>{
       const response = await jsonRest.get(`${STORE_API_BASE_URL}/${packageType}/remote`);
       if (response.ok){
@@ -81,9 +84,14 @@ export default function RemoteList() {
           });
         });
       }
+      setLoading(false);
     };
     fetchdData();
   }, [packageType]);
+
+  if (loading) {
+    return <LoadingSpiner />;
+  }
 
   return (
     <React.Fragment>
