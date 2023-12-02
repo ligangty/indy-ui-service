@@ -445,3 +445,12 @@ label, .label{
     float: right;
     margin-bottom: 6px;
 }
+
+.loader {
+  color: rgb(0, 0, 0);
+  display: inline-block;
+  position: relative;
+  font-size: 24px;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+}
