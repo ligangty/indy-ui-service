@@ -19,10 +19,11 @@ import {PropTypes} from 'prop-types';
 import {jsonRest} from '#utils/RestClient.js';
 import {Utils} from '#utils/AppUtils';
 
-export const PackageTypeSelect = ({packageType,vauleChangeHandler}) =>{
+export const PackageTypeSelect = ({register, formErrors}) =>{
   const [state, setState] = useState({
     pkgTypes: []
   });
+  const [selected, setSelected] = useState();
 
   useEffect(()=>{
     const fetchPkgTypes = async () =>{
@@ -37,18 +38,23 @@ export const PackageTypeSelect = ({packageType,vauleChangeHandler}) =>{
     fetchPkgTypes();
   }, []);
 
-  const selectedValue = packageType || "maven";
-  const onChangeHandler = vauleChangeHandler || (()=>{});
+  let registered = {};
+  if(register){
+    registered = register("packageType", {required: true});
+  }
   return <span>
-    <select value={selectedValue} onChange={onChangeHandler}>
+    <select role="pkgTypeSel" value={selected}
+      onChange={e => setSelected(e.target.value)} {...registered}>
+      <option value=""></option>
       {
         state.pkgTypes.map(type => <option key={`pkgType:${type}`} value={type}>{type}</option>)
       }
-    </select>
+    </select>{' '}
+    {formErrors && formErrors.packageType?.type === "required" && <span className="alert">Package Type is required</span>}
   </span>;
 };
 
 PackageTypeSelect.propTypes = {
-  packageType: PropTypes.string,
-  vauleChangeHandler: PropTypes.func
+  register: PropTypes.func,
+  formErrors: PropTypes.object
 };

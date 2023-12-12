@@ -66,9 +66,9 @@ StoreViewControlPanel.propTypes={
   store: PropTypes.object
 };
 
-const StoreEditControlPanel = ({mode, store}) =>{
+const StoreEditControlPanel = ({mode, store, handleSubmit}) =>{
   const navigate = useNavigate();
-  const handleSave = () => {
+  const save = () => {
     const saveUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
     const saveStore = async () => {
       let response = {};
@@ -115,6 +115,16 @@ const StoreEditControlPanel = ({mode, store}) =>{
     }
   };
 
+  let handleSave = () => save();
+  if(handleSubmit && typeof handleSubmit === 'function'){
+    // console.log(handleSubmit);
+    handleSave = handleSubmit(data=>{
+      data.disabled = !data.enabled;
+      data.enabled = undefined;
+      Utils.rewriteTargetObject(data, store);
+      save();
+    });
+  }
   return <div className="cp-row">
     <button name="save" onClick={handleSave} className="cp-button">Save</button>{'  '}
     <button name="cancel" onClick={handleCancel} className="cp-button">Cancel</button>{'  '}
@@ -127,7 +137,8 @@ const StoreEditControlPanel = ({mode, store}) =>{
 };
 StoreEditControlPanel.propTypes={
   mode: PropTypes.string,
-  store: PropTypes.object
+  store: PropTypes.object,
+  handleSubmit: PropTypes.func
 };
 
 export {StoreViewControlPanel, StoreEditControlPanel};

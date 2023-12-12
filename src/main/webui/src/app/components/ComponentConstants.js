@@ -28,5 +28,12 @@ const hostedOptionLegend = [
 
 const STORE_API_BASE_URL = "/api/admin/stores";
 
+const PATTERNS={
+  URL: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/u
+};
 
-export {remoteOptionLegend, hostedOptionLegend, STORE_API_BASE_URL};
+
+export {remoteOptionLegend,
+   hostedOptionLegend,
+   STORE_API_BASE_URL,
+   PATTERNS};

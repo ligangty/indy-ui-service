@@ -144,5 +144,15 @@ export const Utils = {
     const allParams = [message];
     params.forEach(p => allParams.push(p));
     Reflect.apply(console.log, undefined, allParams);
+  },
+  rewriteTargetObject: (origin, target) => {
+    for (const prop in origin) {
+      if (origin[prop] !== undefined){
+        const val = origin[prop];
+        if(typeof val !== 'string' || val.trim() !== ''){
+          target[prop] = val;
+        }
+      }
+    }
   }
 };

@@ -179,4 +179,51 @@ describe('AppUtils tests', () => {
     expect(Utils.cloneObj({a: {b: "2"}, c: ["3", "4"]})).toEqual({c: ["3", "4"], a: {b: "2"}});
   });
 
+  it("Check rewriteTargetObject", ()=>{
+    let origin = {
+      "name": "central",
+      "type": "remote",
+      "packageType": "maven",
+      "key": "maven:remote:central",
+      "url": "https://repo1.maven.org/maven2/"
+      };
+    let target = {};
+    Utils.rewriteTargetObject(origin, target);
+    expect(target).toEqual(origin);
+
+    target = {
+      "name": "central",
+      "type": "remote",
+      "packageType": "maven",
+      "key": "maven:remote:central",
+      "url": "https://notexist.com/fake/"
+    };
+    Utils.rewriteTargetObject(origin, target);
+    expect(target).toEqual(origin);
+
+    origin ={
+      "name": "central",
+      "type": "remote",
+      "packageType": "maven",
+      "key": "maven:remote:central",
+      "url": " ",
+    };
+    target = {
+      "name": "central",
+      "type": "remote",
+      "packageType": "maven",
+      "key": "maven:remote:central",
+      "url": "https://repo2.maven.org/maven2/",
+      "user": "testUser"
+    };
+    Utils.rewriteTargetObject(origin, target);
+    expect(target.name).toEqual(origin.name);
+    expect(target.type).toEqual(origin.type);
+    expect(target.packageType).toEqual(origin.packageType);
+    expect(target.url).not.toEqual(origin.url);
+    expect(target.url).toBe("https://repo2.maven.org/maven2/");
+    expect(target.user).not.toEqual(origin.user);
+    expect(target.user).toBe("testUser");
+  });
+
 });
