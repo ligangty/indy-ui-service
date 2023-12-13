@@ -80,6 +80,7 @@ export default function RemoteEdit() {
   const {
     register,
     reset,
+    trigger,
     handleSubmit,
     formState: {errors}
   } = useForm();
@@ -149,10 +150,12 @@ export default function RemoteEdit() {
     setUseX509(event.target.checked);
   };
 
+  const changelog = register("changelog");
   return (
     <form onSubmit={e => e.preventDefault()}>
       <div className="control-panel">
-        <EditControlPanel mode={mode} store={store} handleSubmit={handleSubmit} />
+        <EditControlPanel mode={mode} store={store}
+         handleSubmit={handleSubmit} validate={trigger} changelog={changelog} />
       </div>
 
       <div className="content-panel">
