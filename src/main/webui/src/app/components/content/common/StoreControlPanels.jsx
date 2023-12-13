@@ -41,6 +41,23 @@ const save = (store, mode, postSuccessHandler) => {
   saveStore();
 };
 
+const remove = (store, postHandler) => {
+  const deleteUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
+  const removeStore = async ()=>{
+    const response = await http.delete(deleteUrl);
+    if(!response.ok && response.status >= 400){
+      // TODO: Some other way to handle errors?
+      logErrors(response);
+    }
+    if(response.status===204){
+      // TODO: Some other way to show deletion success?
+      Utils.logMessage("Store deleted.");
+    }
+    postHandler(store);
+  };
+  removeStore();
+};
+
 const StoreViewControlPanel = function({store}){
   const navigate = useNavigate();
   const handleEnable = () =>{
@@ -64,19 +81,7 @@ const StoreViewControlPanel = function({store}){
   const [enableText, enableHandler] = store.disabled?["Enable",handleEnable]:["Disable",handleDisable];
 
   const [pkgType, storeType, storeName] = [store.packageType, store.type, store.name];
-  const storeUrl = `${STORE_API_BASE_URL}/${pkgType}/${storeType}/${storeName}`;
-  const handleRemove = async ()=>{
-    const response = await http.delete(storeUrl);
-    if(!response.ok && response.status >= 400){
-      // TODO: Some other way to handle errors?
-      logErrors(response);
-    }
-    if(response.status===204){
-      // TODO: Some other way to show deletion success?
-      Utils.logMessage("Store deleted.");
-    }
-    navigate(`/${store.type}`);
-  };
+  const handleRemove = () => remove(store, st => navigate(`/${st.type}/${st.packageType}`));
 
   return(
     <div className="cp-row-group">
@@ -100,9 +105,7 @@ StoreViewControlPanel.propTypes={
 
 const StoreEditControlPanel = ({mode, store, handleSubmit}) =>{
   const navigate = useNavigate();
-  const postSuccessHandler = st =>{
-    navigate(`/${st.type}/${st.packageType}/view/${st.name}`);
-  };
+  const postSuccessHandler = st => navigate(`/${st.type}/${st.packageType}/view/${st.name}`);
 
   const handleCancel = () => {
     if(mode === 'edit'){
@@ -116,18 +119,7 @@ const StoreEditControlPanel = ({mode, store, handleSubmit}) =>{
   const handleRemove = () => {
     // Only edit page should handle delete logic
     if(mode==="edit"){
-      const deleteUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
-      const deleteStore = async () => {
-        const response = await http.delete(deleteUrl);
-        if (!response.ok){
-          // TODO: find another way to do error handling
-          response.text().then(error=>Utils.logMessage(error));
-        }
-        if(response.status >= 200 || response.status < 300){
-          navigate(`/${store.type}/${store.packageType}`);
-        }
-      };
-      deleteStore();
+      remove(store, st => navigate(`/${st.type}/${st.packageType}`));
     }
   };
 
