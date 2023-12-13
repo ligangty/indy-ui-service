@@ -18,18 +18,50 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import {Utils} from '#utils/AppUtils';
-import {jsonRest,http} from '#utils/RestClient';
+import {jsonRest,http, logErrors} from '#utils/RestClient';
 import {STORE_API_BASE_URL} from '../../ComponentConstants';
 
+const save = (store, mode, postSuccessHandler) => {
+  const saveUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
+  const saveStore = async () => {
+    let response = {};
+    if(mode==="new"){
+      response = await jsonRest.post(saveUrl, store);
+    }else if(mode ==="edit"){
+      response = await jsonRest.put(saveUrl, store);
+    }
+    if (!response.ok){
+      // TODO: find another way to do error handling
+      logErrors(response);
+    }
+    if(response.status >= 200 || response.status < 300){
+      postSuccessHandler(store);
+    }
+  };
+  saveStore();
+};
+
 const StoreViewControlPanel = function({store}){
+  const navigate = useNavigate();
   const handleEnable = () =>{
-    // TODO: need to implement
+    store.disabled = false;
+    if(store.metadata){
+      store.metadata.changelog = "Enabling via UI";
+    }else{
+      store.metadata = {changelog: "Enabling via UI"};
+    }
+    save(store, "edit", st => navigate(`/${st.type}/${st.packageType}/view/${st.name}`));
   };
   const handleDisable = () =>{
-    // TODO: need to implement
+    store.disabled = true;
+    if(store.metadata){
+      store.metadata.changelog = "Disabling indefinitely via UI";
+    }else{
+      store.metadata = {changelog: "Disabling indefinitely via UI"};
+    }
+    save(store, "edit", st => navigate(`/${st.type}/${st.packageType}/view/${st.name}`));
   };
   const [enableText, enableHandler] = store.disabled?["Enable",handleEnable]:["Disable",handleDisable];
-  const navigate = useNavigate();
 
   const [pkgType, storeType, storeName] = [store.packageType, store.type, store.name];
   const storeUrl = `${STORE_API_BASE_URL}/${pkgType}/${storeType}/${storeName}`;
@@ -37,7 +69,7 @@ const StoreViewControlPanel = function({store}){
     const response = await http.delete(storeUrl);
     if(!response.ok && response.status >= 400){
       // TODO: Some other way to handle errors?
-      response.text().then(error=>Utils.logMessage(error));
+      logErrors(response);
     }
     if(response.status===204){
       // TODO: Some other way to show deletion success?
@@ -68,24 +100,8 @@ StoreViewControlPanel.propTypes={
 
 const StoreEditControlPanel = ({mode, store, handleSubmit}) =>{
   const navigate = useNavigate();
-  const save = () => {
-    const saveUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
-    const saveStore = async () => {
-      let response = {};
-      if(mode==="new"){
-        response = await jsonRest.post(saveUrl, store);
-      }else if(mode ==="edit"){
-        response = await jsonRest.put(saveUrl, store);
-      }
-      if (!response.ok){
-        // TODO: find another way to do error handling
-        response.text().then(error=>Utils.logMessage(error));
-      }
-      if(response.status >= 200 || response.status < 300){
-        navigate(`/${store.type}/${store.packageType}/view/${store.name}`);
-      }
-    };
-    saveStore();
+  const postSuccessHandler = st =>{
+    navigate(`/${st.type}/${st.packageType}/view/${st.name}`);
   };
 
   const handleCancel = () => {
@@ -115,14 +131,14 @@ const StoreEditControlPanel = ({mode, store, handleSubmit}) =>{
     }
   };
 
-  let handleSave = () => save();
+  let handleSave = () => save(store, mode, postSuccessHandler);
   if(handleSubmit && typeof handleSubmit === 'function'){
     // console.log(handleSubmit);
     handleSave = handleSubmit(data=>{
       data.disabled = !data.enabled;
       data.enabled = undefined;
       Utils.rewriteTargetObject(data, store);
-      save();
+      save(store, mode, postSuccessHandler);
     });
   }
   return <div className="cp-row">

@@ -34,4 +34,12 @@ const jsonRest ={
   put: (url, payload) => httpCall(url, "PUT", {"Content-type": "application/json"}, JSON.stringify(payload))
 };
 
-export {http, jsonRest};
+const logErrors = response => {
+  if(response.text()){
+    response.text().then(error=>console.log(error));
+  }else{
+    console.log(`Something wrong: ${response.status} -> ${response.statusText}`);
+  }
+};
+
+export {http, jsonRest, logErrors};
