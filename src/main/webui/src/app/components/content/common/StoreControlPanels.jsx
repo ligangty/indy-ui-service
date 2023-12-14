@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import {Utils} from '#utils/AppUtils';
 import {jsonRest,http, logErrors} from '#utils/RestClient';
 import {STORE_API_BASE_URL} from '../../ComponentConstants';
+import {ConfirmDialog} from './PopupDialogs.jsx';
 
 const save = (store, mode, postSuccessHandler) => {
   const saveUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
@@ -80,8 +81,15 @@ const StoreViewControlPanel = function({store}){
   };
   const [enableText, enableHandler] = store.disabled?["Enable",handleEnable]:["Disable",handleDisable];
 
-  const [pkgType, storeType, storeName] = [store.packageType, store.type, store.name];
+  const [showConfirmBox, setShowConfirm] = useState(false);
+  const showConfirmLog = () =>{
+    setShowConfirm(true);
+  };
+  const cancelConfirmLog = ()=>{
+    setShowConfirm(false);
+  };
   const handleRemove = () => remove(store, st => navigate(`/${st.type}/${st.packageType}`));
+  const [pkgType, storeType, storeName] = [store.packageType, store.type, store.name];
 
   return(
     <div className="cp-row-group">
@@ -91,9 +99,10 @@ const StoreViewControlPanel = function({store}){
       <div className="cp-row">
         <button onClick={()=>navigate(`/${storeType}/${pkgType}/edit/${storeName}`)}>Edit</button>{'  '}
         <button onClick={()=>navigate(`/${storeType}/new`)}>New...</button>{'  '}
-        <button name="del" onClick={handleRemove} className="del-button cp-button">
+        <button name="delete" onClick={showConfirmLog} className="del-button cp-button">
           Delete
         </button>
+        <ConfirmDialog showBox={showConfirmBox} handleCancel={cancelConfirmLog} handleConfirm={handleRemove} />
       </div>
     </div>
   );
