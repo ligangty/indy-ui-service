@@ -19,6 +19,30 @@ import {PropTypes} from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
+const ChangeLogDialog = ({showBox, handleSave, handleCancel, changelog}) => <Modal show={showBox} onHide={handleCancel}>
+    <Modal.Header closeButton>
+      <Modal.Title><b>Enter a summary for this change:</b></Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      <textarea cols="20" rows="5" style={{height: "130px"}} {...changelog}></textarea>
+    </Modal.Body>
+    <Modal.Footer>
+      <Button variant="secondary" onClick={handleCancel}>
+        Cancel
+      </Button>
+      <Button variant="primary" onClick={handleSave}>
+        Save
+      </Button>
+    </Modal.Footer>
+  </Modal>;
+
+ChangeLogDialog.propTypes={
+  showBox: PropTypes.bool,
+  handleSave: PropTypes.func,
+  handleCancel: PropTypes.func,
+  changelog: PropTypes.object
+};
+
 const ConfirmDialog = ({showBox, handleConfirm, handleCancel}) => <Modal show={showBox} onHide={handleCancel}>
   <Modal.Header>
     <Modal.Title><b>Are you sure to delete this repository?</b></Modal.Title>
@@ -39,4 +63,4 @@ ConfirmDialog.propTypes={
   handleCancel: PropTypes.func
 };
 
-export {ConfirmDialog};
+export {ChangeLogDialog, ConfirmDialog};

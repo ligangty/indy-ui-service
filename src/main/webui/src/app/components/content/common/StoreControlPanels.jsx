@@ -16,11 +16,12 @@
 
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+// import {Modal} from 'bootstrap';
 import {PropTypes} from 'prop-types';
 import {Utils} from '#utils/AppUtils';
 import {jsonRest,http, logErrors} from '#utils/RestClient';
 import {STORE_API_BASE_URL} from '../../ComponentConstants';
-import {ConfirmDialog} from './PopupDialogs.jsx';
+import {ChangeLogDialog, ConfirmDialog} from './PopupDialogs.jsx';
 
 const save = (store, mode, postSuccessHandler) => {
   const saveUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
@@ -112,9 +113,8 @@ StoreViewControlPanel.propTypes={
   store: PropTypes.object
 };
 
-const StoreEditControlPanel = ({mode, store, handleSubmit}) =>{
+const StoreEditControlPanel = ({mode, store, handleSubmit, validate, changelog}) =>{
   const navigate = useNavigate();
-  const postSuccessHandler = st => navigate(`/${st.type}/${st.packageType}/view/${st.name}`);
 
   const handleCancel = () => {
     if(mode === 'edit'){
@@ -132,30 +132,63 @@ const StoreEditControlPanel = ({mode, store, handleSubmit}) =>{
     }
   };
 
+  const postSuccessHandler = st => navigate(`/${st.type}/${st.packageType}/view/${st.name}`);
   let handleSave = () => save(store, mode, postSuccessHandler);
   if(handleSubmit && typeof handleSubmit === 'function'){
     // console.log(handleSubmit);
     handleSave = handleSubmit(data=>{
       data.disabled = !data.enabled;
       data.enabled = undefined;
+      if(data.changelog && data.changelog.trim() !== ''){
+        if(store.metadata){
+          store.metadata.changelog = data.changelog;
+        }else{
+          store.metadata = {changelog: data.changelog};
+        }
+        data.changelog = undefined;
+      }
       Utils.rewriteTargetObject(data, store);
       save(store, mode, postSuccessHandler);
     });
   }
+
+  const [showChangeBox, setShowChange] = useState(false);
+  const showCommitMsg = () =>{
+    validate().then(valid => valid && setShowChange(true));
+  };
+  const cancelCommitMsg = ()=>{
+    setShowChange(false);
+  };
+
+  const [showConfirmBox, setShowConfirm] = useState(false);
+  const showConfirmLog = () =>{
+    validate().then(valid => valid && setShowConfirm(true));
+  };
+  const cancelConfirmLog = ()=>{
+    setShowConfirm(false);
+  };
+
   return <div className="cp-row">
-    <button name="save" onClick={handleSave} className="cp-button">Save</button>{'  '}
+    <button name="save" onClick={showCommitMsg} className="cp-button">Save</button>{'  '}
     <button name="cancel" onClick={handleCancel} className="cp-button">Cancel</button>{'  '}
     {
-      mode==="edit" && <button name="del" onClick={handleRemove} className="del-button cp-button">
-        Delete
-      </button>
+      mode==="edit" && <React.Fragment>
+        <button name="delete" onClick={showConfirmLog} className="del-button cp-button">
+          Delete
+        </button>
+        <ConfirmDialog showBox={showConfirmBox} handleCancel={cancelConfirmLog} handleConfirm={handleRemove} />
+      </React.Fragment>
     }
+    <ChangeLogDialog showBox={showChangeBox} handleCancel={cancelCommitMsg} handleSave={handleSave} changelog={changelog} />
   </div>;
 };
+
 StoreEditControlPanel.propTypes={
   mode: PropTypes.string,
   store: PropTypes.object,
-  handleSubmit: PropTypes.func
+  handleSubmit: PropTypes.func,
+  validate: PropTypes.func,
+  changelog: PropTypes.object
 };
 
 export {StoreViewControlPanel, StoreEditControlPanel};
