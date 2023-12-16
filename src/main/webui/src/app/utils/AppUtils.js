@@ -154,5 +154,30 @@ export const Utils = {
         }
       }
     }
-  }
+  },
+  sortEndpoints: endpoints => {
+    let typeOrder = ['group', 'remote', 'hosted'];
+    return endpoints.sort((a, b) => {
+      let ta = typeOrder.indexOf(a.type);
+      let tb = typeOrder.indexOf(b.type);
+
+      if (ta !== tb){
+        return ta < tb ? -1 : 1;
+      }
+
+      if (a.packageType < b.packageType){
+        return -1;
+      }else if (b.packageType < a.packageType){
+        return 1;
+      }
+
+      if (a.name < b.name){
+        return -1;
+      }else if (b.name < a.name){
+        return 1;
+      }
+
+      return 0;
+    });
+  },
 };

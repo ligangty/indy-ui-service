@@ -24,8 +24,10 @@ import {PackageTypeSelect} from '../common/PackageTypeSelect.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
 import {Utils} from '#utils/AppUtils.js';
 import {TimeUtils} from '#utils/TimeUtils.js';
-import {jsonRest} from '#utils/RestClient.js';
-import {STORE_API_BASE_URL, PATTERNS} from "../../ComponentConstants.js";
+import {IndyRest} from '#utils/RestClient.js';
+import {PATTERNS} from "../../ComponentConstants.js";
+
+const {storeRes, disableRes} = IndyRest;
 
 const CertificateSection = ({store, register}) => <div className="sub-fields">
   {
@@ -87,18 +89,15 @@ export default function RemoteEdit() {
 
   const path = location.pathname;
   const mode = path.match(/.*\/new$/u)? 'new':'edit';
-  let [pkgType, storeName] = ["",""];
   // Give a default packageType
   let store = {"packageType": "maven", "type": "remote"};
-  [pkgType, storeName] = [packageType, name];
-  const storeAPIEndpoint = `${STORE_API_BASE_URL}/${pkgType}/remote/${storeName}`;
   useEffect(()=>{
     if(mode === 'edit'){
       const fetchStore = async () =>{
         // get Store data
-        const response = await jsonRest.get(storeAPIEndpoint);
-        if (response.ok){
-          const raw = await response.json();
+        const res = await storeRes.get(packageType, "remote", name);
+        if (res.success){
+          const raw = res.result;
           const storeView = Utils.cloneObj(raw);
           storeView.disabled = raw.disabled === undefined ? false : raw.disabled;
           storeView.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
@@ -106,14 +105,13 @@ export default function RemoteEdit() {
           // eslint-disable-next-line no-extra-parens
           storeView.useAuth = (storeView.useProxy && storeView.proxy_user) || storeView.user;
           // get Store disablement data
-          const timeoutUrl = `/api/admin/schedule/store/${storeView.packageType}/${storeView.type}/${storeView.name}/disable-timeout`;
-          const timeoutResponse = await jsonRest.get(timeoutUrl);
+          const timeoutRes = await disableRes.getStoreTimeout(store.packageType, store.type, store.name);
           const cloned = Utils.cloneObj(storeView);
-          if (timeoutResponse.ok){
-            const timeout = await timeoutResponse.json();
+          if (timeoutRes.success){
+            const timeout = timeoutRes.result;
             cloned.disableExpiration = timeout.expiration;
           }else{
-            response.text().then(error=>Utils.logMessage(`disable timeout getting failed! Error reason: ${error}`));
+            Utils.logMessage(`disable timeout getting failed! Error reason: ${timeoutRes.error.message}`);
           }
           // Change state and re-rendering
           setState({
@@ -126,15 +124,13 @@ export default function RemoteEdit() {
           setUseX509(storeView.useX509);
         }else{
           // TODO: find another way to do error handling
-          response.text().then(error=>setState({
-            message: error
-          }));
+          Utils.logMessage(`Failed to get store data. Error reason: ${res.error.status}->${res.error.message}`);
         }
       };
 
       fetchStore();
     }
-  }, [storeAPIEndpoint, mode, reset]);
+  }, [packageType, name, mode, reset]);
 
   if (mode === 'edit'){
     store = state.store;

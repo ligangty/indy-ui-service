@@ -19,24 +19,25 @@ import {useNavigate} from 'react-router-dom';
 // import {Modal} from 'bootstrap';
 import {PropTypes} from 'prop-types';
 import {Utils} from '#utils/AppUtils';
-import {jsonRest,http, logErrors} from '#utils/RestClient';
+import {IndyRest, logErrors} from '#utils/RestClient';
 import {STORE_API_BASE_URL} from '../../ComponentConstants';
 import {ChangeLogDialog, ConfirmDialog} from './PopupDialogs.jsx';
 
+const {storeRes} = IndyRest;
+
 const save = (store, mode, postSuccessHandler) => {
-  const saveUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
   const saveStore = async () => {
-    let response = {};
+    let res = {};
     if(mode==="new"){
-      response = await jsonRest.post(saveUrl, store);
+      res = await storeRes.create(store);
     }else if(mode ==="edit"){
-      response = await jsonRest.put(saveUrl, store);
+      res = await storeRes.update(store);
     }
-    if (!response.ok){
+    if (!res.success){
       // TODO: find another way to do error handling
-      logErrors(response);
+      Utils.logMessage(res.error.message);
     }
-    if(response.status >= 200 || response.status < 300){
+    if(res.success){
       postSuccessHandler(store);
     }
   };
@@ -44,14 +45,13 @@ const save = (store, mode, postSuccessHandler) => {
 };
 
 const remove = (store, postHandler) => {
-  const deleteUrl = `${STORE_API_BASE_URL}/${store.packageType}/${store.type}/${store.name}`;
   const removeStore = async ()=>{
-    const response = await http.delete(deleteUrl);
-    if(!response.ok && response.status >= 400){
+    const res = await storeRes.delete(store.packageType, store.type, store.name);
+    if(!res.success){
       // TODO: Some other way to handle errors?
-      logErrors(response);
+      Utils.logMessage(res.error.message);
     }
-    if(response.status===204){
+    if(res.success){
       // TODO: Some other way to show deletion success?
       Utils.logMessage("Store deleted.");
     }

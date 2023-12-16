@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 const httpCall = (url, method, headers={}, payload) => fetch(url, {
   method,
   credentials: 'same-origin',
@@ -42,4 +43,78 @@ const logErrors = response => {
   }
 };
 
-export {http, jsonRest, logErrors};
+const BASE_API_PATH = "/api/admin/stores";
+const storeAPIEndpoint = (pkgType, type, name) => `${BASE_API_PATH}/${pkgType}/${type}/${name}`;
+
+const handleResponse = async response => {
+  if (response.ok){
+    const store = await response.json();
+    return {result: store, success: true};
+  }
+  const responseMsg = await response.text();
+  if(responseMsg){
+    return {success: false, error: {status: response.status, message: responseMsg}};
+  }
+  return {success: false, error: {status: response.status, message: response.statusText}};
+};
+const IndyRest = {
+  statsRes: {
+    getAllPkgTypes: async () =>{
+      const response = await jsonRest.get('/api/stats/package-type/keys');
+      return handleResponse(response);
+    },
+    getVersion: async () =>{
+      const response = await jsonRest.get(`/api/stats/version-info`);
+      return handleResponse(response);
+    }
+  },
+  storeRes: {
+    get: async (pkgType, type, name) => {
+      // get Store data
+      const response = await jsonRest.get(storeAPIEndpoint(pkgType, type, name));
+      return handleResponse(response);
+    },
+    create: async store => {
+      const response = await jsonRest.post(storeAPIEndpoint(store.packageType, store.type, store.name), store);
+      return handleResponse(response);
+    },
+    update: async store => {
+      // update Store data
+      const response = await jsonRest.put(storeAPIEndpoint(store.packageType, store.type, store.name), store);
+      return handleResponse(response);
+    },
+    delete: async (pkgType, type, name) => {
+      const response = await http.delete(storeAPIEndpoint(pkgType, type, name));
+      return handleResponse(response);
+    },
+    getStores: async (pkgType, type) => {
+      const response = await jsonRest.get(`${BASE_API_PATH}/${pkgType}/${type}`);
+      return handleResponse(response);
+    }
+  },
+  disableRes: {
+    getAllStoreTimeout: async () => {
+      const response = await jsonRest.get('/api/admin/schedule/store/all/disable-timeout');
+      return handleResponse(response);
+    },
+    getStoreTimeout: async (pkgType, type, name) => {
+      const response = await jsonRest.get(`/api/admin/schedule/store/${pkgType}/${type}/${name}/disable-timeout`);
+      if (response.ok){
+        const stores = await response.json();
+        return {result: stores, success: true};
+      }
+      const responseMsg = await response.text();
+      if(responseMsg){
+        return {success: false, error: {status: response.status, message: responseMsg}};
+      }
+      return {success: false, error: {status: response.status, message: response.statusText}};
+    }
+  },
+  nfcRes: {
+      // TODO: not implemented.
+  },
+};
+
+
+
+export {http, jsonRest, logErrors, IndyRest, BASE_API_PATH};

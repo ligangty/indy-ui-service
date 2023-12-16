@@ -16,8 +16,10 @@
 
 import React, {useState, useEffect} from 'react';
 import {PropTypes} from 'prop-types';
-import {jsonRest} from '#utils/RestClient.js';
+import {IndyRest} from '#utils/RestClient.js';
 import {Utils} from '#utils/AppUtils';
+
+const {statsRes} = IndyRest;
 
 export const PackageTypeSelect = ({register, formErrors}) =>{
   const [state, setState] = useState({
@@ -27,12 +29,12 @@ export const PackageTypeSelect = ({register, formErrors}) =>{
 
   useEffect(()=>{
     const fetchPkgTypes = async () =>{
-      const response = await jsonRest.get('/api/stats/package-type/keys');
-      if (response.ok){
-        const pkgTypes = await response.json();
+      const res = await statsRes.getAllPkgTypes();
+      if (res.success){
+        const pkgTypes = res.result;
         setState({pkgTypes});
       }else{
-        Utils.logMessage(response);
+        Utils.logMessage(res);
       }
     };
     fetchPkgTypes();

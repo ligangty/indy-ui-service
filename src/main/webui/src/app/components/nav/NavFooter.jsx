@@ -17,24 +17,25 @@
 import React, {useEffect, useState} from 'react';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
-import {jsonRest} from '../../utils/RestClient';
+import {IndyRest} from '../../utils/RestClient';
 import {Utils} from '../../utils/AppUtils';
 import {Col, Row} from 'react-bootstrap';
+
+const {statsRes} = IndyRest;
 
 export default function NavFooter() {
   const [state, setState] = useState({stats: {}});
 
   useEffect(()=>{
     const fetchVersion = async () => {
-      const response = await jsonRest.get(`/api/stats/version-info`);
-      if (response.ok){
-        const raw = await response.json();
+      const res = await statsRes.getVersion();
+      if (res.success){
         setState({
-          stats: raw
+          stats: res.result
         });
       }else{
-        response.text().then(data => {
-          Utils.logMessage(`Failed to version info. Error reason: ${response.status}->${data}`);
+        res.text().then(data => {
+          Utils.logMessage(`Failed to version info. Error reason: ${res.status}->${data}`);
         });
       }
     };

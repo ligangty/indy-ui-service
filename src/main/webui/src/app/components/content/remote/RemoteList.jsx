@@ -22,7 +22,9 @@ import {remoteOptionLegend as options, STORE_API_BASE_URL} from "../../Component
 import {StoreListingWidget} from '../common/StoreListingWidget.jsx';
 import {LoadingSpiner} from "../common/LoadingSpiner.jsx";
 import {Utils} from '#utils/AppUtils.js';
-import {jsonRest} from '#utils/RestClient.js';
+import {IndyRest} from '#utils/RestClient.js';
+
+const {storeRes, disableRes} = IndyRest;
 
 const handlers = {
   handleDebug: (event, setState) => {
@@ -58,17 +60,17 @@ export default function RemoteList() {
   useEffect(()=>{
     setLoading(true);
     const fetchdData = async ()=>{
-      const response = await jsonRest.get(`${STORE_API_BASE_URL}/${packageType}/remote`);
-      if (response.ok){
-        const timeoutResponse = await jsonRest.get('/api/admin/schedule/store/all/disable-timeout');
+      const res = await storeRes.getStores(packageType, "remote");
+      if (res.success){
+        const timeoutRes = await disableRes.getAllStoreTimeout();
         let disabledMap = {};
-        if (timeoutResponse.ok){
-          const timeoutData = await timeoutResponse.json();
+        if (timeoutRes.success){
+          const timeoutData = timeoutRes.result;
           disabledMap = Utils.setDisableMap(timeoutData);
         }else{
-          timeoutResponse.text().then(data=>Utils.logMessage(`disable timeout get failed in remote listing! Error reason: ${data}`));
+          Utils.logMessage(`disable timeout get failed in remote listing! Error reason: ${timeoutRes.error.message}`);
         }
-        let data = await response.json();
+        let data = res.result;
         if(typeof data === 'string'){
           data = JSON.parse(data);
         }
@@ -78,10 +80,8 @@ export default function RemoteList() {
           disabledMap
         });
       }else{
-        response.text().then(data=>{
-          setState({
-            message: data
-          });
+        setState({
+          message: res.error.message
         });
       }
       setLoading(false);
