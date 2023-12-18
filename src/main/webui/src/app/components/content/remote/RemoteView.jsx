@@ -26,8 +26,9 @@ import {LoadingSpiner} from '../common/LoadingSpiner.jsx';
 import {Filters} from '#utils/Filters.js';
 import {Utils} from '#utils/AppUtils.js';
 import {TimeUtils} from '#utils/TimeUtils.js';
-import {jsonRest} from '#utils/RestClient.js';
-import {STORE_API_BASE_URL} from '../../ComponentConstants.js';
+import {IndyRest} from '#utils/RestClient.js';
+
+const {storeRes, disableRes} = IndyRest;
 
 const RemoteAccessSection = ({store})=> <div className="fieldset">
   <div className="detail-field">
@@ -162,9 +163,9 @@ export default function RemoteView() {
   useEffect(()=>{
     setLoading(true);
     const fetchStore = async () => {
-      const response = await jsonRest.get(`${STORE_API_BASE_URL}/${packageType}/remote/${name}`);
-      if (response.ok){
-        const raw = await response.json();
+      const res = await storeRes.get(packageType, "remote",name);
+      if (res.success){
+        const raw = res.result;
         const store = Utils.cloneObj(raw);
         store.disabled = raw.disabled === undefined ? false : raw.disabled;
         store.useX509 = raw.server_certificate_pem || raw.key_certificate_pem;
@@ -173,11 +174,10 @@ export default function RemoteView() {
         store.useAuth = store.useAuth || store.user;
 
         // get Store disablement data
-        const timeoutUrl = `/api/admin/schedule/store/${store.packageType}/${store.type}/${store.name}/disable-timeout`;
-        const timeoutResponse = await jsonRest.get(timeoutUrl);
+        const timeoutRes = await disableRes.getStoreTimeout(store.packageType, store.type, store.name);
         const newStore = Utils.cloneObj(store);
-        if(timeoutResponse.ok){
-          const timeoutData = await timeoutResponse.json();
+        if(timeoutRes.success){
+          const timeoutData = timeoutRes.result;
           newStore.disableExpiration = timeoutData.expiration;
         }
         // Change state and re-rendering
@@ -185,9 +185,7 @@ export default function RemoteView() {
           store: newStore
         });
       }else{
-        response.text().then(data => {
-          Utils.logMessage(`Failed to get store data. Error reason: ${response.status}->${data}`);
-        });
+        Utils.logMessage(`Failed to get store data. Error reason: ${res.error.status}->${res.error.message}`);
       }
       setLoading(false);
     };
