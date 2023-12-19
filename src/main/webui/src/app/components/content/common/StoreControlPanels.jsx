@@ -19,8 +19,7 @@ import {useNavigate} from 'react-router-dom';
 // import {Modal} from 'bootstrap';
 import {PropTypes} from 'prop-types';
 import {Utils} from '#utils/AppUtils';
-import {IndyRest, logErrors} from '#utils/RestClient';
-import {STORE_API_BASE_URL} from '../../ComponentConstants';
+import {IndyRest} from '#utils/RestClient';
 import {ChangeLogDialog, ConfirmDialog} from './PopupDialogs.jsx';
 
 const {storeRes} = IndyRest;

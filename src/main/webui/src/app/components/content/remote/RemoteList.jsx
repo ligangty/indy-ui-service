@@ -18,7 +18,7 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {ListJsonDebugger} from '../common/Debugger.jsx';
 import ListControl from "../common/ListControl.jsx";
-import {remoteOptionLegend as options, STORE_API_BASE_URL} from "../../ComponentConstants.js";
+import {remoteOptionLegend as options} from "../../ComponentConstants.js";
 import {StoreListingWidget} from '../common/StoreListingWidget.jsx';
 import {LoadingSpiner} from "../common/LoadingSpiner.jsx";
 import {Utils} from '#utils/AppUtils.js';

@@ -105,7 +105,7 @@ export default function RemoteEdit() {
           // eslint-disable-next-line no-extra-parens
           storeView.useAuth = (storeView.useProxy && storeView.proxy_user) || storeView.user;
           // get Store disablement data
-          const timeoutRes = await disableRes.getStoreTimeout(store.packageType, store.type, store.name);
+          const timeoutRes = await disableRes.getStoreTimeout(packageType, "remote", name);
           const cloned = Utils.cloneObj(storeView);
           if (timeoutRes.success){
             const timeout = timeoutRes.result;
