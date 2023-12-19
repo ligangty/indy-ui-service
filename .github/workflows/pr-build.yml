@@ -22,18 +22,21 @@ name: PR Build
 on: [pull_request]
 
 jobs:
-  build:
-
+  verify:
+    name: PR verify
     runs-on: ubuntu-latest
+    env:
+      MAVEN_OPTS: "-Xmx4096m -Xms2048m -XX:MaxMetaspaceSize=4096m -Xss8m"
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
-        java-version: '11'
-        distribution: 'adopt'
+        distribution: 'temurin'
+        architecture: x64
+        java-version: 11
 
     - name: maven-settings-xml-action
       uses: whelk-io/maven-settings-xml-action@v14
