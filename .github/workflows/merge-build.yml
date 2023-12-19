@@ -80,7 +80,7 @@ jobs:
       uses: redhat-actions/buildah-build@v2
       with:
         image: indy-ui-service
-        tags: ${{ github.ref_name }}
+        tags: latest
         platforms: linux/amd64
         containerfiles: |
           commonjava-images/indy-ui-service/actions.Dockerfile
