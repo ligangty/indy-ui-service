@@ -16,6 +16,7 @@
 
 import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
+import {ConfirmDialog} from '../common/PopupDialogs.jsx';
 
 import {IndyRest} from '#utils/RestClient.js';
 
@@ -37,13 +38,21 @@ export default function Cache() {
   const {
     register,
     handleSubmit,
+    trigger,
     formState: {errors}
   } = useForm();
-  const submit = e => {
-    e.preventDefault();
+  const [showConfirmBox, setShowConfirm] = useState(false);
+  const showConfirmLog = () =>{
+    trigger().then(valid => valid && setShowConfirm(true));
+  };
+  const cancelConfirmLog = ()=>{
+    setShowConfirm(false);
+  };
+  const submit = () => {
     handleSubmit(data=>{
       deleteCache(data.path);
     })();
+    setShowConfirm(false);
   };
   return <form onSubmit={e => e.preventDefault()}>
     <div className="control-panel">
@@ -57,7 +66,10 @@ export default function Cache() {
         {errors.path?.type === "required" && <span className="alert">Metadata url is required</span>}
       </div>
       <div className="cp-row">
-        <button onClick={submit}>Delete</button>
+        <button onClick={showConfirmLog}>Delete</button>
+        <ConfirmDialog showBox={showConfirmBox}
+         title={`Do you really want to delete this file?`}
+         handleCancel={cancelConfirmLog} handleConfirm={submit} />
       </div>
     </div>
     <div className="content-panel">

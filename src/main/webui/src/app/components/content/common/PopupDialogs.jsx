@@ -43,9 +43,9 @@ ChangeLogDialog.propTypes={
   changelog: PropTypes.object
 };
 
-const ConfirmDialog = ({showBox, handleConfirm, handleCancel}) => <Modal show={showBox} onHide={handleCancel}>
+const ConfirmDialog = ({showBox, title, handleConfirm, handleCancel}) => <Modal show={showBox} onHide={handleCancel}>
   <Modal.Header>
-    <Modal.Title><b>Are you sure to delete this repository?</b></Modal.Title>
+    <Modal.Title><b>{title}</b></Modal.Title>
   </Modal.Header>
   <Modal.Footer>
     <Button variant="secondary" onClick={handleCancel}>
@@ -59,6 +59,7 @@ const ConfirmDialog = ({showBox, handleConfirm, handleCancel}) => <Modal show={s
 
 ConfirmDialog.propTypes={
   showBox: PropTypes.bool,
+  title: PropTypes.string.isRequired,
   handleConfirm: PropTypes.func,
   handleCancel: PropTypes.func
 };
