@@ -102,7 +102,9 @@ const StoreViewControlPanel = function({store}){
         <button name="delete" onClick={showConfirmLog} className="del-button cp-button">
           Delete
         </button>
-        <ConfirmDialog showBox={showConfirmBox} handleCancel={cancelConfirmLog} handleConfirm={handleRemove} />
+        <ConfirmDialog showBox={showConfirmBox}
+         title="Are you sure to delete this repository?"
+         handleCancel={cancelConfirmLog} handleConfirm={handleRemove} />
       </div>
     </div>
   );
@@ -175,7 +177,9 @@ const StoreEditControlPanel = ({mode, store, handleSubmit, validate, changelog})
         <button name="delete" onClick={showConfirmLog} className="del-button cp-button">
           Delete
         </button>
-        <ConfirmDialog showBox={showConfirmBox} handleCancel={cancelConfirmLog} handleConfirm={handleRemove} />
+        <ConfirmDialog showBox={showConfirmBox}
+         title="Are you sure to delete this repository?"
+         handleCancel={cancelConfirmLog} handleConfirm={handleRemove} />
       </React.Fragment>
     }
     <ChangeLogDialog showBox={showChangeBox} handleCancel={cancelCommitMsg} handleSave={handleSave} changelog={changelog} />
