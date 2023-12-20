@@ -48,8 +48,8 @@ const storeAPIEndpoint = (pkgType, type, name) => `${BASE_API_PATH}/${pkgType}/$
 
 const handleResponse = async response => {
   if (response.ok){
-    const store = await response.json();
-    return {result: store, success: true};
+    const result = await response.json();
+    return {result, success: true};
   }
   const responseMsg = await response.text();
   if(responseMsg){
@@ -89,6 +89,12 @@ const IndyRest = {
     },
     getStores: async (pkgType, type) => {
       const response = await jsonRest.get(`${BASE_API_PATH}/${pkgType}/${type}`);
+      return handleResponse(response);
+    }
+  },
+  contentRes: {
+    browse: async dirPath => {
+      const response = await jsonRest.get(`/api${dirPath}`);
       return handleResponse(response);
     }
   },

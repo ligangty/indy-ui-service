@@ -17,7 +17,9 @@
 import React, {useState, useEffect} from 'react';
 import {PropTypes} from 'prop-types';
 import {styles} from './style.js';
-import {jsonRest} from '#utils/RestClient.js';
+import {IndyRest} from '#utils/RestClient.js';
+
+const {contentRes} = IndyRest;
 
 const replaceUrl = url =>{
   if (url.includes("api/browse")){
@@ -111,18 +113,18 @@ export default function DirectoryListing () {
 
   useEffect(()=>{
     const fetchData = async () => {
-      const response = await jsonRest.get(`/api${document.location.pathname}`);
-      if(response.ok){
-        const data = await response.json();
+      const res = await contentRes.browse(document.location.pathname);
+      if(res.success){
+        const data = res.result;
         setState({
           isLoaded: true,
           data
         });
       }else{
-        response.text().then(error=>setState({
+        setState({
           isLoaded: true,
-          error
-        }));
+          error: res.error.message
+        });
       }
     };
     fetchData();
