@@ -42,4 +42,10 @@ describe('IndyRest test', () => {
       expect(result.success).toBe(false);
       expect(result.error).toEqual({status: 404, message: "Not Found"});
   });
+  it('Check get store: error with json body', async () => {
+    fetchMock.mock(`${BASE_API_PATH}/maven/remote/central`, {status: 500, body: JSON.stringify({error: "Mock internal error"})});
+      const result = await IndyRest.storeRes.get("maven", "remote", "central");
+      expect(result.success).toBe(false);
+      expect(result.error).toEqual({status: 500, message: "Mock internal error"});
+  });
 });
