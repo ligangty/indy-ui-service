@@ -27,7 +27,7 @@ import RemoteEdit from './remote/RemoteEdit.jsx';
 import GroupEdit from './group/GroupEdit.jsx';
 import HostedEdit from './hosted/HostedEdit.jsx';
 import NFC from './addons/NFC.jsx';
-import CacheDelete from './addons/CacheDelete.jsx';
+import Cache from './addons/Cache.jsx';
 
 // const browseCompatible=`<!--[if lt IE 7]>
 //     <p className="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -60,7 +60,7 @@ export const Main = () => <Container fluid>
 
       <Route path="/nfc" element={<NFC />} />
       <Route path="/nfc/view/all" element={<NFC />} />
-      <Route path="/cache/delete" element={<CacheDelete />} />
+      <Route path="/cache/delete" element={<Cache />} />
       {
       // <Route exact path={["/nfc/view/:packageType/:type/:name"]} element={} />
       //

@@ -101,7 +101,11 @@ const IndyRest = {
     browse: async dirPath => {
       const response = await jsonRest.get(`/api${dirPath}`);
       return handleResponse(response);
-    }
+    },
+    delete: async contentPath => {
+      const response = await http.delete(`${contentPath}?cache-only=true`);
+      return handleResponse(response);
+    },
   },
   disableRes: {
     getAllStoreTimeout: async () => {
@@ -125,7 +129,5 @@ const IndyRest = {
       // TODO: not implemented.
   },
 };
-
-
 
 export {IndyRest, BASE_API_PATH};
