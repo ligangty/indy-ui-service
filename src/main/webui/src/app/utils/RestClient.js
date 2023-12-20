@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import {Utils} from "./AppUtils.js";
 
 const httpCall = (url, method, headers={}, payload) => fetch(url, {
   method,
@@ -35,13 +36,13 @@ const jsonRest ={
   put: (url, payload) => httpCall(url, "PUT", {"Content-type": "application/json"}, JSON.stringify(payload))
 };
 
-const logErrors = response => {
-  if(response.text()){
-    response.text().then(error=>console.log(error));
-  }else{
-    console.log(`Something wrong: ${response.status} -> ${response.statusText}`);
-  }
-};
+// const logErrors = response => {
+//   if(response.text()){
+//     response.text().then(error=>console.log(error));
+//   }else{
+//     console.log(`Something wrong: ${response.status} -> ${response.statusText}`);
+//   }
+// };
 
 const BASE_API_PATH = "/api/admin/stores";
 const storeAPIEndpoint = (pkgType, type, name) => `${BASE_API_PATH}/${pkgType}/${type}/${name}`;
@@ -51,9 +52,13 @@ const handleResponse = async response => {
     const result = await response.json();
     return {result, success: true};
   }
-  const responseMsg = await response.text();
-  if(responseMsg){
-    return {success: false, error: {status: response.status, message: responseMsg}};
+  try {
+    const responseData = await response.json();
+    if(responseData){
+      return {success: false, error: {status: response.status, message: responseData.error}};
+    }
+  }catch(e) {
+    Utils.logMessage(e.type);
   }
   return {success: false, error: {status: response.status, message: response.statusText}};
 };
@@ -123,4 +128,4 @@ const IndyRest = {
 
 
 
-export {http, jsonRest, logErrors, IndyRest, BASE_API_PATH};
+export {IndyRest, BASE_API_PATH};
