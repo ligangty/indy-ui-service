@@ -80,7 +80,7 @@ jobs:
       uses: redhat-actions/buildah-build@v2
       with:
         image: indy-ui-service
-        tags: latest
+        tags: ${{ github.ref_name }}
         platforms: linux/amd64
         containerfiles: |
           commonjava-images/indy-ui-service/actions.Dockerfile
@@ -90,6 +90,6 @@ jobs:
       id: push-to-quay
       uses: redhat-actions/push-to-registry@v2
       with:
-        image: indy-ui-service
-        tags: latest
+        image: ${{ steps.buildah-build.outputs.image }}
+        tags: ${{ steps.buildah-build.outputs.tags }}
         registry: quay.io/factory2
