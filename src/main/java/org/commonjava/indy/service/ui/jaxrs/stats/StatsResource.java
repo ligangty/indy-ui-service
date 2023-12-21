@@ -15,16 +15,13 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.stats;
 
-import io.quarkus.launcher.QuarkusLauncher;
 import io.quarkus.runtime.LaunchMode;
-import org.apache.commons.io.IOUtils;
 import org.commonjava.indy.service.ui.client.stats.StatsClient;
 import org.commonjava.indy.service.ui.exception.IndyUIException;
 import org.commonjava.indy.service.ui.jaxrs.ResponseHelper;
 import org.commonjava.indy.service.ui.models.stats.AddOnListing;
 import org.commonjava.indy.service.ui.models.stats.EndpointView;
 import org.commonjava.indy.service.ui.models.stats.IndyVersioning;
-import org.commonjava.indy.service.ui.util.ResourceUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -41,9 +38,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.Map;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -54,7 +48,7 @@ import static org.commonjava.indy.service.ui.util.ResourceUtils.loadClasspathCon
 @Path( "/api/stats" )
 public class StatsResource
 {
-    private Logger logger = LoggerFactory.getLogger( this.getClass() );
+    private final Logger logger = LoggerFactory.getLogger( this.getClass() );
 
     @Inject
     @RestClient

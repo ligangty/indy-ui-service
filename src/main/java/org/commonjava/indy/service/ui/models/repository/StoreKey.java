@@ -222,8 +222,6 @@ public final class StoreKey
     public void readExternal( final ObjectInput in )
             throws IOException, ClassNotFoundException
     {
-        int keyVersion = in.readInt();
-
         this.packageType = (String) in.readObject();
 
         Object rawType = in.readObject();
