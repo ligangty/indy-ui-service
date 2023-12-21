@@ -16,19 +16,15 @@
 package org.commonjava.indy.service.ui.keycloak;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.codehaus.plexus.interpolation.InterpolationException;
 import org.codehaus.plexus.interpolation.PropertiesBasedValueSource;
 import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.commonjava.indy.service.ui.exception.IndyUIException;
-import org.commonjava.indy.service.ui.util.ResourceUtils;
 import org.commonjava.indy.service.ui.util.UrlUtils;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.util.Properties;

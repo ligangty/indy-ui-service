@@ -22,6 +22,7 @@ import javax.activation.MimetypesFileTypeMap;
 import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 @ApplicationScoped
 public class MimeTyper
@@ -40,7 +41,7 @@ public class MimeTyper
         {
             try
             {
-                final String extraTypes = IOUtils.toString( stream );
+                final String extraTypes = IOUtils.toString( stream, Charset.defaultCharset() );
                 typeMap.addMimeTypes( extraTypes );
             }
             catch ( final IOException e )
