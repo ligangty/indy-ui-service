@@ -15,8 +15,6 @@
  */
 package org.commonjava.indy.service.ui.client;
 
-import io.quarkus.oidc.IdToken;
-import io.quarkus.oidc.RefreshToken;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.slf4j.Logger;

@@ -55,8 +55,6 @@ import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.QUE
 @Path( "/api/content/maven/{type: (hosted|group|remote)}/{name}" )
 public class MavenContentAccessResource
 {
-    private final Logger logger = LoggerFactory.getLogger( this.getClass() );
-
     @Inject
     @RestClient
     MavenContentAccessServiceClient client;

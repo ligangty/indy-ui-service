@@ -16,8 +16,6 @@
 package org.commonjava.indy.service.ui.jaxrs.content;
 
 import org.commonjava.indy.service.ui.client.content.ContentBrowseReGenClient;
-import org.commonjava.indy.service.ui.client.content.ContentBrowseServiceClient;
-import org.commonjava.indy.service.ui.models.content.ContentBrowseResult;
 import org.commonjava.indy.service.ui.models.repository.StoreType;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -27,9 +25,6 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -48,8 +43,6 @@ import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PAT
 @Path( "/api/browse/{packageType}/{type: (hosted|group|remote)}/{name}" )
 public class ContentBrowseResource
 {
-    private final Logger logger = LoggerFactory.getLogger( this.getClass() );
-
     @Inject
     ContentBrowseReGenClient client;
 
