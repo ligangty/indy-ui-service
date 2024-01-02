@@ -62,14 +62,14 @@
         "changelog" : "Creating hosted repository for build: 2601 (repo: build_kie-soup_20180628.0657)"
       },
       "disabled" : false,
-      "snapshotTimeoutSeconds" : 0,
+      "snapshotTimeoutSeconds" : 3600,
       "readonly" : false,
       "packageType" : "maven",
       "name" : "build_kie-soup_20180628.0657",
       "disable_timeout" : 0,
       "path_style" : "plain",
       "authoritative_index" : false,
-      "allow_snapshots" : false,
+      "allow_snapshots" : true,
       "allow_releases" : true
     }
   ]

@@ -163,7 +163,7 @@ export default function RemoteView() {
   useEffect(()=>{
     setLoading(true);
     const fetchStore = async () => {
-      const res = await storeRes.get(packageType, "remote",name);
+      const res = await storeRes.get(packageType, "remote", name);
       if (res.success){
         const raw = res.result;
         const store = Utils.cloneObj(raw);
