@@ -53,15 +53,17 @@ describe('StoreBasicSections tests', () => {
 
   it("Verify StoreViewBasicSection for hosted repo", ()=>{
     const mockHostedStore = {name: "local-deployments", type: "hosted", packageType: "maven",
-       key: "maven:hosted:local-deployments", disabled: false, "allow_snapshots": true,
+       key: "maven:hosted:local-deployments", disabled: false, readonly: false, "allow_snapshots": true,
        "allow_releases": true, description: "work for local deployment",
-       url: "http://fakeurl"};
+       url: "http://fakeurl", storage: "/var/lib/teststorage"};
     render(<StoreViewBasicSection store={mockHostedStore} />);
     expect(screen.getByText("Package Type:")).toBeInTheDocument();
     expect(screen.getByText(/\s*maven\s*$/u, {selector: "span"})).toBeInTheDocument();
 
     expect(screen.getByText("Name:")).toBeInTheDocument();
     expect(screen.getByText(/\s*local-deployments\s*$/u, {selector: "span"})).toBeInTheDocument();
+
+    expect(screen.getByText("If set to readonly, all uploading and deleting operations to this repo are prohibited")).toBeInTheDocument();
 
     expect(screen.getByText("Make the content index authoritative to this repository (when readonly, this will be enabled automatically)")).toBeInTheDocument();
 
@@ -75,6 +77,8 @@ describe('StoreBasicSections tests', () => {
     expect(screen.queryByText("Pre-fetching Priority:")).not.toBeInTheDocument();
     expect(screen.queryByText("Allow Pre-fetching Rescan?")).not.toBeInTheDocument();
     expect(screen.queryByText("Pre-fetching Listing Type:")).not.toBeInTheDocument();
+
+    expect(screen.getByText("/var/lib/teststorage")).toBeInTheDocument();
   });
 
   it("Verify StoreViewBasicSection for group repo", ()=>{

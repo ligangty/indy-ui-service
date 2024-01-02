@@ -19,6 +19,7 @@ import {render, screen, cleanup, within} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import {StoreViewCapabilitiesSection} from "./StoreCapabilitiesSections.jsx";
 import {Filters} from "#utils/Filters.js";
+import {TimeUtils} from "#utils/TimeUtils.js";
 
 afterEach(() => {
   cleanup();
@@ -40,12 +41,16 @@ describe('StoreCapabilitiesSections tests', () => {
   it("Verify StoreViewCapabilitiesSection for hosted repo", ()=>{
     const mockHostedStore = {name: "local-deployments", type: "hosted", packageType: "maven",
        key: "maven:hosted:local-deployments", disabled: false, "allow_snapshots": true,
-       "allow_releases": false, description: "work for local deployment"};
+       "allow_releases": false, description: "work for local deployment", snapshotTimeoutSeconds: 3600};
     render(<StoreViewCapabilitiesSection store={mockHostedStore} />);
-    let parentDiv = screen.getByText("Allow Releases").closest("div");
+    let parentDiv = screen.getByText("Allow Uploads").closest("div");
+    expect(within(parentDiv).getByText(Filters.checkmark(mockHostedStore.allow_releases || mockHostedStore.allow_snapshots))).toBeInTheDocument();
+    parentDiv = screen.getByText("Allow Releases").closest("div");
     expect(within(parentDiv).getByText(Filters.checkmark(mockHostedStore.allow_releases))).toBeInTheDocument();
     parentDiv = screen.getByText("Snapshots Allowed?").closest("div");
     expect(within(parentDiv).getByText(Filters.checkmark(mockHostedStore.allow_snapshots))).toBeInTheDocument();
+    parentDiv = screen.getByText("Snapshot Timeout:").closest("div");
+    expect(within(parentDiv).getByText(`${TimeUtils.secondsToDuration(mockHostedStore.snapshotTimeoutSeconds)}`)).toBeInTheDocument();
   });
 
   it("Verify StoreViewCapabilitiesSection for group repo", ()=>{

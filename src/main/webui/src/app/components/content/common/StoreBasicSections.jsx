@@ -22,10 +22,11 @@ import {Utils} from '#utils/AppUtils.js';
 import {TimeUtils} from '#utils/TimeUtils.js';
 
 export const StoreViewBasicSection = ({store})=>{
-  let authoritativeIndexHints = "Make the content index authoritative to this repository";
+  let authoritativeIndexHint = "Make the content index authoritative to this repository";
   if(store.type==="hosted"){
-    authoritativeIndexHints += " (when readonly, this will be enabled automatically)";
+    authoritativeIndexHint += " (when readonly, this will be enabled automatically)";
   }
+  const readOnlyHint = "If set to readonly, all uploading and deleting operations to this repo are prohibited";
   return <div className="fieldset">
     <div className="detail-field">
         <label>Package Type:</label>
@@ -36,19 +37,29 @@ export const StoreViewBasicSection = ({store})=>{
         <span className="key">{store.name}</span>
     </div>
     <div className="detail-field">
-        <span>{Filters.checkmark(!store.disabled)}</span>
-        <label>Enabled?</label>
-        {
-          store.disabled && store.disableExpiration &&
-          <span className="hint">Set to automatically re-enable at {TimeUtils.timestampToDateFormat(store.disableExpiration)}</span>
-        }
+      <span>{Filters.checkmark(!store.disabled)}</span>
+      <label>Enabled?</label>
+      {
+        store.disabled && store.disableExpiration &&
+        <span className="hint">Set to automatically re-enable at {TimeUtils.timestampToDateFormat(store.disableExpiration)}</span>
+      }
     </div>
+    {
+      store.type==="hosted"&&<div className="detail-field">
+        <span>{Filters.checkmark(store.readonly)}</span>
+        <label>Readonly?</label>
+        {
+          store.type==="hosted" && !store.readonly &&
+          <span className="hint">{readOnlyHint}</span>
+        }
+      </div>
+    }
     <div className="detail-field">
       <span>{Filters.checkmark(store.authoritative_index)}</span>
       <label>Authoritative index enabled?</label>
       {
         (store.type==="remote" || store.type==="hosted") && !store.authoritative_index &&
-        <span className="hint">{authoritativeIndexHints}</span>
+        <span className="hint">{authoritativeIndexHint}</span>
       }
     </div>
     <div className="sub-fields">
@@ -105,6 +116,12 @@ export const StoreViewBasicSection = ({store})=>{
           <label>Pre-fetching Listing Type:</label>
           <span>{store.prefetch_listing_type}</span>
         </div>
+      </div>
+    }
+    {
+      store.type==="hosted" && store.storage && <div className="detail-field">
+        <label>Alternative Storage Directory:</label>
+        <span>{store.storage}</span>
       </div>
     }
   </div>;
