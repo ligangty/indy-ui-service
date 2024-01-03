@@ -161,10 +161,8 @@ export default function RemoteEdit() {
             <label>Package Type:</label>
             {
               mode==='new'?
-              <React.Fragment>
-                <PackageTypeSelect register={register} formErrors={errors} />
-              </React.Fragment>:
-              <span className="key">{store.packageType}</span>
+                <PackageTypeSelect register={register} formErrors={errors} />:
+                <span className="key">{store.packageType}</span>
             }
           </div>
           <div className="detail-field">
