@@ -55,7 +55,7 @@ describe('StoreBasicSections tests', () => {
     const mockHostedStore = {name: "local-deployments", type: "hosted", packageType: "maven",
        key: "maven:hosted:local-deployments", disabled: false, readonly: false, "allow_snapshots": true,
        "allow_releases": true, description: "work for local deployment",
-       url: "http://fakeurl", storage: "/var/lib/teststorage"};
+        storage: "/var/lib/teststorage"};
     render(<StoreViewBasicSection store={mockHostedStore} />);
     expect(screen.getByText("Package Type:")).toBeInTheDocument();
     expect(screen.getByText(/\s*maven\s*$/u, {selector: "span"})).toBeInTheDocument();
@@ -69,7 +69,6 @@ describe('StoreBasicSections tests', () => {
 
     const storeLocalURL = Utils.storeHref(mockHostedStore.key);
     expect(screen.getByRole("link", {name: storeLocalURL})).toHaveAttribute("href", storeLocalURL);
-    expect(screen.queryByRole("link", {name: mockHostedStore.url})).not.toBeInTheDocument();
 
     expect(screen.queryByText("Content Cache Timeout:")).not.toBeInTheDocument();
     expect(screen.queryByText("Metadata Cache Timeout:")).not.toBeInTheDocument();
@@ -83,8 +82,9 @@ describe('StoreBasicSections tests', () => {
 
   it("Verify StoreViewBasicSection for group repo", ()=>{
     const mockGroupStore = {name: "public", type: "group", packageType: "maven",
-       key: "maven:group:public", disabled: false, description: "public group",
-       url: "http://fakeurl", constituents: ["maven:remote:central", "maven:hosted:local-deployments",]};
+       // eslint-disable-next-line camelcase
+       key: "maven:group:public", disabled: false, prepend_constituent: false,
+       description: "public group", constituents: ["maven:remote:central", "maven:hosted:local-deployments",]};
     render(<StoreViewBasicSection store={mockGroupStore} />);
     expect(screen.getByText("Package Type:")).toBeInTheDocument();
     expect(screen.getByText(/\s*maven\s*$/u, {selector: "span"})).toBeInTheDocument();
@@ -92,12 +92,10 @@ describe('StoreBasicSections tests', () => {
     expect(screen.getByText("Name:")).toBeInTheDocument();
     expect(screen.getByText(/\s*public\s*$/u, {selector: "span"})).toBeInTheDocument();
 
-    expect(screen.queryByText("Make the content index authoritative to this repository")).not.toBeInTheDocument();
-    expect(screen.queryByText("Make the content index authoritative to this repository (when readonly, this will be enabled automatically)")).not.toBeInTheDocument();
+    expect(screen.getByText("If enabled, all new constituents which are added not manually(like promotion) will be at the top of constituents list")).toBeInTheDocument();
 
     const storeLocalURL = Utils.storeHref(mockGroupStore.key);
     expect(screen.getByRole("link", {name: storeLocalURL})).toHaveAttribute("href", storeLocalURL);
-    expect(screen.queryByRole("link", {name: mockGroupStore.url})).not.toBeInTheDocument();
 
     expect(screen.queryByText("Content Cache Timeout:")).not.toBeInTheDocument();
     expect(screen.queryByText("Metadata Cache Timeout:")).not.toBeInTheDocument();

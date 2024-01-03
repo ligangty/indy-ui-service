@@ -27,6 +27,7 @@ export const StoreViewBasicSection = ({store})=>{
     authoritativeIndexHint += " (when readonly, this will be enabled automatically)";
   }
   const readOnlyHint = "If set to readonly, all uploading and deleting operations to this repo are prohibited";
+  const constituentsPrependHint = "If enabled, all new constituents which are added not manually(like promotion) will be at the top of constituents list";
   return <div className="fieldset">
     <div className="detail-field">
         <label>Package Type:</label>
@@ -45,23 +46,35 @@ export const StoreViewBasicSection = ({store})=>{
       }
     </div>
     {
-      store.type==="hosted"&&<div className="detail-field">
+      store.type==="hosted" &&
+      <div className="detail-field">
         <span>{Filters.checkmark(store.readonly)}</span>
         <label>Readonly?</label>
         {
-          store.type==="hosted" && !store.readonly &&
+          !store.readonly &&
           <span className="hint">{readOnlyHint}</span>
         }
       </div>
     }
-    <div className="detail-field">
-      <span>{Filters.checkmark(store.authoritative_index)}</span>
-      <label>Authoritative index enabled?</label>
-      {
-        (store.type==="remote" || store.type==="hosted") && !store.authoritative_index &&
-        <span className="hint">{authoritativeIndexHint}</span>
-      }
-    </div>
+    {
+      (store.type==='remote'||store.type==='hosted') &&
+      <div className="detail-field">
+        <span>{Filters.checkmark(store.authoritative_index)}</span>
+        <label>Authoritative index enabled?</label>
+        {
+          !store.authoritative_index &&
+          <span className="hint">{authoritativeIndexHint}</span>
+        }
+      </div>
+    }
+    {
+      store.type==='group' &&
+      <div className="detail-field">
+        <span>{Filters.checkmark(store.prepend_constituent)}</span>
+        <label>Prepend Constituents?</label>
+        <span className="hint">{constituentsPrependHint}</span>
+      </div>
+    }
     <div className="sub-fields">
       <div className="detail-field">
         <label>Disable Timeout:</label>

@@ -180,4 +180,11 @@ export const Utils = {
       return 0;
     });
   },
+  defaultDescription: description => {
+    let desc = description;
+    if (!desc || desc.length < 1){
+      desc = 'No description provided.';
+    }
+    return desc;
+  }
 };

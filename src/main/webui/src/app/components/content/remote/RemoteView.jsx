@@ -227,5 +227,5 @@ export default function RemoteView() {
       </React.Fragment>
     );
   }
-  return null;
+  return <React.Fragment />;
 }
