@@ -96,5 +96,5 @@ export default function HostedView() {
       </React.Fragment>
     );
   }
-  return null;
+  return <React.Fragment />;
 }
