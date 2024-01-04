@@ -20,6 +20,15 @@
  * useful in new UI and and decide if removing some of them.
  */
 export const Utils = {
+  storeOptions: store => {
+    if(store.type==='remote') {
+      return Utils.remoteOptions(store);
+    }
+    if(store.type==='hosted'){
+      return Utils.hostedOptions(store);
+    }
+    return [];
+  },
   remoteOptions: store => {
     const options = [];
     if (store.type==="remote"){

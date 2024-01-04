@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import {Utils} from "./AppUtils.js";
-
 const httpCall = (url, method, headers={}, payload) => fetch(url, {
   method,
   credentials: 'same-origin',
