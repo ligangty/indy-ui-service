@@ -49,7 +49,12 @@ const storeAPIEndpoint = (pkgType, type, name) => `${BASE_API_PATH}/${pkgType}/$
 
 const handleResponse = async response => {
   if (response.ok){
-    const result = await response.json();
+    let result = {};
+    try {
+      result = await response.json();
+    }catch(e){
+      // no response body, do nothing
+    }
     return {result, success: true};
   }
   try {
@@ -58,7 +63,7 @@ const handleResponse = async response => {
       return {success: false, error: {status: response.status, message: responseData.error}};
     }
   }catch(e) {
-    Utils.logMessage(e.type);
+    // no response body, do nothing
   }
   return {success: false, error: {status: response.status, message: response.statusText}};
 };
