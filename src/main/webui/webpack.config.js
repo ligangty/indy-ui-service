@@ -27,6 +27,11 @@ module.exports = {
   },
   mode: 'development',
   devtool: 'inline-source-map',
+  devServer: {
+    static: path.resolve(__dirname, outputDirectory),
+    host: '0.0.0.0',
+    port: 8080,
+  },
   optimization: {
     minimize: true,
     minimizer: [
