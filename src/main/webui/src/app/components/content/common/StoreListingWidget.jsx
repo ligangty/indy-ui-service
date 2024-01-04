@@ -77,7 +77,7 @@ const StoreListingWidget = ({storeList, disableMap, storeType}) => {
                       }
                     </div>
                     <div>
-                      <CapabilitiesSection options={Utils.remoteOptions(store)} />
+                      <CapabilitiesSection options={Utils.storeOptions(store)} />
                     </div>
                     <div className="description field"><span>{store.description}</span></div>
                   </div>
