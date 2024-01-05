@@ -29,17 +29,24 @@ LocalURLSection.propTypes = {
 };
 
 // For options, see AppUtils.remoteOptions|hostedOptions
-const CapabilitiesSection = ({options}) => <div className="left-half">
-    <label>Capabilities:</label>{' '}
-    {
-      options.map(option => <div key={option.title} className="options">
-          <span className="key">{option.icon} </span>
-        </div>)
-    }
-  </div>;
+const CapabilitiesSection = ({store}) => {
+  if(store.type==="remote" || store.type==="hosted"){
+    const options = Utils.storeOptions(store);
+    const styleClass = store.type==="remote"?"left-half":"right-half";
+    return <div className={styleClass}>
+      <label>Capabilities:</label>{' '}
+      {
+        options.map(option => <div key={option.title} className="options">
+            <span className="key">{option.icon} </span>
+          </div>)
+      }
+    </div>;
+  }
+  return <Fragment/>;
+};
 
 CapabilitiesSection.propTypes = {
-  options: PropTypes.array
+  store: PropTypes.object
 };
 
 const StoreNameSection = ({store, storeClass}) => <div className="fieldset-caption">
@@ -75,10 +82,11 @@ const StoreListingWidget = ({storeList, disableMap, storeType}) => {
                           <a href={store.url} target="_new">{store.url}</a>
                         </div>
                       }
+                      { storeType === "hosted" && <CapabilitiesSection store={store} />}
                     </div>
-                    <div>
-                      <CapabilitiesSection options={Utils.storeOptions(store)} />
-                    </div>
+                    {
+                      storeType === "remote" && <div><CapabilitiesSection store={store} /></div>
+                    }
                     <div className="description field"><span>{store.description}</span></div>
                   </div>
                 </div>
