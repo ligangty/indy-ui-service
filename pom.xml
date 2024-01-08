@@ -20,12 +20,12 @@
   <parent>
     <groupId>org.commonjava</groupId>
     <artifactId>service-parent</artifactId>
-    <version>4</version>
+    <version>5-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.commonjava.indy.service</groupId>
   <artifactId>indy-ui-service</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>2.1.0-SNAPSHOT</version>
   <name>Indy UI</name>
   <url>https://github.com/Commonjava/indy-ui-service</url>
   <description>Indy UI</description>
@@ -42,7 +42,7 @@
     <apiVersion>1</apiVersion>
     <projectEmail>https://github.com/Commonjava/indy-ui-service</projectEmail>
 
-    <indysecurity.verison>1.1</indysecurity.verison>
+    <indysecurity.verison>1.2-SNAPSHOT</indysecurity.verison>
     
     <skipTests>false</skipTests>
     <plugin.jacoco.skip>false</plugin.jacoco.skip>
@@ -124,7 +124,7 @@
     <dependency>
       <groupId>io.quarkiverse.quinoa</groupId>
       <artifactId>quarkus-quinoa</artifactId>
-      <version>1.2.9</version>
+      <version>2.3.2</version>
     </dependency>
 
     <dependency>
@@ -135,6 +135,11 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-test-security</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-test-oidc-server</artifactId>
       <scope>test</scope>
     </dependency>
     

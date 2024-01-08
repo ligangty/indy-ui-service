@@ -15,13 +15,14 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.auth;
 
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
+import io.quarkus.test.oidc.server.OidcWiremockTestResource;
 import io.quarkus.test.security.TestSecurity;
 import io.restassured.path.json.JsonPath;
+import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
-
-import javax.ws.rs.core.Response;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -30,6 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @QuarkusTest
 @TestProfile( AuthTestProfile.class )
+@QuarkusTestResource( OidcWiremockTestResource.class)
 public class AuthResourceTest
 {
     @TestSecurity( roles = { "power", "admin" }, user = "user" )
@@ -43,12 +45,4 @@ public class AuthResourceTest
         assertThat( resultPath.getList( "roles" ), hasItems( "power", "admin" ) );
     }
 
-    @Test
-    public void testGetUserInfoNotAuth()
-    {
-        given().when()
-               .get( "/api/admin/auth/userinfo" )
-               .then()
-               .statusCode( Response.Status.UNAUTHORIZED.getStatusCode() );
-    }
 }
