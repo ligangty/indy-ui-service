@@ -34,15 +34,15 @@ afterEach(() => {
 
 describe('HostedView tests', () => {
   it("Verify HostedView", async ()=>{
-    const mockHostedStore = {name: "central", type: "hosted", packageType: "maven",
-    key: "maven:hosted:central", disabled: false, storage: "/var/lib/storage",
+    const mockHostedStore = {name: "local-deployment", type: "hosted", packageType: "maven",
+    key: "maven:hosted:local-deployment", disabled: false, storage: "/var/lib/storage",
     "allow_snapshots": true, "allow_releases": true,
-    description: "official maven central"};
-    const mockDisableTimeout = {name: "Disable-Timeout", group: "maven:hosted:central#Disable-Timeout",
+    description: "local deployment repo"};
+    const mockDisableTimeout = {name: "Disable-Timeout", group: "maven:hosted:local-deployment#Disable-Timeout",
     expiration: "2030-02-22T17:00:00.000Z"};
-    fetchMock.mock(`${STORE_API_BASE_URL}/maven/hosted/central`, {status: 200, body: JSON.stringify(mockHostedStore)});
-    fetchMock.mock("/api/admin/schedule/store/maven/hosted/central/disable-timeout", {status: 200, body: JSON.stringify(mockDisableTimeout)});
-    render(<MemoryRouter initialEntries={["/hosted/maven/view/central"]}>
+    fetchMock.mock(`${STORE_API_BASE_URL}/maven/hosted/local-deployment`, {status: 200, body: JSON.stringify(mockHostedStore)});
+    fetchMock.mock("/api/admin/schedule/store/maven/hosted/local-deployment/disable-timeout", {status: 200, body: JSON.stringify(mockDisableTimeout)});
+    render(<MemoryRouter initialEntries={["/hosted/maven/view/local-deployment"]}>
       <Routes>
         <Route path="/hosted/:packageType/view/:name" element={<HostedView />} />
       </Routes>
@@ -54,9 +54,9 @@ describe('HostedView tests', () => {
 
       // StoreView: Basic section testing
       expect(screen.getByText("Package Type:")).toBeInTheDocument();
-      expect(screen.getByText(/\s*maven\s*$/u, {selector: "span"})).toBeInTheDocument();
+      expect(screen.getByText(mockHostedStore.packageType, {selector: "span"})).toBeInTheDocument();
       expect(screen.getByText("Name:")).toBeInTheDocument();
-      expect(screen.getByText(/\s*central\s*$/u, {selector: "span"})).toBeInTheDocument();
+      expect(screen.getByText(mockHostedStore.name, {selector: "span"})).toBeInTheDocument();
       expect(screen.getByText("Alternative Storage Directory:")).toBeInTheDocument();
       expect(screen.getByText(mockHostedStore.storage, {selector: "span"})).toBeInTheDocument();
 
