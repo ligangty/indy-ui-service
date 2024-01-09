@@ -48,7 +48,7 @@ describe('GroupView tests', () => {
     </MemoryRouter>);
 
     await waitFor(() => {
-      // ListControl section testing
+      // Control section testing
       expect(screen.getByRole("button", {name: "New..."})).toBeInTheDocument();
 
       // StoreView: Basic section testing
