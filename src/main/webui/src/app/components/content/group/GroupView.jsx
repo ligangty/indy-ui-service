@@ -93,7 +93,7 @@ export default function GroupView() {
                 store.constituents && store.constituents.length > 0 &&
                 <ol className="detail-value detail-value-list">
                   {
-                    store.constituents.map(item => <li key={`constituent-${item}`} className="detail-value-list-item">
+                    store.constituents.map(item => <li key={`constituent-${item}`}>
                       <Link to={Utils.detailHref(item)}>{item}</Link>
                     </li>)
                   }
