@@ -19,6 +19,7 @@ import org.commonjava.indy.service.ui.client.repository.RepositoryQueryServiceCl
 import org.commonjava.indy.service.ui.models.repository.ArtifactStore;
 import org.commonjava.indy.service.ui.models.repository.SimpleBooleanResultDTO;
 import org.commonjava.indy.service.ui.models.repository.StoreListingDTO;
+import org.commonjava.indy.service.ui.models.stats.EndpointViewListing;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -37,6 +38,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import java.util.Map;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.eclipse.microprofile.openapi.annotations.enums.ParameterIn.PATH;
@@ -248,6 +250,30 @@ public class RepositoryQueryResource
     public Response getStoreEmpty()
     {
         return client.isStoreEmpty();
+    }
+
+    @Operation(
+            summary = "Retrieve a listing of the artifact stores available on the system. This is especially useful for setting up a network of Indy instances that reference one another" )
+    @APIResponse( responseCode = "200",
+                  content = @Content( schema = @Schema( implementation = EndpointViewListing.class ) ),
+                  description = "The artifact store listing" )
+    @Path( "/endpoints/{packageType}" )
+    @GET
+    @Produces( APPLICATION_JSON )
+    public Response getEndpoints( @PathParam( "packageType" ) final String pkgType )
+    {
+        return client.getEndpoints( pkgType );
+    }
+
+    @Operation( summary = "Retrieve a listing of the artifact stores keys available on the system." )
+    @APIResponse( responseCode = "200", content = @Content( schema = @Schema( implementation = Map.class ) ),
+                  description = "The artifact store keys listing" )
+    @Path( "/storekeys/{packageType}" )
+    @GET
+    @Produces( APPLICATION_JSON )
+    public Response getStoreKeys( @PathParam( "packageType" ) final String pkgType )
+    {
+        return client.getStoreKeys( pkgType );
     }
 
 }
