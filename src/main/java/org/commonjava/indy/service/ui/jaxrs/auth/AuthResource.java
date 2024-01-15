@@ -15,7 +15,16 @@
  */
 package org.commonjava.indy.service.ui.jaxrs.auth;
 
+import io.quarkus.security.identity.SecurityIdentity;
+import org.apache.commons.lang3.StringUtils;
+import org.commonjava.indy.service.ui.models.auth.UserInfo;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -26,12 +35,20 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.security.Principal;
+import java.util.Collections;
+import java.util.Set;
 
 @Path( "/api/admin/auth" )
 public class AuthResource
 {
+    private final Logger logger = LoggerFactory.getLogger( this.getClass() );
+
     @Inject
     JsonWebToken accessToken;
+
+    @Inject
+    SecurityIdentity identity;
 
     @Path( "accesstoken" )
     @GET
@@ -56,5 +73,29 @@ public class AuthResource
                       .append( "  </body>\n" )
                       .append( "</html>" );
         return Response.ok( contentBuilder.toString() ).build();
+    }
+
+    @APIResponses( { @APIResponse( responseCode = "200",
+                                   content = @Content( schema = @Schema( implementation = UserInfo.class ) ),
+                                   description = "Return the current user information" ),
+            @APIResponse( responseCode = "401", description = "User not authenticated" ) } )
+    @Path( "userinfo" )
+    @GET
+    @Produces( MediaType.APPLICATION_JSON )
+    public Response getUserInfo( @Context UriInfo uriInfo )
+    {
+        Set<String> roles = identity.getRoles() == null ? Collections.emptySet() : identity.getRoles();
+        Principal user = identity.getPrincipal();
+        if ( user != null && StringUtils.isNotBlank( user.getName() ) )
+        {
+            logger.debug( "User: {}", user.getName() );
+            final UserInfo userInfo = new UserInfo( user.getName(), roles );
+            return Response.ok( userInfo ).build();
+        }
+        else
+        {
+            logger.warn( "User name is not got correctly, please check the security configuration." );
+            return Response.status( Response.Status.UNAUTHORIZED ).build();
+        }
     }
 }
