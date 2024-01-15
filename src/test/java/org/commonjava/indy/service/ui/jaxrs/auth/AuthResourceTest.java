@@ -42,4 +42,13 @@ public class AuthResourceTest
         assertThat( resultPath.getInt( "roles.size" ), is( 2 ) );
         assertThat( resultPath.getList( "roles" ), hasItems( "power", "admin" ) );
     }
+
+    @Test
+    public void testGetUserInfoNotAuth()
+    {
+        given().when()
+               .get( "/api/admin/auth/userinfo" )
+               .then()
+               .statusCode( Response.Status.UNAUTHORIZED.getStatusCode() );
+    }
 }
