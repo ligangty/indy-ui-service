@@ -15,11 +15,16 @@
  */
 
 import React from "react";
-import {render, screen, cleanup} from '@testing-library/react';
+import {render, screen, cleanup, waitFor} from '@testing-library/react';
 import userEvent from "@testing-library/user-event";
 import {MemoryRouter} from 'react-router-dom';
 import '@testing-library/jest-dom';
+import fetchMock from "fetch-mock";
 import NavHeader from "./NavHeader.jsx";
+
+beforeEach(() => {
+  fetchMock.restore();
+});
 
 afterEach(() => {
   cleanup();
@@ -27,6 +32,11 @@ afterEach(() => {
 
 describe('Header tests', () => {
   it("Verify Header for elements existing", async ()=>{
+    const mockUserInfo = {
+      userName: "test-user",
+      roles: ["admin", "power-user"]
+    };
+    fetchMock.mock("/api/admin/auth/userinfo", {status: 200, body: JSON.stringify(mockUserInfo)});
     const user = userEvent.setup();
     render(<MemoryRouter><NavHeader /></MemoryRouter>);
     expect(screen.getByRole("link", {name: "Indy"})).toBeInTheDocument();
@@ -51,5 +61,10 @@ describe('Header tests', () => {
     await user.click(addonsButton);
     expect(screen.getByRole("link", {name: "Not-Found Cache"})).toBeInTheDocument();
     expect(screen.getByRole("link", {name: "Delete Cache"})).toBeInTheDocument();
+
+    await waitFor(()=>{
+      expect(screen.getByText(mockUserInfo.userName)).toBeInTheDocument();
+    });
+
   });
 });
