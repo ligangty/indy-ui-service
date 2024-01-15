@@ -149,3 +149,8 @@ app.put(`${STORE_API_BASE}/:packageType/:type/:name`, (req, res) => {
   }
 });
 
+app.get('/api/admin/auth/userinfo', (req, res) => {
+  const testUser = {userName: "indy", roles: ["admin", "power-user", "user"]};
+  res.status(200).json(testUser);
+});
+

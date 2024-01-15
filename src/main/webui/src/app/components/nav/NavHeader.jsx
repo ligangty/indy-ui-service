@@ -14,19 +14,42 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import {LinkContainer} from 'react-router-bootstrap';
+import {IndyRest} from '#utils/RestClient';
+import {Utils} from '#utils/AppUtils';
 
-// TODO: This is mock user login, need to implement later for real login
-const isUserloggedIn = true;
-const username = "mock";
+const {authRes} = IndyRest;
+
 
 // eslint-disable-next-line max-lines-per-function
 export default function NavHeader(){
+  const [state, setState] = useState({
+    isUserloggedIn: false,
+    userInfo: {}
+  });
+
+  useEffect(()=>{
+    const fetchUserInfo = async () => {
+      const res = await authRes.getUserInfo();
+      if (res.success){
+        setState({
+          isUserloggedIn: true,
+          userInfo: res.result
+        });
+      }else{
+        res.text().then(data => {
+          Utils.logMessage(`Failed to get user info. Error reason: ${res.status}->${data}`);
+        });
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
   return (
     <Navbar expand="lg" bg="body-tertiary" fixed="top">
       <Container fluid>
@@ -59,9 +82,9 @@ export default function NavHeader(){
               <NavDropdown.Item href="/api/diag/bundle">Diagnostics Bundle</NavDropdown.Item>
             </NavDropdown>
           </Nav>
-          { isUserloggedIn &&
+          { state.isUserloggedIn &&
             <Nav className="ms-auto">
-              <NavDropdown title={username} id="nav-dropdown-login">
+              <NavDropdown title={state.userInfo.userName} id="nav-dropdown-login">
                 <NavDropdown.Item href="/logout">Log Out</NavDropdown.Item>
               </NavDropdown>
             </Nav>

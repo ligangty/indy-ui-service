@@ -128,6 +128,12 @@ const IndyRest = {
       return {success: false, error: {status: response.status, message: response.statusText}};
     }
   },
+  authRes: {
+    getUserInfo: async () => {
+      const response = await jsonRest.get('/api/admin/auth/userinfo');
+      return handleResponse(response);
+    }
+  },
   nfcRes: {
       // TODO: not implemented.
   },
