@@ -117,4 +117,14 @@ public interface RepositoryQueryServiceClient
     @GET
     @Path( "/isEmpty" )
     Response isStoreEmpty();
+
+    @GET
+    @Path( "/storekeys/{packageType}" )
+    @Produces( APPLICATION_JSON )
+    Response getStoreKeys( @PathParam( "packageType" ) final String pkgType );
+
+    @GET
+    @Path( "/endpoints/{packageType}" )
+    @Produces( APPLICATION_JSON )
+    Response getEndpoints( @PathParam( "packageType" ) final String pkgType );
 }
