@@ -115,7 +115,7 @@ const RemoteAccessSection = ({store})=> <div className="fieldset">
           <span><ap-password-mask></ap-password-mask></span>
         </div>
       }
-        <div className="fieldset two-col">
+        <div className="fieldset">
         {
           store.key_certificate_pem &&
           <div className="left-col">
