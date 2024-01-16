@@ -313,7 +313,7 @@ export default function RemoteEdit() {
                 <input type="password" role="password" defaultValue={store.key_password} {...register("key_password")} /><Hint hintKey="client_key" />
               </div>
             }
-              <div className="fieldset two-col">
+              <div className="fieldset">
                 {
                   useAuth &&
                   <div className="left-col">
