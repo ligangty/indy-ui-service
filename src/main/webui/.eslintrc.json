@@ -230,7 +230,7 @@
       "nonblock-statement-body-position": 2,
       "object-curly-newline": 2,
       "object-curly-spacing": [
-          1,
+          2,
           "never"
       ],
       "object-property-newline": 0,
