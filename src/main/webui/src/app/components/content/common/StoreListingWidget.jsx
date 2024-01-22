@@ -117,7 +117,7 @@ const StoreListingWidget = ({storeList, disableMap, storeType}) => {
                         </div>
                       }
                       { storeType === "hosted" && <CapabilitiesSection store={store} />}
-                      { storeType === "group" && <ConstituentsSection constituents={store.constituents} />}
+                      { storeType === "group" && <ConstituentsSection constituents={store.constituents?store.constituents:[]} />}
                     </div>
                     {
                       storeType === "remote" && <div><CapabilitiesSection store={store} /></div>
