@@ -37,7 +37,6 @@ describe('GroupList tests', () => {
       {name: "central", type: "group", packageType: "maven",
        key: "maven:group:central", disabled: false, "allow_snapshots": true,
        "allow_releases": true, url: "https://repo.maven.apache.org/maven2/",
-       constituents: [],
        description: "official maven central"},
       {name: "mrrc", type: "group", packageType: "maven",
        key: "maven:group:mrrc", disabled: false,
