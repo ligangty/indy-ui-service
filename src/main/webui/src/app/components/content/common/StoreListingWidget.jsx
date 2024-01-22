@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2023 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
+ * Copyright (C) 2024 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 import {Utils} from '#utils/AppUtils.js';
@@ -47,6 +47,40 @@ const CapabilitiesSection = ({store}) => {
 
 CapabilitiesSection.propTypes = {
   store: PropTypes.object
+};
+
+const ConstituentsSection = ({constituents}) => {
+  const [showConstituents, setShowConstituents] = useState(false);
+
+  return <div className="right-half">
+    <div className="inline-label">
+      {constituents.length} Constituent(s) [
+      <span className="option">
+        <a href="" onClick={e => {
+          e.preventDefault();
+          setShowConstituents(!showConstituents);
+        }}>{showConstituents ? '-' : '+'}</a>
+      </span>
+      ]
+    </div>
+    {
+      showConstituents &&
+      <ol className="content-panel item-expanded subsection">
+        {
+          constituents.map(item => <li key={`constituent-${item}`} className="detail-value-list-item">
+            <Link to={Utils.detailHref(item)}>{item}</Link>
+            {Utils.typeFromKey(item) === "remote" && <div className="subfields">
+              <span className="description field">(Remote URL: <Link to={Utils.storeHref(item)}>{Utils.storeHref(item)}</Link>)</span>
+            </div>}
+          </li>)
+        }
+      </ol>
+    }
+  </div>;
+};
+
+ConstituentsSection.propTypes = {
+  constituents: PropTypes.array
 };
 
 const StoreNameSection = ({store, storeClass}) => <div className="fieldset-caption">
@@ -83,6 +117,7 @@ const StoreListingWidget = ({storeList, disableMap, storeType}) => {
                         </div>
                       }
                       { storeType === "hosted" && <CapabilitiesSection store={store} />}
+                      { storeType === "group" && <ConstituentsSection constituents={store.constituents} />}
                     </div>
                     {
                       storeType === "remote" && <div><CapabilitiesSection store={store} /></div>
