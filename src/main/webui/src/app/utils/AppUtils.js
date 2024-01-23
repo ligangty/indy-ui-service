@@ -196,5 +196,43 @@ export const Utils = {
       desc = 'No description provided.';
     }
     return desc;
-  }
+  },
+  formatKey: (packageType, type, name)=>`${packageType}:${type}:${name}`,
+  keyLabel: key => {
+    const parts = key.split(':');
+    return parts[2] + " (" + parts[1] + "; " + parts[0] + ")";
+  },
+  // Sort by: type (group, remote, hosted), packageType, name
+  sortByEmbeddedKey: items => {
+    if (items === undefined){
+      return items;
+    }
+
+    const typeOrder = ['group', 'remote', 'hosted'];
+    return items.sort((a, b) =>{
+      const ap = a.key.split(':');
+      const bp = b.key.split(':');
+
+      const ati = typeOrder.indexOf(ap[1]);
+      const bti = typeOrder.indexOf(bp[1]);
+
+      if (ati !== bti){
+        return ati < bti ? -1 : 1;
+      }
+
+      if (ap[0] < bp[0]){
+        return -1;
+      }else if (bp[0] < ap[0]){
+        return 1;
+      }
+
+      if (ap[2] < bp[2]){
+        return -1;
+      }else if (bp[2] < ap[2]){
+        return 1;
+      }
+
+      return 0;
+    });
+  },
 };

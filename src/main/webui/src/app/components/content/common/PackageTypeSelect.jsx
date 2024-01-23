@@ -51,7 +51,7 @@ export const PackageTypeSelect = ({register, formErrors}) =>{
         state.pkgTypes.map(type => <option key={`pkgType:${type}`} value={type}>{type}</option>)
       }
     </select>{' '}
-    {formErrors && formErrors.packageType?.type === "required" && <span className="alert">Package Type is required</span>}
+    {formErrors && formErrors.packageType?.type === "required" && <span className="indy-alert">Package Type is required</span>}
   </span>;
 };
 

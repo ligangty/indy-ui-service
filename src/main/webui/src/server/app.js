@@ -20,6 +20,8 @@ const server = app.listen(Config.SERVER_PORT, () => {
 });
 app.use(express.static('dist'));
 
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 // For direct url bar addressing, will send home page directly for client router rendering
 app.get([Config.APP_ROOT, `${Config.APP_ROOT}/*`, '/'], (req, res) => {
     res.sendFile(indexHtml);
@@ -48,7 +50,8 @@ app.get('/api/stats/all-endpoints', (req, res) => {
 // stats APIs end
 
 // endpoints and storekeys
-app.get('/api/admin/stores/query/endpoints/:packageType', (req, res) => {
+app.get('/api/admin/stores/query/endpoints/:packageType', async (req, res) => {
+  await sleep(2000);
   const [pkgType] = [req.params.packageType];
   const statsEndpointsFile = path.resolve(__dirname, `./mock/list/FakeAllEndPoints.json`);
   const list = require(statsEndpointsFile);
@@ -86,8 +89,6 @@ const decideMockListFile = (packgeType, type) => {
   return path.resolve(__dirname, `./mock/list/Fake${pkgToFileMapping[packgeType]}${typeToFileMapping[type]}List.json`);
 };
 
-
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // For store listing
 app.get(`${STORE_API_BASE}/:packageType/:type`, async (req, res) => {
@@ -194,4 +195,59 @@ app.put(`${STORE_API_BASE}/:packageType/:type/:name`, (req, res) => {
 app.get('/api/admin/auth/userinfo', (req, res) => {
   const testUser = {userName: "indy", roles: ["admin", "power-user", "user"]};
   res.status(200).json(testUser);
+});
+
+// Mock NFC APIs
+app.get(`/api/nfc/:packageType/:type/:name`, async (req, res) => {
+  await sleep(2000);
+  const [pkgType, type, name] = [req.params.packageType, req.params.type, req.params.name];
+  const storeKey = `${pkgType}:${type}:${name}`;
+  console.log(`Fetching nfc for ${storeKey}`);
+  const allNFCItems = require('./mock/list/FakeNFCItems.json');
+  const nfcItems = allNFCItems.sections.filter(s=>s.key===storeKey);
+  console.log(`Returning nfc items for ${storeKey}: ${nfcItems}`);
+  const result = {
+    sections: nfcItems
+  };
+  res.status(200).json(result);
+});
+
+app.get('/api/nfc', async (req, res) => {
+  await sleep(2000);
+  const [pageIndex, pageSize] = [req.query.pageIndex, req.query.pageSize];
+  const allNFCItems = require('./mock/list/FakeNFCItems.json');
+  allNFCItems.sections.sort();
+  if(pageIndex && pageSize){
+    let [start, size] = [parseInt(pageIndex, 10), parseInt(pageSize, 10)];
+    let end = start+size;
+    const sections = allNFCItems.sections;
+    if(end > sections.length){
+      end = sections.length;
+    }
+    const result = {
+      sections: allNFCItems.sections.slice(start, end)
+    };
+    res.status(200).json(result);
+  }else{
+    res.status(200).json(allNFCItems);
+  }
+});
+
+app.delete('/api/nfc', (req, res)=>{
+  console.log("Deleting all nfc setcions");
+  res.status(204).json({"msg": "All sections deleted"});
+});
+
+app.delete(`/api/nfc/:packageType/:type/:name`, (req, res) => {
+  const [pkgType, type, name] = [req.params.packageType, req.params.type, req.params.name];
+  const storeKey = `${pkgType}:${type}:${name}`;
+  console.log(`Deleting nfc for section ${storeKey}`);
+  res.status(204).json({"msg": "section deleted"});
+});
+
+app.delete(`/api/nfc/:packageType/:type/:name/:path`, (req, res) => {
+  const [pkgType, type, name, nfcPath] = [req.params.packageType, req.params.type, req.params.name, req.params.path];
+  const storeKey = `${pkgType}:${type}:${name}`;
+  console.log(`Deleting nfc path ${nfcPath} for ${storeKey}`);
+  res.status(204).json({"msg": "Path in section deleted"});
 });

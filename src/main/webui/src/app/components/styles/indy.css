@@ -442,8 +442,8 @@ label, .label{
 }
 
 .pagination{
-    float: right;
-    margin-bottom: 6px;
+  float: right;
+  margin-bottom: 6px;
 }
 
 .loader {
@@ -455,6 +455,6 @@ label, .label{
   box-sizing: border-box;
 }
 
-.alert {
+.indy-alert {
   color: red;
 }

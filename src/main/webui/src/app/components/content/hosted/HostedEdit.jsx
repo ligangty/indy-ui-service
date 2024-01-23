@@ -159,8 +159,8 @@ export default function HostedEdit() {
               <span>
                 <input type="text" size="25" {...register("name", {required: true, maxLength: 50})}
                 />{' '}
-                {errors.name?.type === "required" && <span className="alert">Name is required</span>}
-                {errors.name?.type === "maxLength" && <span className="alert">Name&apos;s length should be less than 50</span>}
+                {errors.name?.type === "required" && <span className="indy-alert">Name is required</span>}
+                {errors.name?.type === "maxLength" && <span className="indy-alert">Name&apos;s length should be less than 50</span>}
               </span>:
               <span className="key">{store.name}</span>
             }
@@ -190,7 +190,7 @@ export default function HostedEdit() {
               <label>Disable Timeout:</label>
               <input type="number" defaultValue={store.disable_timeout}
                {...register("disable_timeout", {min: -1, max: 999999999})}/>{' '}
-              {errors.disable_timeout && <span className="alert">Not a valid number</span>}<br />
+              {errors.disable_timeout && <span className="indy-alert">Not a valid number</span>}<br />
               <DisableTimeoutHint />
             </div>
           </div>
