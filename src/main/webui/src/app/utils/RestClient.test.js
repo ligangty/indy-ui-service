@@ -15,7 +15,7 @@
  */
 
 import fetchMock from "fetch-mock";
-import {IndyRest, BASE_API_PATH} from "./RestClient.js";
+import {IndyRest, BASE_STORE_API_PATH} from "./RestClient.js";
 
 beforeEach(()=>{
 
@@ -31,19 +31,19 @@ describe('IndyRest test', () => {
       key: "maven:remote:central", disabled: false, "allow_snapshots": true,
       "allow_releases": true, url: "https://repo.maven.apache.org/maven2/",
       description: "official maven central"};
-    fetchMock.mock(`${BASE_API_PATH}/maven/remote/central`, {status: 200, body: JSON.stringify(mockRemoteStore)});
+    fetchMock.mock(`${BASE_STORE_API_PATH}/maven/remote/central`, {status: 200, body: JSON.stringify(mockRemoteStore)});
     const res = await IndyRest.storeRes.get("maven", "remote", "central");
     expect(res.success).toBe(true);
     expect(res.result).toEqual(mockRemoteStore);
   });
   it('Check get store: not exists', async () => {
-    fetchMock.mock(`${BASE_API_PATH}/maven/remote/central`, {status: 404});
+    fetchMock.mock(`${BASE_STORE_API_PATH}/maven/remote/central`, {status: 404});
       const result = await IndyRest.storeRes.get("maven", "remote", "central");
       expect(result.success).toBe(false);
       expect(result.error).toEqual({status: 404, message: "Not Found"});
   });
   it('Check get store: error with json body', async () => {
-    fetchMock.mock(`${BASE_API_PATH}/maven/remote/central`, {status: 500, body: JSON.stringify({error: "Mock internal error"})});
+    fetchMock.mock(`${BASE_STORE_API_PATH}/maven/remote/central`, {status: 500, body: JSON.stringify({error: "Mock internal error"})});
       const result = await IndyRest.storeRes.get("maven", "remote", "central");
       expect(result.success).toBe(false);
       expect(result.error).toEqual({status: 500, message: "Mock internal error"});

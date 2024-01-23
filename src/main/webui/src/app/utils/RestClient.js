@@ -42,8 +42,8 @@ const jsonRest ={
 //   }
 // };
 
-const BASE_API_PATH = "/api/admin/stores";
-const storeAPIEndpoint = (pkgType, type, name) => `${BASE_API_PATH}/${pkgType}/${type}/${name}`;
+const BASE_STORE_API_PATH = "/api/admin/stores";
+const storeAPIEndpoint = (pkgType, type, name) => `${BASE_STORE_API_PATH}/${pkgType}/${type}/${name}`;
 
 const handleResponse = async response => {
   if (response.ok){
@@ -74,6 +74,10 @@ const IndyRest = {
     getVersion: async () =>{
       const response = await jsonRest.get(`/api/stats/version-info`);
       return handleResponse(response);
+    },
+    getAllEndpoints: async () =>{
+      const response = await jsonRest.get(`/api/stats/all-endpoints`);
+      return handleResponse(response);
     }
   },
   storeRes: {
@@ -96,7 +100,17 @@ const IndyRest = {
       return handleResponse(response);
     },
     getStores: async (pkgType, type) => {
-      const response = await jsonRest.get(`${BASE_API_PATH}/${pkgType}/${type}`);
+      const response = await jsonRest.get(`${BASE_STORE_API_PATH}/${pkgType}/${type}`);
+      return handleResponse(response);
+    }
+  },
+  storeQueryRes: {
+    getEndpoints: async pkgType => {
+      const response = await jsonRest.get(`${BASE_STORE_API_PATH}/query/endpoints/${pkgType}`);
+      return handleResponse(response);
+    },
+    getStoreKeys: async pkgType => {
+      const response = await jsonRest.get(`${BASE_STORE_API_PATH}/query/storekeys/${pkgType}`);
       return handleResponse(response);
     }
   },
@@ -133,10 +147,7 @@ const IndyRest = {
       const response = await jsonRest.get('/api/admin/auth/userinfo');
       return handleResponse(response);
     }
-  },
-  nfcRes: {
-      // TODO: not implemented.
-  },
+  }
 };
 
-export {IndyRest, BASE_API_PATH};
+export {IndyRest, BASE_STORE_API_PATH};

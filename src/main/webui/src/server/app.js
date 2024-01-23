@@ -25,6 +25,7 @@ app.get([Config.APP_ROOT, `${Config.APP_ROOT}/*`, '/'], (req, res) => {
     res.sendFile(indexHtml);
 });
 
+// stats APIs start
 app.get('/api/stats/package-type/keys', (req, res)=>{
   res.status(200).json(["generic-http", "maven", "npm"]);
 });
@@ -38,10 +39,50 @@ app.get('/api/stats/version-info', (req, res) => {
     });
 });
 
+app.get('/api/stats/all-endpoints', (req, res) => {
+  const statsEndpointsFile = path.resolve(__dirname, `./mock/list/FakeAllEndPoints.json`);
+  const list = require(statsEndpointsFile);
+  res.status(200).json(list);
+});
+
+// stats APIs end
+
+// endpoints and storekeys
+app.get('/api/admin/stores/query/endpoints/:packageType', (req, res) => {
+  const [pkgType] = [req.params.packageType];
+  const statsEndpointsFile = path.resolve(__dirname, `./mock/list/FakeAllEndPoints.json`);
+  const list = require(statsEndpointsFile);
+  if (pkgType==="all"){
+    res.status(200).json(list);
+  }else{
+    const filtered = {
+      items: list.items.filter(i=>pkgType===i.packageType)
+    };
+    res.status(200).json(filtered);
+  }
+});
+
+app.get('/api/admin/stores/query/storekeys/:packageType', (req, res) => {
+  const [pkgType] = [req.params.packageType];
+  const statsEndpointsFile = path.resolve(__dirname, `./mock/list/FakeAllEndPoints.json`);
+  const list = require(statsEndpointsFile);
+  if (pkgType==="all"){
+    const keys = {
+      items: list.items.map(i=>i.key)
+    };
+    res.status(200).json(keys);
+  }else{
+    const filteredKeys = {
+      items: list.items.filter(i=>pkgType===i.packageType).map(i=>i.key)
+    };
+    res.status(200).json(filteredKeys);
+  }
+});
+
+
 const decideMockListFile = (packgeType, type) => {
   const pkgToFileMapping = {"maven": "Maven", "generic-http": "Generic", "npm": "NPM"};
   const typeToFileMapping = {"remote": "Remote", "hosted": "Hosted", "group": "Group"};
-  path.resolve(__dirname, './file-location');
   return path.resolve(__dirname, `./mock/list/Fake${pkgToFileMapping[packgeType]}${typeToFileMapping[type]}List.json`);
 };
 
@@ -149,8 +190,8 @@ app.put(`${STORE_API_BASE}/:packageType/:type/:name`, (req, res) => {
   }
 });
 
+// Mock authentication
 app.get('/api/admin/auth/userinfo', (req, res) => {
   const testUser = {userName: "indy", roles: ["admin", "power-user", "user"]};
   res.status(200).json(testUser);
 });
-
