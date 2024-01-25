@@ -51,7 +51,7 @@ export default function HostedEdit() {
   let store = {"packageType": "maven", "type": "hosted"};
   useEffect(()=>{
     if(mode === 'edit'){
-      const fetchStore = async () =>{
+      (async () =>{
         // get Store data
         const res = await storeRes.get(packageType, "hosted", name);
         if (res.success){
@@ -77,9 +77,7 @@ export default function HostedEdit() {
           // TODO: find another way to do error handling
           Utils.logMessage(`Failed to get store data. Error reason: ${res.error.status}->${res.error.message}`);
         }
-      };
-
-      fetchStore();
+      })();
     }
   }, [packageType, name, mode, reset]);
 

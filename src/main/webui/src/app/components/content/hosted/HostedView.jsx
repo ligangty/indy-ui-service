@@ -38,7 +38,7 @@ export default function HostedView() {
 
   useEffect(()=>{
     setLoading(true);
-    const fetchStore = async () => {
+    (async () => {
       const res = await storeRes.get(packageType, "hosted", name);
       if (res.success){
         const raw = res.result;
@@ -60,9 +60,7 @@ export default function HostedView() {
         Utils.logMessage(`Failed to get store data. Error reason: ${res.error.status}->${res.error.message}`);
       }
       setLoading(false);
-    };
-
-    fetchStore();
+    })();
   }, [packageType, name]);
 
   if (loading) {
