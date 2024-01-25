@@ -30,6 +30,54 @@ import {Filters} from '#utils/Filters.js';
 const {storeRes, disableRes} = IndyRest;
 
 
+const EditCapabilities = ({allowReleases, allowSnapshots, register}) => {
+  const [canSnapshot, setSnapshot] = useState(allowSnapshots);
+  const [canRelease, setRelease] = useState(allowReleases);
+
+  if (canRelease === undefined && allowReleases !== undefined) {
+    setRelease(allowReleases);
+  }
+
+  if (canSnapshot === undefined && allowSnapshots !== undefined) {
+    setSnapshot(allowSnapshots);
+  }
+
+  return <div className="fieldset">
+    <div className="detail-field">
+      <span>{Filters.checkmark(canRelease || canSnapshot)}</span>
+      <label>Allow Uploads</label>
+    </div>
+    <div className="detail-field">
+      <span>
+        <input type="checkbox" onClick={e => setRelease(e.target.checked)} defaultChecked={canRelease} {...register("allow_releases")} />
+      </span>{' '}
+      <label>Allow Releases</label>
+    </div>
+    <div className="detail-field">
+      <span>
+        <input type="checkbox" onClick={e => setSnapshot(e.target.checked)} defaultChecked={canSnapshot} {...register("allow_snapshots")} />
+      </span>{' '}
+      <label>Allow Snapshots</label>
+    </div>
+    {
+      canSnapshot &&
+      <div className="sub-fields">
+        <div className="detail-field">
+          <label>Snapshot Timeout:</label>
+          <span><input type="text" defaultChecked={canSnapshot} {...register("snapshotTimeoutSeconds")} /></span>
+          <DurationHint />
+        </div>
+      </div>
+    }
+  </div>;
+};
+
+EditCapabilities.propTypes = {
+  allowReleases: PropTypes.bool,
+  allowSnapshots: PropTypes.bool,
+  register: PropTypes.function,
+};
+
 export default function HostedEdit() {
   const [state, setState] = useState({
     store: {},
@@ -163,34 +211,7 @@ export default function HostedEdit() {
         </div>
 
         <div className="fieldset-caption">Capabilities</div>
-        <div className="fieldset">
-          <div className="detail-field">
-            <span>{Filters.checkmark(store.allow_releases || store.allow_snapshots)}</span>
-            <label>Allow Uploads</label>
-          </div>
-          <div className="detail-field">
-            <span>
-              <input type="checkbox" defaultChecked={store.allow_releases} {...register("allow_releases")}/>
-            </span>{' '}
-            <label>Allow Releases</label>
-          </div>
-          <div className="detail-field">
-            <span>
-              <input type="checkbox" defaultChecked={store.allow_snapshots} {...register("allow_snapshots")}/>
-            </span>{' '}
-            <label>Allow Snapshots</label>
-          </div>
-          {
-            store.allow_snapshots &&
-            <div className="sub-fields">
-              <div className="detail-field">
-                <label>Snapshot Timeout:</label>
-                <span><input type="text"defaultChecked={store.allow_snapshots} {...register("snapshotTimeoutSeconds")}/></span>
-                <DurationHint />
-              </div>
-            </div>
-          }
-        </div>
+        <EditCapabilities allowSnapshots={store.allow_snapshots} allowReleases={store.allow_releases} register={register} />
 
       </div>
       {
