@@ -37,7 +37,7 @@ export default function GroupView() {
 
   useEffect(()=>{
     setLoading(true);
-    const fetchStore = async () => {
+    (async () => {
       const res = await storeRes.get(packageType, "group", name);
       if (res.success){
         const raw = res.result;
@@ -59,9 +59,7 @@ export default function GroupView() {
         Utils.logMessage(`Failed to get store data. Error reason: ${res.error.status}->${res.error.message}`);
       }
       setLoading(false);
-    };
-
-    fetchStore();
+    })();
   }, [packageType, name]);
 
   if (loading) {

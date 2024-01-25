@@ -34,7 +34,7 @@ export default function NavHeader(){
   });
 
   useEffect(()=>{
-    const fetchUserInfo = async () => {
+    (async () => {
       const res = await authRes.getUserInfo();
       if (res.success){
         setState({
@@ -46,9 +46,7 @@ export default function NavHeader(){
           Utils.logMessage(`Failed to get user info. Error reason: ${res.status}->${data}`);
         });
       }
-    };
-
-    fetchUserInfo();
+    })();
   }, []);
   return (
     <Navbar expand="lg" bg="body-tertiary" fixed="top">

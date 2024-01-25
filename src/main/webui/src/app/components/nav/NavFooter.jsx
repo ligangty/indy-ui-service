@@ -27,7 +27,7 @@ export default function NavFooter() {
   const [state, setState] = useState({stats: {}});
 
   useEffect(()=>{
-    const fetchVersion = async () => {
+    (async () => {
       const res = await statsRes.getVersion();
       if (res.success){
         setState({
@@ -38,9 +38,7 @@ export default function NavFooter() {
           Utils.logMessage(`Failed to version info. Error reason: ${res.status}->${data}`);
         });
       }
-    };
-
-    fetchVersion();
+    })();
   }, []);
 
   const stats = state.stats;

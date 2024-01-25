@@ -59,7 +59,7 @@ export default function HostedList() {
 
   useEffect(() => {
     setLoading(true);
-    const fetchdData = async () => {
+    (async () => {
       const res = await storeRes.getStores(packageType, "hosted");
       if (res.success) {
         const timeoutRes = await disableRes.getAllStoreTimeout();
@@ -85,8 +85,7 @@ export default function HostedList() {
         });
       }
       setLoading(false);
-    };
-    fetchdData();
+    })();
   }, [packageType]);
 
   if (loading) {

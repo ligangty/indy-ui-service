@@ -53,7 +53,7 @@ export default function RemoteEdit() {
   let store = {"packageType": "maven", "type": "remote"};
   useEffect(()=>{
     if(mode === 'edit'){
-      const fetchStore = async () =>{
+     (async () =>{
         // get Store data
         const res = await storeRes.get(packageType, "remote", name);
         if (res.success){
@@ -86,9 +86,7 @@ export default function RemoteEdit() {
           // TODO: find another way to do error handling
           Utils.logMessage(`Failed to get store data. Error reason: ${res.error.status}->${res.error.message}`);
         }
-      };
-
-      fetchStore();
+      })();
     }
   }, [packageType, name, mode, reset]);
 

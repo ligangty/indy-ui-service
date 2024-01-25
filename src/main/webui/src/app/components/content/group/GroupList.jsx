@@ -59,7 +59,7 @@ export default function GroupList() {
 
   useEffect(() => {
     setLoading(true);
-    const fetchdData = async () => {
+    (async () => {
       const res = await storeRes.getStores(packageType, "group");
       if (res.success) {
         const timeoutRes = await disableRes.getAllStoreTimeout();
@@ -85,8 +85,7 @@ export default function GroupList() {
         });
       }
       setLoading(false);
-    };
-    fetchdData();
+    })();
   }, [packageType]);
 
   if (loading) {

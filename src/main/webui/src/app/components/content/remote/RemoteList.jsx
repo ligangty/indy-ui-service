@@ -59,7 +59,7 @@ export default function RemoteList() {
 
   useEffect(()=>{
     setLoading(true);
-    const fetchdData = async ()=>{
+    (async ()=>{
       const res = await storeRes.getStores(packageType, "remote");
       if (res.success){
         const timeoutRes = await disableRes.getAllStoreTimeout();
@@ -85,8 +85,7 @@ export default function RemoteList() {
         });
       }
       setLoading(false);
-    };
-    fetchdData();
+    })();
   }, [packageType]);
 
   if (loading) {

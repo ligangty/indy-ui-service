@@ -28,7 +28,7 @@ export const PackageTypeSelect = ({register, formErrors}) =>{
   const [selected, setSelected] = useState();
 
   useEffect(()=>{
-    const fetchPkgTypes = async () =>{
+    (async () =>{
       const res = await statsRes.getAllPkgTypes();
       if (res.success){
         const pkgTypes = res.result;
@@ -36,8 +36,7 @@ export const PackageTypeSelect = ({register, formErrors}) =>{
       }else{
         Utils.logMessage(res);
       }
-    };
-    fetchPkgTypes();
+    })();
   }, []);
 
   let registered = {};

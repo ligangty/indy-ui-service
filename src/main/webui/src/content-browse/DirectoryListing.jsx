@@ -112,7 +112,7 @@ export default function DirectoryListing () {
   });
 
   useEffect(()=>{
-    const fetchData = async () => {
+    (async () => {
       const res = await contentRes.browse(document.location.pathname);
       if(res.success){
         const data = res.result;
@@ -126,8 +126,7 @@ export default function DirectoryListing () {
           error: res.error.message
         });
       }
-    };
-    fetchData();
+    })();
   }, []);
 
   const {error, isLoaded, data} = state;
