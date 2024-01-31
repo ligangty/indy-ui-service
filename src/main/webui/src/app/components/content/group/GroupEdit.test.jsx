@@ -37,6 +37,56 @@ afterEach(() => {
 
 describe('GroupEdit tests', () => {
   it("Verify GroupEdit for new mode", async () => {
+    const mockAvailable = {
+      "items": [
+        {
+          "packageType": "maven",
+          "name": "build_org-keycloak-keycloak-parent-4-x_20180515.1724",
+          "type": "group",
+          "key": "maven:group:build_org-keycloak-keycloak-parent-4-x_20180515.1724",
+          "storeKey": "maven:group:build_org-keycloak-keycloak-parent-4-x_20180515.1724",
+          "storeType": "group",
+          "resource_uri": "http://localhost:4000/api/content/maven/group/build_org-keycloak-keycloak-parent-4-x_20180515.1724"
+        },
+        {
+          "packageType": "maven",
+          "name": "build_org-keycloak-keycloak-parent-4-x_20180531.0218",
+          "type": "group",
+          "key": "maven:group:build_org-keycloak-keycloak-parent-4-x_20180531.0218",
+          "storeKey": "maven:group:build_org-keycloak-keycloak-parent-4-x_20180531.0218",
+          "storeType": "group",
+          "resource_uri": "http://localhost:4000/api/content/maven/group/build_org-keycloak-keycloak-parent-4-x_20180531.0218"
+        },
+        {
+          "packageType": "maven",
+          "name": "build_org-keycloak-keycloak-nodejs-auth-utils-3-xnpm_1-2-stage-4_20180104.1216",
+          "type": "group",
+          "key": "maven:group:build_org-keycloak-keycloak-nodejs-auth-utils-3-xnpm_1-2-stage-4_20180104.1216",
+          "storeKey": "maven:group:build_org-keycloak-keycloak-nodejs-auth-utils-3-xnpm_1-2-stage-4_20180104.1216",
+          "storeType": "group",
+          "resource_uri": "http://localhost:4000/api/content/maven/group/build_org-keycloak-keycloak-nodejs-auth-utils-3-xnpm_1-2-stage-4_20180104.1216"
+        },
+        {
+          "packageType": "maven",
+          "name": "build_vertx-infinispan-3-5-1_20180705.1313",
+          "type": "group",
+          "key": "maven:group:build_vertx-infinispan-3-5-1_20180705.1313",
+          "storeKey": "maven:group:build_vertx-infinispan-3-5-1_20180705.1313",
+          "storeType": "group",
+          "resource_uri": "http://localhost:4000/api/content/maven/group/build_vertx-infinispan-3-5-1_20180705.1313"
+        },
+        {
+          "packageType": "maven",
+          "name": "public",
+          "type": "group",
+          "key": "maven:group:public",
+          "storeKey": "maven:group:public",
+          "storeType": "group",
+          "resource_uri": "http://localhost:4000/api/content/maven/group/public"
+        }
+      ]
+    };
+    fetchMock.mock(`/api/stats/all-endpoints`, {status: 200, body: JSON.stringify(mockAvailable)});
     render(<MemoryRouter initialEntries={["/group/new"]}>
       <Routes>
         <Route path="/group/new" element={<GroupEdit />} />

@@ -186,7 +186,7 @@ export default function GroupEdit() {
   const path = location.pathname;
   const mode = path.match(/.*\/new$/u) ? 'new' : 'edit';
   // Give a default packageType
-  let store = {"packageType": "maven", "type": "group"};
+  let store = {"packageType": "maven", "type": "group", "constituents": []};
   let available = [];
   useEffect(() => {
     if (mode === 'edit') {
@@ -229,12 +229,29 @@ export default function GroupEdit() {
 
       fetchStore();
     }
+
+    if (mode === 'new') {
+      (async () => {
+        // get available Store data
+        const availableRes = await statsRes.getAllEndpoints();
+        let availableResult = [];
+        if (availableRes.success) {
+          availableResult = availableRes.result.items;
+          setState({
+            available: availableResult,
+          });
+        } else {
+          Utils.logMessage(`Getting available constituents failed! Error reason: ${statsRes.error.message}`);
+        }
+      })();
+    }
   }, [packageType, name, mode, reset]);
 
   if (mode === 'edit') {
     store = state.store;
-    available = state.available;
   }
+
+  available = state.available;
 
   const changelog = register("changelog");
   return (
