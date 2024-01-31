@@ -20,6 +20,8 @@ import {useNavigate} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 
 export default function ListControl({type, legends, handleHideAll, handleSearch, handleDebug, handleSortBy}) {
+  // TODO: check if this debug and setDebug state is really needed
+  // eslint-disable-next-line no-unused-vars
   const [debug, setDebug] = useState(false);
   const navigate = useNavigate();
   return (

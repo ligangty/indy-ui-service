@@ -152,6 +152,7 @@ export const Utils = {
   logMessage: (message, ...params) => {
     const allParams = [message];
     params.forEach(p => allParams.push(p));
+    // eslint-disable-next-line no-console
     Reflect.apply(console.log, undefined, allParams);
   },
   rewriteTargetObject: (origin, target) => {
