@@ -139,6 +139,8 @@ const StoreEditControlPanel = ({mode, store, handleSubmit, validate, changelog})
     handleSave = handleSubmit(data=>{
       data.disabled = !data.enabled;
       data.enabled = undefined;
+      // store.constituents can be updated without data being updated
+      data.constituents = store.constituents;
       if(data.changelog && data.changelog.trim() !== ''){
         if (data.metadata && data.metadata.changelog) {
           // need to overwrite previous changelog here
