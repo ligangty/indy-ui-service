@@ -167,11 +167,8 @@ EditConstituents.propTypes = {
 };
 
 export default function GroupEdit() {
-  const [state, setState] = useState({
-    available: [],
-    store: {},
-    storeView: {}
-  });
+  const [store, setStore] = useState({"packageType": "maven", "type": "group", "constituents": []});
+  const [available, setAvailable] = useState([]);
   const location = useLocation();
   const {packageType, name} = useParams();
   const {
@@ -184,9 +181,6 @@ export default function GroupEdit() {
 
   const path = location.pathname;
   const mode = path.match(/.*\/new$/u) ? 'new' : 'edit';
-  // Give a default packageType
-  let store = {"packageType": "maven", "type": "group", "constituents": []};
-  let available = [];
   useEffect(() => {
     if (mode === 'edit') {
       const fetchStore = async () => {
@@ -216,11 +210,8 @@ export default function GroupEdit() {
             Utils.logMessage(`disable timeout getting failed! Error reason: ${timeoutRes.error.message}`);
           }
           // Change state and re-rendering
-          setState({
-            storeView: cloned,
-            store: raw,
-            available: Array.from(allAvailable),
-          });
+          setStore(raw);
+          setAvailable(Array.from(allAvailable));
           reset(raw);
         } else {
           // TODO: find another way to do error handling
@@ -239,21 +230,13 @@ export default function GroupEdit() {
         if (availableRes.success) {
           let availableResult = availableRes.result.items;
           availableResult.forEach(item => allAvailable.add(item.packageType + ':' + item.type + ':' + item.name));
-          setState({
-            available: Array.from(allAvailable),
-          });
+          setAvailable(Array.from(allAvailable));
         } else {
           Utils.logMessage(`Getting available constituents failed! Error reason: ${statsRes.error.message}`);
         }
       })();
     }
   }, [packageType, name, mode, reset]);
-
-  if (mode === 'edit') {
-    store = state.store;
-  }
-
-  available = state.available;
 
   const changelog = register("changelog");
   return (
