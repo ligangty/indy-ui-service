@@ -35,8 +35,8 @@ const EditConstituents = ({store, currentAvailable}) => {
   });
 
   const addConstituent = available => {
-    let idx = currentAvailable.findIndex(a => a.name === available.name);
-    store.constituents.push(available.packageType + ':' + available.type + ':' + available.name);
+    let idx = currentAvailable.indexOf(available);
+    store.constituents.push(available);
     // element.addClass('hidden');
     currentAvailable.splice(idx, 1);
     setItems({
@@ -48,8 +48,7 @@ const EditConstituents = ({store, currentAvailable}) => {
   const removeConstituent = constituent => {
     let idx = store.constituents.indexOf(constituent);
 
-    let parts = constituent.split(':');
-    currentAvailable.push({packageType: parts[0], type: parts[1], name: parts[2]});
+    currentAvailable.push(constituent);
 
     store.constituents.splice(idx, 1);
 
@@ -148,12 +147,12 @@ const EditConstituents = ({store, currentAvailable}) => {
     <ol className="right-half detail-value detail-edit-list">
       <lt><label>Available:</label><span className="hint">(click to add to constituents)</span></lt>
       {
-        currentAvailable && currentAvailable.map(item => <li key={`available-${item.name}`}><div className="available">
+        currentAvailable && currentAvailable.map(item => <li key={`available-${item}`}><div className="available">
           <a href="" title="Add to constituents" className="surround-cp-action" onClick={e => {
             e.preventDefault();
             addConstituent(item);
           }}>
-            <div className="inline value">{item.packageType + ':' + item.type + ':' + item.name}</div><span className="inline-cp">+</span>
+            <div className="inline value">{item}</div><span className="inline-cp">+</span>
           </a>
         </div>
         </li>)
@@ -199,9 +198,11 @@ export default function GroupEdit() {
           storeView.disabled = raw.disabled === undefined ? false : raw.disabled;
           // get available Store data
           const availableRes = await statsRes.getAllEndpoints();
-          let availableResult = [];
+          let allAvailable = new Set();
           if (availableRes.success) {
-            availableResult = availableRes.result.items;
+            let availableResult = availableRes.result.items;
+            availableResult.forEach(item => allAvailable.add(item.packageType + ':' + item.type + ':' + item.name));
+            raw.constituents.forEach(item => allAvailable.delete(item));
           } else {
             Utils.logMessage(`Getting available constituents failed! Error reason: ${statsRes.error.message}`);
           }
@@ -218,7 +219,7 @@ export default function GroupEdit() {
           setState({
             storeView: cloned,
             store: raw,
-            available: availableResult,
+            available: Array.from(allAvailable),
           });
           reset(raw);
         } else {
@@ -234,11 +235,12 @@ export default function GroupEdit() {
       (async () => {
         // get available Store data
         const availableRes = await statsRes.getAllEndpoints();
-        let availableResult = [];
+        let allAvailable = new Set();
         if (availableRes.success) {
-          availableResult = availableRes.result.items;
+          let availableResult = availableRes.result.items;
+          availableResult.forEach(item => allAvailable.add(item.packageType + ':' + item.type + ':' + item.name));
           setState({
-            available: availableResult,
+            available: Array.from(allAvailable),
           });
         } else {
           Utils.logMessage(`Getting available constituents failed! Error reason: ${statsRes.error.message}`);
