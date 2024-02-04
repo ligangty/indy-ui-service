@@ -45,6 +45,30 @@ const jsonRest ={
 const BASE_STORE_API_PATH = "/api/admin/stores";
 const storeAPIEndpoint = (pkgType, type, name) => `${BASE_STORE_API_PATH}/${pkgType}/${type}/${name}`;
 
+const BASE_NFC_API_PATH = "/api/nfc";
+const nfcAPIEndpoint = (pkgType, type, name, path) => {
+  let result = `${BASE_NFC_API_PATH}/${pkgType}/${type}/${name}`;
+  if(path.trim() !== ""){
+    const encodedPath = encodeURIComponent(path);
+    result += `/${encodedPath}`;
+  }
+  return result;
+};
+
+const genPageParam = (index, size) => {
+  let queryParam = "";
+  if(index >= 0) {
+    queryParam = `pageIndex=${index}`;
+  }
+  if(size > 0){
+    if(queryParam.length > 0){
+      queryParam += `&`;
+    }
+    queryParam += `pageSize=${size}`;
+  }
+  return queryParam;
+};
+
 const handleResponse = async response => {
   if (response.ok){
     let result = {};
@@ -147,7 +171,35 @@ const IndyRest = {
       const response = await jsonRest.get('/api/admin/auth/userinfo');
       return handleResponse(response);
     }
-  }
+  },
+  nfcRes: {
+    query: async (index, size) => {
+      const queryParam = genPageParam(index,size);
+      let apiPath = `${BASE_NFC_API_PATH}`;
+      if(queryParam.length > 0){
+        apiPath += `?${queryParam}`;
+      }
+      const response = await jsonRest.get(`${apiPath}`);
+      return handleResponse(response);
+    },
+    get: async (pkgType, type, name, path, index, size) => {
+      const queryParam = genPageParam(index,size);
+      let apiPath = nfcAPIEndpoint(pkgType, type, name, path);
+      if(queryParam.length > 0){
+        apiPath += `?${queryParam}`;
+      }
+      const response = await jsonRest.get(apiPath);
+      return handleResponse(response);
+    },
+    deleteAll: async () => {
+      const response = await http.delete(`${BASE_NFC_API_PATH}`);
+      return handleResponse(response);
+    },
+    delete: async (pkgType, type, name, path) => {
+      const response = await http.delete(nfcAPIEndpoint(pkgType, type, name, path));
+      return handleResponse(response);
+    }
+  },
 };
 
 export {IndyRest, BASE_STORE_API_PATH};

@@ -72,7 +72,7 @@
     "dev": "webpack-dev-server --open --hot",
     "lint": "eslint './src/**'",
     "lint-fix": "eslint './src/**' --fix",
-    "server": "npm run build-dev && nodemon src/server/app.js --exec babel-node --presets @babel/preset-env",
+    "server": "nodemon src/server/app.js --exec babel-node --presets @babel/preset-env",
     "test": "NODE_ENV=test jest"
   }
 }

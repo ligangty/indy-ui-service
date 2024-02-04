@@ -63,8 +63,6 @@ export const Main = () => <Container fluid>
       <Route path="/cache/delete" element={<Cache />} />
       {
       // <Route exact path={["/nfc/view/:packageType/:type/:name"]} element={} />
-      //
-      // <Route exact path={"/logout"} element={} />
       }
     </Routes>
   </Container>;

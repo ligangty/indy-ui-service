@@ -132,8 +132,8 @@ export default function RemoteEdit() {
               <span>
                 <input type="text" size="25" {...register("name", {required: true, maxLength: 50})}
                 />{' '}
-                {errors.name?.type === "required" && <span className="alert">Name is required</span>}
-                {errors.name?.type === "maxLength" && <span className="alert">Name&apos;s length should be less than 50</span>}
+                {errors.name?.type === "required" && <span className="indy-alert">Name is required</span>}
+                {errors.name?.type === "maxLength" && <span className="indy-alert">Name&apos;s length should be less than 50</span>}
               </span>:
               <span className="key">{store.name}</span>
             }
@@ -158,7 +158,7 @@ export default function RemoteEdit() {
               <label>Disable Timeout:</label>
               <input type="number" defaultValue={store.disable_timeout}
                {...register("disable_timeout", {min: -1, max: 999999999})}/>{' '}
-              {errors.disable_timeout && <span className="alert">Not a valid number</span>}<br />
+              {errors.disable_timeout && <span className="indy-alert">Not a valid number</span>}<br />
               <DisableTimeoutHint />
             </div>
           </div>
@@ -167,8 +167,8 @@ export default function RemoteEdit() {
             <label>Remote URL:</label>
             <input type="text" defaultValue={store.url} size="92"
             {...register("url", {required: true, pattern: PATTERNS.URL})} />{' '}
-            {errors.url?.type==="required" && <span className="alert">Remote URL is required</span>}
-            {errors.url?.type==="pattern" && <span className="alert">Not a valid URL</span>}
+            {errors.url?.type==="required" && <span className="indy-alert">Remote URL is required</span>}
+            {errors.url?.type==="pattern" && <span className="indy-alert">Not a valid URL</span>}
           </div>
 
           <div className="sub-fields">

@@ -61,9 +61,7 @@ describe('PackageTypeSelect tests', () => {
 
   it("Verify PackageTypeSelect for value change", async ()=>{
     const {selectOptions} = userEvent.setup();
-    let value = "";
     render(<PackageTypeSelect />);
-    expect(value).toBe("");
     await waitFor(() => {
       expect(screen.getByRole("pkgTypeSel")).toHaveValue("");
     });

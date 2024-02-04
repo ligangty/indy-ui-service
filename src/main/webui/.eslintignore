@@ -1,5 +1,6 @@
 **/*.css
 **/*.json
 **/*.ico
+**/*.bak
 **/index.html
 **/README.md

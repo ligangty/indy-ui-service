@@ -63,7 +63,7 @@ export default function Cache() {
         <label htmlFor="conent-path">Input the the metadata url:</label>
         (Can be a full or a relative url like &quot;/api/content/maven/group/central/org/foo/bar/maven-metadata.xml. Be noticed that this will trigger the deletions of the target path from all <b>affected groups</b>.&quot;)
         <input id="conent-path" style={{width: "100%"}} {...register("path", {required: true})}/>
-        {errors.path?.type === "required" && <span className="alert">Metadata url is required</span>}
+        {errors.path?.type === "required" && <span className="indy-alert">Metadata url is required</span>}
       </div>
       <div className="cp-row">
         <button onClick={showConfirmLog}>Delete</button>
