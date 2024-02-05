@@ -27,6 +27,7 @@ export default function NFC() {
   const [error, setError] = useState('');
   const [currentKey, setCurrentKey] = useState("");
   const [sections, setSections] = useState([]);
+  const rawSections = useRef([]);
   const pageSizes = [10, 50, 100];
   const page = useRef({
       index: 0,
@@ -74,6 +75,18 @@ export default function NFC() {
     });
   };
 
+  const initSections = secs => {
+    labelSections(secs);
+    const raw = Utils.sortByEmbeddedKey(secs);
+    setSections(raw);
+    rawSections.current = raw;
+  };
+
+  const cleanSections = () => {
+    rawSections.current = [];
+    setSections([]);
+  };
+
   const showSection = e => {
     const selectKey = e.target.value;
     if (!selectKey){
@@ -84,13 +97,12 @@ export default function NFC() {
     setPagginationHidden(true);
     setLoading(true);
     const [packageType, type, name] = selectKey.split(':');
-    setSections([]);
+    cleanSections();
     (async ()=> {
       const resp = await nfcRes.get(packageType, type, name, "");
       if(resp.success){
         if(resp.result && resp.result.sections !== undefined){
-          labelSections(resp.result.sections);
-          setSections(Utils.sortByEmbeddedKey(resp.result.sections));
+          initSections(resp.result.sections);
           setShowAll(false);
         }
       }
@@ -104,13 +116,12 @@ export default function NFC() {
     const [index, size] = [page.current.index, page.current.size];
     setPagginationHidden(false);
     setLoading(true);
-    setSections([]);
+    cleanSections();
     (async ()=> {
       const resp = await nfcRes.query(index, size);
       if(resp.success){
         if(resp.result && resp.result.sections !== undefined){
-          labelSections(resp.result.sections);
-          setSections(Utils.sortByEmbeddedKey(resp.result.sections));
+          initSections(resp.result.sections);
           setShowAll(true);
           setCurrentKey("");
         }
@@ -124,7 +135,7 @@ export default function NFC() {
     (async () => {
       const result = await nfcRes.deleteAll();
       if(result.success){
-        setSections([]);
+        cleanSections();
         setPagginationHidden(true);
         setMessage("All NFC entries cleared successfully.");
       }else{
@@ -181,7 +192,7 @@ export default function NFC() {
     setMessage("");
     setPagginationHidden(true);
     setLoading(true);
-    setSections([]);
+    cleanSections();
     if (isShowAll){
       // alert( "showing all NFC entries");
       // delete $scope.currentKey;
@@ -189,8 +200,7 @@ export default function NFC() {
         const resp = await nfcRes.query(index, size);
         if(resp.success){
           if (resp.result && resp.result.sections !== undefined){
-            labelSections(resp.result.sections);
-            setSections(Utils.sortByEmbeddedKey(resp.result.sections));
+            initSections(resp.result.sections);
             setPagginationHidden(false);
             setPrevDisabled(index <= 0);
           }
@@ -206,8 +216,7 @@ export default function NFC() {
           const resp = await nfcRes.get(packageType, type, name, "", index, size);
           if(resp.success){
             if(resp.result && resp.result.sections !== undefined){
-              labelSections(resp.result.sections);
-              setSections(Utils.sortByEmbeddedKey(resp.result.sections));
+              initSections(resp.result.sections);
               setPagginationHidden(false);
               // TODO: check if need to setCurrentKey here
               setCurrentKey(Utils.formatKey(packageType, type, name));
@@ -243,8 +252,13 @@ export default function NFC() {
   };
 
   const handleSearch = e => {
-    e.preventDefault();
-    // TODO: not implemented yet!
+    const raw = rawSections.current;
+    if (raw && raw.length > 0){
+      const searchString = e.target.value;
+      const newSections=[];
+      raw.forEach(item => item.key.toLowerCase().includes(searchString.toLowerCase()) && newSections.push(item));
+      setSections(newSections);
+    }
   };
 
   return <Fragment>
