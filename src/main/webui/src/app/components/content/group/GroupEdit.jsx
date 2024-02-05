@@ -29,20 +29,14 @@ import {IndyRest} from '#utils/RestClient.js';
 const {statsRes, storeRes, disableRes} = IndyRest;
 
 const EditConstituents = ({store, currentAvailable}) => {
-  const [, setItems] = useState({
-    'constituents': store.constituents,
-    'currentAvailble': currentAvailable,
-  });
+  const [state, setState] = useState(false);
 
   const addConstituent = available => {
     let idx = currentAvailable.indexOf(available);
     store.constituents.push(available);
     // element.addClass('hidden');
     currentAvailable.splice(idx, 1);
-    setItems({
-      'constituents': store.constituents,
-      'currentAvailble': currentAvailable,
-    });
+    setState(!state);
   };
 
   const removeConstituent = constituent => {
@@ -53,10 +47,7 @@ const EditConstituents = ({store, currentAvailable}) => {
     store.constituents.splice(idx, 1);
 
     Utils.sortEndpoints(currentAvailable);
-    setItems({
-      'constituents': store.constituents,
-      'currentAvailble': currentAvailable,
-    });
+    setState(!state);
   };
 
   const moveItem = (from, to) => {
@@ -68,10 +59,7 @@ const EditConstituents = ({store, currentAvailable}) => {
     let idx = store.constituents.indexOf(constituent);
     if (idx > 0) {
       moveItem(idx, idx - 1);
-      setItems({
-        'constituents': store.constituents,
-        'currentAvailble': currentAvailable,
-      });
+      setState(!state);
     }
   };
 
@@ -79,29 +67,20 @@ const EditConstituents = ({store, currentAvailable}) => {
     let idx = store.constituents.indexOf(constituent);
     if (idx < store.constituents.length - 1) {
       moveItem(idx, idx + 1);
-      setItems({
-        'constituents': store.constituents,
-        'currentAvailble': currentAvailable,
-      });
+      setState(!state);
     }
   };
 
   const top = constituent => {
     let idx = store.constituents.indexOf(constituent);
     moveItem(idx, 0);
-    setItems({
-      'constituents': store.constituents,
-      'currentAvailble': currentAvailable,
-    });
+    setState(!state);
   };
 
   const bottom = constituent => {
     let idx = store.constituents.indexOf(constituent);
     moveItem(idx, store.constituents.length - 1);
-    setItems({
-      'constituents': store.constituents,
-      'currentAvailble': currentAvailable,
-    });
+    setState(!state);
   };
 
   return <div className="fieldset">
@@ -147,7 +126,7 @@ const EditConstituents = ({store, currentAvailable}) => {
     <ol className="right-half detail-value detail-edit-list">
       <lt><label>Available:</label><span className="hint">(click to add to constituents)</span></lt>
       {
-        currentAvailable && currentAvailable.map(item => <li key={`available-${item}`}><div className="available">
+        currentAvailable && currentAvailable.map(item => store.packageType !== "" && item.startsWith(store.packageType) && <li key={`available-${item}`}><div className="available">
           <a href="" title="Add to constituents" className="surround-cp-action" onClick={e => {
             e.preventDefault();
             addConstituent(item);
@@ -167,7 +146,7 @@ EditConstituents.propTypes = {
 };
 
 export default function GroupEdit() {
-  const [store, setStore] = useState({"packageType": "maven", "type": "group", "constituents": []});
+  const [store, setStore] = useState({"type": "group", "constituents": []});
   const [available, setAvailable] = useState([]);
   const location = useLocation();
   const {packageType, name} = useParams();
@@ -182,6 +161,21 @@ export default function GroupEdit() {
   const path = location.pathname;
   const mode = path.match(/.*\/new$/u) ? 'new' : 'edit';
   useEffect(() => {
+    const fetchAvailable = async () => {
+      // get available Store data
+      const availableRes = await statsRes.getAllEndpoints();
+      let allAvailable = new Set();
+      if (availableRes.success) {
+        let availableResult = availableRes.result.items;
+        availableResult.forEach(item => {
+          allAvailable.add(item.packageType + ':' + item.type + ':' + item.name);
+        });
+      } else {
+        Utils.logMessage(`Getting available constituents failed! Error reason: ${statsRes.error.message}`);
+      }
+      return allAvailable;
+    };
+
     if (mode === 'edit') {
       const fetchStore = async () => {
         // get Store data
@@ -190,16 +184,9 @@ export default function GroupEdit() {
           const raw = res.result;
           const storeView = Utils.cloneObj(raw);
           storeView.disabled = raw.disabled === undefined ? false : raw.disabled;
-          // get available Store data
-          const availableRes = await statsRes.getAllEndpoints();
-          let allAvailable = new Set();
-          if (availableRes.success) {
-            let availableResult = availableRes.result.items;
-            availableResult.forEach(item => allAvailable.add(item.packageType + ':' + item.type + ':' + item.name));
-            raw.constituents.forEach(item => allAvailable.delete(item));
-          } else {
-            Utils.logMessage(`Getting available constituents failed! Error reason: ${statsRes.error.message}`);
-          }
+          let allAvailable = await fetchAvailable();
+          raw.constituents.forEach(item => allAvailable.delete(item));
+          allAvailable.delete(raw.key);
           // get Store disablement data
           const timeoutRes = await disableRes.getStoreTimeout(packageType, "group", name);
           const cloned = Utils.cloneObj(storeView);
@@ -222,21 +209,21 @@ export default function GroupEdit() {
       fetchStore();
     }
 
-    if (mode === 'new') {
+    if (mode === "new") {
       (async () => {
-        // get available Store data
-        const availableRes = await statsRes.getAllEndpoints();
-        let allAvailable = new Set();
-        if (availableRes.success) {
-          let availableResult = availableRes.result.items;
-          availableResult.forEach(item => allAvailable.add(item.packageType + ':' + item.type + ':' + item.name));
-          setAvailable(Array.from(allAvailable));
-        } else {
-          Utils.logMessage(`Getting available constituents failed! Error reason: ${statsRes.error.message}`);
-        }
+        let allAvailable = await fetchAvailable();
+        setAvailable(Array.from(allAvailable));
       })();
     }
   }, [packageType, name, mode, reset]);
+
+  const updatePackageType = newPackageType => {
+    let newStore = store;
+    newStore.packageType = newPackageType;
+    newStore.constituents = [];
+    setStore(newStore);
+    reset(store);
+  };
 
   const changelog = register("changelog");
   return (
@@ -253,7 +240,7 @@ export default function GroupEdit() {
             <label>Package Type:</label>
             {
               mode === 'new' ?
-                <PackageTypeSelect register={register} formErrors={errors} /> :
+                <PackageTypeSelect register={register} formErrors={errors} updatePackageType={updatePackageType}/> :
                 <span className="key">{store.packageType}</span>
             }
           </div>

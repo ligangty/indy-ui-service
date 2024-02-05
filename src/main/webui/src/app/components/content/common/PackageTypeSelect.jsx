@@ -21,7 +21,7 @@ import {Utils} from '#utils/AppUtils';
 
 const {statsRes} = IndyRest;
 
-export const PackageTypeSelect = ({register, formErrors}) =>{
+export const PackageTypeSelect = ({register, formErrors, updatePackageType}) =>{
   const [state, setState] = useState({
     pkgTypes: []
   });
@@ -43,9 +43,22 @@ export const PackageTypeSelect = ({register, formErrors}) =>{
   if(register){
     registered = register("packageType", {required: true});
   }
+
+  const {onChange, onBlur, name, ref} = registered;
+
+  const change = e => {
+    setSelected(e.target.value);
+    if (typeof updatePackageType === "function") {
+      updatePackageType(e.target.value);
+    }
+    if (typeof onChange === "function") {
+      onChange(e);
+    }
+  };
+
   return <span>
     <select role="pkgTypeSel" value={selected}
-      onChange={e => setSelected(e.target.value)} {...registered}>
+      onChange={change} onBlur={onBlur} name={name} ref={ref}>
       <option value=""></option>
       {
         state.pkgTypes.map(type => <option key={`pkgType:${type}`} value={type}>{type}</option>)
@@ -57,5 +70,6 @@ export const PackageTypeSelect = ({register, formErrors}) =>{
 
 PackageTypeSelect.propTypes = {
   register: PropTypes.func,
-  formErrors: PropTypes.object
+  formErrors: PropTypes.object,
+  updatePackageType: PropTypes.func,
 };
