@@ -75,7 +75,7 @@ const EditCapabilities = ({allowReleases, allowSnapshots, register}) => {
 EditCapabilities.propTypes = {
   allowReleases: PropTypes.bool,
   allowSnapshots: PropTypes.bool,
-  register: PropTypes.function,
+  register: PropTypes.func
 };
 
 export default function HostedEdit() {
