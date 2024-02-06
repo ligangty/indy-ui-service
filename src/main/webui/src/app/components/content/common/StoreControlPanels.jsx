@@ -136,11 +136,16 @@ const StoreEditControlPanel = ({mode, store, handleSubmit, validate, changelog})
   const postSuccessHandler = st => navigate(`/${st.type}/${st.packageType}/view/${st.name}`);
   let handleSave = () => save(store, mode, postSuccessHandler);
   if(handleSubmit && typeof handleSubmit === 'function'){
-    // console.log(handleSubmit);
     handleSave = handleSubmit(data=>{
       data.disabled = !data.enabled;
       data.enabled = undefined;
+      // store.constituents can be updated without data being updated
+      data.constituents = store.constituents;
       if(data.changelog && data.changelog.trim() !== ''){
+        if (data.metadata && data.metadata.changelog) {
+          // need to overwrite previous changelog here
+          data.metadata.changelog = data.changelog;
+        }
         if(store.metadata){
           store.metadata.changelog = data.changelog;
         }else{
