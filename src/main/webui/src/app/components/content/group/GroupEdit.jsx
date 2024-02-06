@@ -85,7 +85,7 @@ const EditConstituents = ({store, currentAvailable}) => {
 
   return <div className="fieldset">
     <ol className="left-half detail-value detail-edit-list">
-      <lt><label>Current:</label><span className="hint">(hover for controls)</span></lt>
+      <label>Current:</label><span className="hint">(hover for controls)</span>
       {
         store.constituents && store.constituents.map((item, index) => <li key={`constituent-${item}`}><div className="constituent">
           <div className="inline value">{item}</div>
@@ -124,7 +124,7 @@ const EditConstituents = ({store, currentAvailable}) => {
       }
     </ol>
     <ol className="right-half detail-value detail-edit-list">
-      <lt><label>Available:</label><span className="hint">(click to add to constituents)</span></lt>
+      <label>Available:</label><span className="hint">(click to add to constituents)</span>
       {
         currentAvailable && currentAvailable.map(item => store.packageType !== "" && item.startsWith(store.packageType) && <li key={`available-${item}`}><div className="available">
           <a href="" title="Add to constituents" className="surround-cp-action" onClick={e => {
