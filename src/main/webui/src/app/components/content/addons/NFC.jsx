@@ -299,8 +299,7 @@ export default function NFC() {
       {error && error.trim() !== "" && <div className="alert alert-danger" role="alert">{error}</div>}
       {(message && message.trim() !== "" || error && error.trim() !== "") && <hr />}
       {
-        sections?
-         sections.length > 0 &&
+        sections && sections.length > 0 ?
          <ul>
           {
             sections.map(section => <li key={section.key} role={`section-${section.key}`} className="section">
