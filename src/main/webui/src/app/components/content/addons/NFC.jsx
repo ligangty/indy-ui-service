@@ -71,7 +71,9 @@ export default function NFC() {
   const labelSections = secs => {
     secs.forEach(s => {
       s.label = Utils.keyLabel(s.key);
-      s.paths.sort();
+      if(s.paths && s.paths.length > 1){
+        s.paths.sort();
+      }
     });
   };
 
@@ -297,8 +299,9 @@ export default function NFC() {
       {error && error.trim() !== "" && <div className="alert alert-danger" role="alert">{error}</div>}
       {(message && message.trim() !== "" || error && error.trim() !== "") && <hr />}
       {
-        sections && sections.length > 0 &&
-        <ul>
+        sections?
+         sections.length > 0 &&
+         <ul>
           {
             sections.map(section => <li key={section.key} role={`section-${section.key}`} className="section">
               <div className="with-inline-cp">
@@ -329,10 +332,12 @@ export default function NFC() {
               }
             </li>)
           }
-        </ul>
+         </ul>:
+         <div>No NFC entries found</div>
       }
       {
-        !paginationHidden && <div className="pagination">
+        !paginationHidden && sections && sections.length > 0 &&
+        <div className="pagination">
           <label>Page Size:</label>&nbsp;
           <select value={page.current.size} onChange={e => {
             changePageSize(e.target.value);
