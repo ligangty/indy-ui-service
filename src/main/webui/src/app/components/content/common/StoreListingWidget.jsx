@@ -94,16 +94,15 @@ StoreNameSection.propTypes = {
   storeClass: PropTypes.string
 };
 
-const StoreListingWidget = ({storeList, disableMap, storeType}) => {
+const StoreListingWidget = ({storeList, storeType}) => {
   const listing = storeList;
-  const disMap = disableMap;
   if(listing && listing.length >0){
     return (
       <div className="content-panel">
         <div className="store-listing">
           {
             listing.map(store => {
-              const storeClass = Utils.isDisabled(store.key, disMap)? "disabled-store":"enabled-store";
+              const storeClass = store.disabled? "disabled-store":"enabled-store";
               return (
                 <div key={store.key} className="store-listing-item">
                   <StoreNameSection store={store} storeClass={storeClass} />
@@ -137,7 +136,6 @@ const StoreListingWidget = ({storeList, disableMap, storeType}) => {
 
 StoreListingWidget.propTypes = {
   storeList: PropTypes.array,
-  disableMap: PropTypes.object,
   storeType: PropTypes.string
 };
 

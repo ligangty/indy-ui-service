@@ -24,7 +24,7 @@ import {LoadingSpiner} from "../common/LoadingSpiner.jsx";
 import {Utils} from '#utils/AppUtils.js';
 import {IndyRest} from '#utils/RestClient.js';
 
-const {storeRes, disableRes} = IndyRest;
+const {storeRes} = IndyRest;
 
 const handlers = {
   handleDebug: (event, setState) => {
@@ -51,7 +51,6 @@ export default function RemoteList() {
   const [state, setState] = useState({
     rawList: [],
     listing: [],
-    disabledMap: {},
     enableDebug: false,
     message: ''
   });
@@ -62,22 +61,13 @@ export default function RemoteList() {
     (async ()=>{
       const res = await storeRes.getStores(packageType, "remote");
       if (res.success){
-        const timeoutRes = await disableRes.getAllStoreTimeout();
-        let disabledMap = {};
-        if (timeoutRes.success){
-          const timeoutData = timeoutRes.result;
-          disabledMap = Utils.setDisableMap(timeoutData);
-        }else{
-          Utils.logMessage(`disable timeout get failed in remote listing! Error reason: ${timeoutRes.error.message}`);
-        }
         let data = res.result;
         if(typeof data === 'string'){
           data = JSON.parse(data);
         }
         setState({
           rawList: data.items,
-          listing: data.items,
-          disabledMap
+          listing: data.items
         });
       }else{
         setState({
@@ -103,7 +93,7 @@ export default function RemoteList() {
       />
       {
       state.listing?
-      <StoreListingWidget storeList={state.listing} disableMap={state.disabledMap} storeType="remote" />:
+      <StoreListingWidget storeList={state.listing} storeType="remote" />:
       <div className="container-fluid">
         No content fetched!
       </div>
