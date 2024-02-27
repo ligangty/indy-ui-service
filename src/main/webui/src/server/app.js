@@ -41,7 +41,8 @@ app.get('/api/stats/version-info', (req, res) => {
     });
 });
 
-app.get('/api/stats/all-endpoints', (req, res) => {
+app.get('/api/stats/all-endpoints', async (req, res) => {
+  await sleep(3000);
   const statsEndpointsFile = path.resolve(__dirname, `./mock/list/FakeAllEndPoints.json`);
   const list = require(statsEndpointsFile);
   res.status(200).json(list);
