@@ -18,8 +18,8 @@ package org.commonjava.indy.service.ui.util;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.LoggerFactory;
 
-import javax.activation.MimetypesFileTypeMap;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.activation.MimetypesFileTypeMap;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
