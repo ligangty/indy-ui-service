@@ -37,9 +37,8 @@ describe('StoreListingWidget tests', () => {
        url: "https://maven.repository.redhat.com/ga/",
        description: "Red Hat maven repository"},
     ];
-    const mockDisableMap = {};
     render(<MemoryRouter>
-    <StoreListingWidget storeList={mockRemoteStoreList} disableMap={mockDisableMap} storeType="remote"/>
+    <StoreListingWidget storeList={mockRemoteStoreList} storeType="remote"/>
     </MemoryRouter>);
 
     // Testing LocalURLSection
