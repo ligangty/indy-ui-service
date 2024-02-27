@@ -19,6 +19,7 @@ import {useLocation, useParams} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import {PropTypes} from 'prop-types';
 import {StoreEditControlPanel as EditControlPanel} from '../common/StoreControlPanels.jsx';
+import {LoadingSpiner} from '../common/LoadingSpiner.jsx';
 import {DisableTimeoutHint} from '../common/Hints.jsx';
 import {PackageTypeSelect} from '../common/PackageTypeSelect.jsx';
 // import ViewJsonDebugger from './Debugger.jsx';
@@ -150,6 +151,7 @@ export default function GroupEdit() {
   const [available, setAvailable] = useState([]);
   const location = useLocation();
   const {packageType, name} = useParams();
+  const [avaiLoading, setAvaiLoading] = useState(true);
   const {
     register,
     reset,
@@ -162,6 +164,7 @@ export default function GroupEdit() {
   const mode = path.match(/.*\/new$/u) ? 'new' : 'edit';
   useEffect(() => {
     const fetchAvailable = async () => {
+      setAvaiLoading(true);
       // get available Store data
       const availableRes = await statsRes.getAllEndpoints();
       let allAvailable = new Set();
@@ -173,6 +176,7 @@ export default function GroupEdit() {
       } else {
         Utils.logMessage(`Getting available constituents failed! Error reason: ${statsRes.error.message}`);
       }
+      setAvaiLoading(false);
       return allAvailable;
     };
 
@@ -289,7 +293,11 @@ export default function GroupEdit() {
             </textarea>
           </div>
           <div className="fieldset-caption">Constituents</div>
-          <EditConstituents store={store} currentAvailable={available}/>
+          {
+           avaiLoading?
+            <LoadingSpiner /> :
+            <EditConstituents store={store} currentAvailable={available} />
+          }
         </div>
       </div>
       {
