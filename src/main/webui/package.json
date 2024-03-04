@@ -65,6 +65,7 @@
   "scripts": {
     "build-dev": "npm run clean && npm run compile-dev && npm run lint && npm run test && npm run deploy && cp ./src/content-browse/html/* ./dist/content-browse/",
     "build": "npm run clean && npm run compile && npm run test && npm run lint && npm run deploy && cp ./src/content-browse/html/* ./dist/content-browse/",
+    "build-no-test": "npm run clean && npm run compile && npm run deploy && cp ./src/content-browse/html/* ./dist/content-browse/",
     "clean": "rm -rf ./dist/*",
     "compile-dev": "NODE_ENV=development webpack --config ./webpack.config.js && webpack --config ./webpack-content-browse.dev.config.js",
     "compile": "NODE_ENV=production webpack --config ./webpack.config-prod.js && webpack --config ./webpack-content-browse.prod.config.js",
