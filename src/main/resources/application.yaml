@@ -100,6 +100,7 @@ quarkus:
       install-env:
         strict-ssl: false
       install: "config set strict-ssl false && npm ci"
+      build: "run build-no-test"
 
 # These REST APIs are not needed to show in rest docs
 mp:
