@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2024 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
+ * Copyright (C) 2023 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import React, {Fragment, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
