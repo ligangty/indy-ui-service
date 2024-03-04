@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2023 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /* eslint-disable camelcase */
 /**
  * Copyright (C) 2024 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
@@ -86,7 +101,7 @@ describe('GroupEdit tests', () => {
         }
       ]
     };
-    fetchMock.mock(`/api/stats/all-endpoints`, {status: 200, body: JSON.stringify(mockAvailable)});
+    fetchMock.mock(`/api/admin/stores/query/endpoints/all`, {status: 200, body: JSON.stringify(mockAvailable)});
     render(<MemoryRouter initialEntries={["/group/new"]}>
       <Routes>
         <Route path="/group/new" element={<GroupEdit />} />
@@ -181,7 +196,7 @@ describe('GroupEdit tests', () => {
       expiration: "2030-02-22T17:00:00.000Z"
     };
     fetchMock.mock(`${STORE_API_BASE_URL}/maven/group/local-deployment`, {status: 200, body: JSON.stringify(mockGroupStore)});
-    fetchMock.mock(`/api/stats/all-endpoints`, {status: 200, body: JSON.stringify(mockAvailable)});
+    fetchMock.mock(`/api/admin/stores/query/endpoints/maven`, {status: 200, body: JSON.stringify(mockAvailable)});
     fetchMock.mock("/api/admin/schedule/store/maven/group/local-deployment/disable-timeout", {status: 200, body: JSON.stringify(mockDisableTimeout)});
     render(<MemoryRouter initialEntries={["/group/maven/edit/local-deployment"]}>
       <Routes>

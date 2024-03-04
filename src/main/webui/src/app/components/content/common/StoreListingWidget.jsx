@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2024 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
+ * Copyright (C) 2023 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import React, {Fragment, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
@@ -94,16 +93,15 @@ StoreNameSection.propTypes = {
   storeClass: PropTypes.string
 };
 
-const StoreListingWidget = ({storeList, disableMap, storeType}) => {
+const StoreListingWidget = ({storeList, storeType}) => {
   const listing = storeList;
-  const disMap = disableMap;
   if(listing && listing.length >0){
     return (
       <div className="content-panel">
         <div className="store-listing">
           {
             listing.map(store => {
-              const storeClass = Utils.isDisabled(store.key, disMap)? "disabled-store":"enabled-store";
+              const storeClass = store.disabled? "disabled-store":"enabled-store";
               return (
                 <div key={store.key} className="store-listing-item">
                   <StoreNameSection store={store} storeClass={storeClass} />
@@ -137,7 +135,6 @@ const StoreListingWidget = ({storeList, disableMap, storeType}) => {
 
 StoreListingWidget.propTypes = {
   storeList: PropTypes.array,
-  disableMap: PropTypes.object,
   storeType: PropTypes.string
 };
 

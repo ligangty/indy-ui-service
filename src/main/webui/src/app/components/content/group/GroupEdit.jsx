@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2024 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
+ * Copyright (C) 2023 Red Hat, Inc. (https://github.com/Commonjava/indy-ui-service)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import React, {useState, useEffect} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
@@ -27,7 +26,7 @@ import {Utils} from '#utils/AppUtils.js';
 import {TimeUtils} from '#utils/TimeUtils.js';
 import {IndyRest} from '#utils/RestClient.js';
 
-const {statsRes, storeRes, disableRes} = IndyRest;
+const {storeRes, storeQueryRes, disableRes} = IndyRest;
 
 const EditConstituents = ({store, currentAvailable}) => {
   const [state, setState] = useState(false);
@@ -163,10 +162,11 @@ export default function GroupEdit() {
   const path = location.pathname;
   const mode = path.match(/.*\/new$/u) ? 'new' : 'edit';
   useEffect(() => {
+    const pkgType = mode === "edit" ? packageType : "all";
     const fetchAvailable = async () => {
       setAvaiLoading(true);
       // get available Store data
-      const availableRes = await statsRes.getAllEndpoints();
+      const availableRes = await storeQueryRes.getEndpoints(pkgType);
       let allAvailable = new Set();
       if (availableRes.success) {
         let availableResult = availableRes.result.items;
@@ -174,7 +174,7 @@ export default function GroupEdit() {
           allAvailable.add(item.packageType + ':' + item.type + ':' + item.name);
         });
       } else {
-        Utils.logMessage(`Getting available constituents failed! Error reason: ${statsRes.error.message}`);
+        Utils.logMessage(`Getting available constituents failed! Error reason: ${availableRes.error.message}`);
       }
       setAvaiLoading(false);
       return allAvailable;
