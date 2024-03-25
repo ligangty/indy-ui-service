@@ -22,7 +22,7 @@ import org.codehaus.plexus.interpolation.StringSearchInterpolator;
 import org.commonjava.indy.service.ui.exception.IndyUIException;
 import org.commonjava.indy.service.ui.util.UrlUtils;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
