@@ -28,7 +28,9 @@ public class AuthTestProfile
     {
         Map<String, String> configs = new HashMap<>();
         configs.put( "quarkus.oidc.enabled", "true" );
-        configs.put( "quarkus.oidc.auth-server-url", "http://localhost:8180/realms/test" );
+        configs.put( "quarkus.oidc.auth-server-url", "${keycloak.url}/realms/quarkus/" );
+        configs.put( "quarkus.oidc.client-id", "quarkus-service-app" );
+        configs.put( "quarkus.oidc.application-type", "web-app" );
         return configs;
     }
 }
