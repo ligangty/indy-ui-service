@@ -6,7 +6,7 @@ quarkus:
   http:
     port: 8080
     read-timeout: 30m
-#    enable-compression: true
+    enable-compression: true
     limits:
       max-body-size: 1000M
     auth:
