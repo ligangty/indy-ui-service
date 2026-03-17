@@ -61,7 +61,7 @@ jobs:
       run: mvn -B -e clean install -DskipTests
 
     - name: Checkout tools repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: Commonjava/commonjava-images
         path: commonjava-images
