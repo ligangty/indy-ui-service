@@ -41,7 +41,7 @@ public class AuthResourceTest
         given().when().get( "/api/admin/auth/userinfo" ).then().statusCode( Response.Status.OK.getStatusCode() );
         final JsonPath resultPath = given().get( "/api/admin/auth/userinfo" ).thenReturn().jsonPath();
         assertThat( resultPath.getString( "userName" ), is( "user" ) );
-        assertThat( resultPath.getInt( "roles.size" ), is( 2 ) );
+        assertThat( resultPath.getList( "roles" ).size(), is( 2 ) );
         assertThat( resultPath.getList( "roles" ), hasItems( "power", "admin" ) );
     }
 
